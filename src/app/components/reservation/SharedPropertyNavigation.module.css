@@ -1,0 +1,25 @@
+.shared_property_nav {
+  display: flex;
+  gap: 16px;
+  user-select: none;
+}
+
+.shared_property_nav:hover{
+  cursor: pointer;
+}
+
+/* .share_property_nav_item.selected {
+  border-bottom: 1px solid #e97256;
+  padding-bottom: 3px;
+  color: #e97256;
+} */
+
+.share_property_nav_item.selected p{
+  color: #e97256;
+}
+
+.line{
+  width:100%;
+  padding-top: 2px;
+  border-bottom:1px solid #e97256;
+}

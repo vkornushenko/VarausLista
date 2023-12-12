@@ -1,0 +1,42 @@
+.date_nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.date_nav_item {
+  width: 36px;
+  background-color: #d9f4ff;
+  border-radius: 8px;
+  padding: 4px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  user-select: none;
+}
+.date_nav_item:hover{
+  cursor: pointer;
+}
+
+.date_nav_item__weekday {
+  color: #6c7a80;
+  font-size: 14px;
+}
+.date_nav_item__day_number {
+  color: #333c40;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.date_nav_item__selected {
+  background-color: #e97256;
+  gap: 8px;
+}
+
+.date_nav_item__selected .date_nav_item__weekday {
+  color: #e6eff2;
+}
+.date_nav_item__selected .date_nav_item__day_number {
+  color: #fff;
+}

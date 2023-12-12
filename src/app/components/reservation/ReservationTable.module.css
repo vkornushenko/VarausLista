@@ -1,0 +1,36 @@
+.reservations_grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: auto;
+  align-items: center;
+  column-gap: 16px;
+  row-gap: 8px;
+  font-size: 14px;
+}
+.brake_line {
+  grid-column-start: 1;
+  grid-column-end: 5;
+  border-bottom: 1px solid #e6eff2;
+}
+
+.reservation_grid__first_column_items {
+  justify-self: start;
+}
+.reservation_grid__middle_column_items {
+  justify-self: center;
+}
+.reservation_grid__last_column_items {
+  justify-self: end;
+}
+.reservation_grid__last_column_items_header {
+  justify-self: center;
+}
+
+.reservation_grid__header_text {
+  font-size: 12px;
+  color: #6c7a80;
+}
+
+.reservation_grid__content_time {
+  white-space: nowrap;
+}

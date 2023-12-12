@@ -1,0 +1,22 @@
+.welcome__header {
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  display: flex;
+  justify-content: center;
+}
+.welcome__list {
+  width: 100%;
+}
+
+.welcome__list li {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 8px 0;
+  border-bottom: 1px solid #e6eff2;
+}
+.welcome__list li:last-child {
+  border: 0;
+}

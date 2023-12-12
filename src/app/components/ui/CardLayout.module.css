@@ -1,0 +1,12 @@
+.content-card {
+  display: flex;
+  flex-direction: column;
+  gap:24px;
+
+  background-color: #fff;
+  width: 328px;
+  box-sizing: border-box;
+  
+  padding: 16px;
+  border-radius: 16px;
+}
