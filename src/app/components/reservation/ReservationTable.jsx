@@ -3,7 +3,7 @@ import classes from './ReservationTable.module.css';
 export default function ReservationTable() {
   return (
     <>
-      <div className='text_block no_contetn_placeholder'>
+      <div className='text_block no_content_placeholder'>
         <p>Laundry is not reserved by your neighbours for 19 November.</p>
         <p>You can be the first to reserve it.</p>
       </div>

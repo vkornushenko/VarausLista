@@ -40,12 +40,18 @@ h1{
   background-repeat: no-repeat;
 }
 
+main{
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
 /* managing paragraph spacings */
 .text_block p{padding-bottom: 8px;}
 .text_block p:last-child{padding-bottom: 0;}
 
 /* light grey color for no content text placeholders */
-.no_contetn_placeholder p{
+.no_content_placeholder p{
   color: #6C7A80;
 }
 

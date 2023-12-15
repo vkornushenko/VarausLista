@@ -1,16 +1,19 @@
 'use client';
 
-import CardLayout from '../components/ui/CardLayout';
 import { sorce_sans_3 } from '@/app/utils/fonts';
-import classes from './page.module.css';
+import { useState } from 'react';
 import Image from 'next/image';
+
 import LocationIcon from '../../../public/icons/location.svg';
+
+import CardLayout from '../components/ui/CardLayout';
 import SharedPropertyNavigation from '../components/reservation/SharedPropertyNavigation';
 import DateNavigation from '../components/reservation/DateNavigation';
 import ReservationTable from '../components/reservation/ReservationTable';
 import Button from '../components/ui/Button';
-import { useState } from 'react';
 import Reservation from '../components/modal/Reservation';
+
+import classes from './page.module.css';
 
 export default function ReservationPage() {
   const [currentSharedPropertyIndex, setCurrentSharedPropertyIndex] =
@@ -28,22 +31,21 @@ export default function ReservationPage() {
 
   return (
     <main>
-        <CardLayout>
-          <div className={classes.reservation__header_block}>
-            <Image src={LocationIcon} alt='location icon' height={20} />
-            <h1 className={sorce_sans_3.className}>Kulmakatu 47</h1>
-          </div>
-          <SharedPropertyNavigation
-            selectedProperty={SharedPropName}
-            sharedPropertyList={sharedPropertyList}
-            changeProperty={setCurrentSharedPropertyIndex}
-          />
-          <DateNavigation />
-          <ReservationTable />
-          <Button action={toggleLayover} name={`Reserve ${SharedPropName}`} />
-
-          {layoverState && <Reservation toggleLayover={toggleLayover} />}
-        </CardLayout>
+      <CardLayout>
+        <div className={classes.reservation__header_block}>
+          <Image src={LocationIcon} alt='location icon' height={20} />
+          <h1 className={sorce_sans_3.className}>Kulmakatu 47</h1>
+        </div>
+        <SharedPropertyNavigation
+          selectedProperty={SharedPropName}
+          sharedPropertyList={sharedPropertyList}
+          changeProperty={setCurrentSharedPropertyIndex}
+        />
+        <DateNavigation />
+        <ReservationTable />
+        <Button action={toggleLayover} name={`Reserve ${SharedPropName}`} />
+      </CardLayout>
+      {layoverState && <Reservation toggleLayover={toggleLayover} />}
     </main>
   );
 }

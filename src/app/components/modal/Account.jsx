@@ -6,10 +6,6 @@ import { sorce_sans_3 } from '@/app/utils/fonts';
 
 export default function Account(props) {
 
-  // get current time, count timezone, prepare for input format
-  const now = new Date();
-  now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
-  const currentTime = now.toISOString().slice(0, 16);
 
   // handle form submission
   const submitHandler = (event) => {
@@ -27,6 +23,7 @@ export default function Account(props) {
           Create Account
         </h1>
         <form className={classes.form} onSubmit={submitHandler}>
+
           <div className={classes.input_block}>
             <label htmlFor='username' className={sorce_sans_3.className}>
               Name
@@ -39,6 +36,20 @@ export default function Account(props) {
               className={sorce_sans_3.className}
             />
           </div>
+
+          <div className={classes.input_block}>
+            <label htmlFor='address' className={sorce_sans_3.className}>
+              Address
+            </label>
+            <input
+              type='text'
+              id='address'
+              name='address'
+              placeholder='Your address'
+              className={sorce_sans_3.className}
+            />
+          </div>
+
           <div className={classes.input_block}>
             <label htmlFor='apartment' className={sorce_sans_3.className}>
               Apartment No
@@ -51,43 +62,34 @@ export default function Account(props) {
               className={sorce_sans_3.className}
             />
           </div>
+
           <div className={classes.input_block}>
-            <label htmlFor='washing_machine' className={sorce_sans_3.className}>
-              Washing machine No
+            <label htmlFor='email' className={sorce_sans_3.className}>
+              Email address
             </label>
             <input
-              type='text'
-              id='washing_machine'
-              name='washing machine'
-              placeholder='Washing machine number'
+              type='email'
+              id='email'
+              name='email'
+              placeholder='Your email'
               className={sorce_sans_3.className}
             />
           </div>
+
           <div className={classes.input_block}>
-            <label htmlFor='start_time' className={sorce_sans_3.className}>
-              Start time
+            <label htmlFor='password' className={sorce_sans_3.className}>
+              Password
             </label>
             <input
-              type='datetime-local'
-              id='start_time'
-              name='start time'
-              defaultValue={currentTime}
+              type='password'
+              id='password'
+              name='password'
+              placeholder='Password'
               className={sorce_sans_3.className}
             />
           </div>
-          <div className={classes.input_block}>
-            <label htmlFor='duration' className={sorce_sans_3.className}>
-              Duration
-            </label>
-            <input
-              type='time'
-              id='duration'
-              name='duration'
-              defaultValue='02:00'
-              className={sorce_sans_3.className}
-            />
-          </div>
-          <button type='submit' className={sorce_sans_3.className + ' ' + classes.submit_button}>Reserve Sauna</button>
+
+          <button type='submit' className={sorce_sans_3.className + ' ' + classes.submit_button}>Create Account</button>
         </form>
       </CardLayout>
     </ModalLayout>

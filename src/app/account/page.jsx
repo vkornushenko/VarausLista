@@ -1,30 +1,58 @@
 'use client';
 
+// framer motion
+import { motion } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
+
 import CardLayout from '../components/ui/CardLayout';
 
 import { sorce_sans_3 } from '@/app/utils/fonts';
 import Image from 'next/image';
 
 import AvatarIcon from '../../../public/icons/avatar.svg';
-import CartIcon from '../../../public/icons/cart.svg';
+import BinIcon from '../../../public/icons/bin.svg';
 import EyeIcon from '../../../public/icons/eye.svg';
+import EyeSlashedIcon from '../../../public/icons/eye_slashed.svg';
 import CopyIcon from '../../../public/icons/copy.svg';
 
 import classes from './page.module.css';
 import Button from '../components/ui/Button';
 import Account from '../components/modal/Account';
 import { useState } from 'react';
+import ModalLayout from '../components/ui/ModalLayout';
 
 export default function AccountPage() {
+  // confirmation modal state
+  const [confirmationModalState, setConfirmationModalState] = useState(false);
+  // confirmation modal function
+  const toggleConfirmationModal = () => {
+    setConfirmationModalState(!confirmationModalState);
+  };
+
+  // state for password state
+  const [passwordDisplayState, setPasswordDisplayState] = useState(false);
+  const togglePasswordDisplayState = () => {
+    setPasswordDisplayState(!passwordDisplayState);
+    console.log(`passwordDisplayState is: ${passwordDisplayState}`);
+  };
 
   // state for layover
   const [layoverState, setLayoverState] = useState(false);
   const toggleLayover = () => {
     setLayoverState(!layoverState);
-    console.log(layoverState);
-  }
+    console.log(`layoverState is: ${layoverState}`);
+  };
 
-
+  // copy to clipboard state
+  const [copyState, setCopyState] = useState(false);
+  // copy to clipboard function
+  const copyToClipboard = (content) => {
+    setCopyState(true);
+    navigator.clipboard.writeText(content);
+    setTimeout(() => {
+      setCopyState(false);
+    }, 3000);
+  };
 
   return (
     <main>
@@ -40,7 +68,13 @@ export default function AccountPage() {
           <li>
             <p className={classes.field_name}>Address:</p>
             <p className={classes.text_content}>Kulmakatu 47</p>
-            <Image src={CartIcon} alt='VarausLista logo' height={15} />
+            <Image
+              src={BinIcon}
+              alt='bin icon'
+              height={15}
+              className='img_btn'
+              onClick={toggleConfirmationModal}
+            />
           </li>
           <li>
             <p className={classes.field_name}>Apartment:</p>
@@ -52,15 +86,47 @@ export default function AccountPage() {
           </li>
           <li>
             <p className={classes.field_name}>Password:</p>
-            <p className={classes.text_content}>*****</p>
-            <Image src={EyeIcon} alt='VarausLista logo' height={18} />
+            <p className={classes.text_content}>
+              {passwordDisplayState ? 'W4X38CRc6bhm' : '*****'}
+            </p>
+            <Image
+              className='img_btn'
+              src={passwordDisplayState ? EyeSlashedIcon : EyeIcon}
+              alt='eye icon'
+              height={18}
+              onClick={togglePasswordDisplayState}
+            />
           </li>
           <li>
             <p className={classes.field_name}>Invitation link:</p>
             <p className={classes.text_content}>
               4cae2cc2a0017e88ff4cc7a210051a79
             </p>
-            <Image src={CopyIcon} alt='VarausLista logo' height={18} />
+            <Image
+              className='img_btn'
+              src={CopyIcon}
+              alt='copy icon'
+              height={18}
+              onClick={() => {
+                copyToClipboard('4cae2cc2a0017e88ff4cc7a210051a79');
+              }}
+            />
+            <AnimatePresence>
+              {copyState && (
+                <motion.div
+                  className={classes.ux_feedback}
+                  variants={{
+                    hidden: { opacity: 0 },
+                    visible: { opacity: 100 },
+                  }}
+                  initial='hidden'
+                  animate='visible'
+                  exit='hidden'
+                >
+                  link is copied
+                </motion.div>
+              )}
+            </AnimatePresence>
           </li>
         </ul>
 
@@ -71,10 +137,30 @@ export default function AccountPage() {
           </p>
         </div>
 
-        <Button name='Create Account' action={toggleLayover}/>
-        {layoverState && <Account /> }
-        
+        <Button name='Create Account' action={toggleLayover} />
       </CardLayout>
+
+      {layoverState && <Account toggleLayover={toggleLayover} />}
+
+      {confirmationModalState && (
+        <ModalLayout>
+          <CardLayout>
+            <h1 className={sorce_sans_3.className}>Are you sure?</h1>
+            <div className='text_block'>
+              <p>
+                You are going to delete your address. To return it back you will
+                need an invitation link from your neighbours or you will need to
+                create a new address.
+              </p>
+              <p>
+                Please confirm deleting address only if you 100% aware of what
+                you are doing.
+              </p>
+            </div>
+            <Button name='Confirm deleting address' />
+          </CardLayout>
+        </ModalLayout>
+      )}
     </main>
   );
 }

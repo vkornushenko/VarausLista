@@ -38,6 +38,7 @@
   gap: 16px;
   padding: 8px 0;
   border-bottom: 1px solid #e6eff2;
+  position: relative;
 }
 .account__list li:last-child {
   border: 0;
@@ -54,4 +55,18 @@
 
 .info_block p {
   color: #3f788f;
+}
+
+.ux_feedback{
+  position: absolute;
+  z-index: 200;
+  top: calc(-100% + 8px);
+  right:9px;
+  transform: translateX(50%);
+  background-color: #D9F4FF;
+  color:#3f788f;
+  padding: 2px 4px;
+  border: 2px solid #539FBD;
+  border-radius: 2px;
+  box-shadow: 0 0 4px #ACBABF;
 }
