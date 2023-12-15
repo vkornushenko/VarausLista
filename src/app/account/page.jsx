@@ -4,10 +4,11 @@
 import { motion } from 'framer-motion';
 import { AnimatePresence } from 'framer-motion';
 
-import CardLayout from '../components/ui/CardLayout';
+import Image from 'next/image';
+import { useState } from 'react';
 
 import { sorce_sans_3 } from '@/app/utils/fonts';
-import Image from 'next/image';
+import classes from './page.module.css';
 
 import AvatarIcon from '../../../public/icons/avatar.svg';
 import BinIcon from '../../../public/icons/bin.svg';
@@ -15,10 +16,9 @@ import EyeIcon from '../../../public/icons/eye.svg';
 import EyeSlashedIcon from '../../../public/icons/eye_slashed.svg';
 import CopyIcon from '../../../public/icons/copy.svg';
 
-import classes from './page.module.css';
+import CardLayout from '../components/ui/CardLayout';
 import Button from '../components/ui/Button';
 import Account from '../components/modal/Account';
-import { useState } from 'react';
 import ModalLayout from '../components/ui/ModalLayout';
 
 export default function AccountPage() {
@@ -143,7 +143,7 @@ export default function AccountPage() {
       {layoverState && <Account toggleLayover={toggleLayover} />}
 
       {confirmationModalState && (
-        <ModalLayout>
+        <ModalLayout toggleLayover={toggleConfirmationModal}>
           <CardLayout>
             <h1 className={sorce_sans_3.className}>Are you sure?</h1>
             <div className='text_block'>
