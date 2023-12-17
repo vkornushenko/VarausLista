@@ -1,5 +1,9 @@
 'use client';
 
+// redux
+import { useDispatch, useSelector } from 'react-redux';
+import { uiActions } from '@/lib/ui_slice';
+
 // framer motion
 import { motion } from 'framer-motion';
 import { AnimatePresence } from 'framer-motion';
@@ -22,25 +26,26 @@ import Account from '../components/modal/Account';
 import ModalLayout from '../components/ui/ModalLayout';
 
 export default function AccountPage() {
-  // confirmation modal state
-  const [confirmationModalState, setConfirmationModalState] = useState(false);
-  // confirmation modal function
-  const toggleConfirmationModal = () => {
-    setConfirmationModalState(!confirmationModalState);
+  // redux
+  const dispatch = useDispatch();
+  // for confirmation
+  const toggleConfirmationHandler = () => {
+    dispatch(uiActions.toggleConfirmation());
   };
+  const showConfirmation = useSelector(
+    (state) => state.ui.confirmationIsVisible
+  );
+  // for layover
+  const toggleModalrHandler = () => {
+    dispatch(uiActions.toggleModal());
+  };
+  const showModal = useSelector((state) => state.ui.modalIsVisible);
 
   // state for password state
   const [passwordDisplayState, setPasswordDisplayState] = useState(false);
   const togglePasswordDisplayState = () => {
     setPasswordDisplayState(!passwordDisplayState);
-    console.log(`passwordDisplayState is: ${passwordDisplayState}`);
-  };
-
-  // state for layover
-  const [layoverState, setLayoverState] = useState(false);
-  const toggleLayover = () => {
-    setLayoverState(!layoverState);
-    console.log(`layoverState is: ${layoverState}`);
+    //console.log(`passwordDisplayState is: ${passwordDisplayState}`);
   };
 
   // copy to clipboard state
@@ -73,7 +78,7 @@ export default function AccountPage() {
               alt='bin icon'
               height={15}
               className='img_btn'
-              onClick={toggleConfirmationModal}
+              onClick={toggleConfirmationHandler}
             />
           </li>
           <li>
@@ -137,13 +142,13 @@ export default function AccountPage() {
           </p>
         </div>
 
-        <Button name='Create Account' action={toggleLayover} />
+        <Button name='Create Account' action={toggleModalrHandler} />
       </CardLayout>
 
-      {layoverState && <Account toggleLayover={toggleLayover} />}
+      {showModal && <Account toggleLayover={toggleModalrHandler} />}
 
-      {confirmationModalState && (
-        <ModalLayout toggleLayover={toggleConfirmationModal}>
+      {showConfirmation && (
+        <ModalLayout toggleLayover={toggleConfirmationHandler}>
           <CardLayout>
             <h1 className={sorce_sans_3.className}>Are you sure?</h1>
             <div className='text_block'>

@@ -15,16 +15,21 @@ import Reservation from '../components/modal/Reservation';
 
 import classes from './page.module.css';
 
+// redux
+import { useDispatch, useSelector } from 'react-redux';
+import { uiActions } from '@/lib/ui_slice';
+
 export default function ReservationPage() {
+  // redux
+  const dispatch = useDispatch();
+  // for layover
+  const toggleModalrHandler = () => {
+    dispatch(uiActions.toggleModal());
+  };
+  const showModal = useSelector((state) => state.ui.modalIsVisible);
+
   const [currentSharedPropertyIndex, setCurrentSharedPropertyIndex] =
     useState(0);
-  // state for layover
-  const [layoverState, setLayoverState] = useState(false);
-  // toggle for layover
-  const toggleLayover = () => {
-    setLayoverState(!layoverState);
-    console.log(layoverState);
-  };
 
   const sharedPropertyList = ['Sauna', 'Laundry', 'GYM', 'Grill'];
   const SharedPropName = sharedPropertyList[currentSharedPropertyIndex];
@@ -43,9 +48,12 @@ export default function ReservationPage() {
         />
         <DateNavigation />
         <ReservationTable />
-        <Button action={toggleLayover} name={`Reserve ${SharedPropName}`} />
+        <Button
+          action={toggleModalrHandler}
+          name={`Reserve ${SharedPropName}`}
+        />
       </CardLayout>
-      {layoverState && <Reservation toggleLayover={toggleLayover} />}
+      {showModal && <Reservation toggleLayover={toggleModalrHandler} />}
     </main>
   );
 }
