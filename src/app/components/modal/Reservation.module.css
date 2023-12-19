@@ -26,6 +26,8 @@
 
 .form input:focus {
   color: #333c40;
+  border: 1px solid #333c40;
+  outline: 2px solid #acbabf;
 }
 
 .form input::placeholder {
@@ -33,9 +35,10 @@
   font-weight: 400;
   color: #acbabf;
 }
-.form input[type="datetime-local"]{
-    font-size: 20px;
-    /* font-family: 'Times New Roman', Times, serif; */
+
+.form input[type='datetime-local'] {
+  font-size: 20px;
+  /* font-family: 'Times New Roman', Times, serif; */
 }
 
 .input_block {
@@ -55,7 +58,7 @@
   align-self: stretch;
 }
 
-.submit_button:hover{
-    background-color: #3F788F;
-    cursor: pointer;
+.submit_button:hover {
+  background-color: #3f788f;
+  cursor: pointer;
 }

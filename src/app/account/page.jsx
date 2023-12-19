@@ -31,6 +31,7 @@ export default function AccountPage() {
   // for confirmation
   const toggleConfirmationHandler = () => {
     dispatch(uiActions.toggleConfirmation());
+    console.log('toggled');
   };
   const showConfirmation = useSelector(
     (state) => state.ui.confirmationIsVisible

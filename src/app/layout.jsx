@@ -16,6 +16,8 @@ import { AnimatePresence } from 'framer-motion';
 // import { Provider } from 'react-redux';
 // import { makeStore } from '@/lib';
 import StoreProvider from './StoreProvider';
+// import { useDispatch, useSelector } from 'react-redux';
+// import { uiActions } from '@/lib/ui_slice';
 
 // export const metadata = {
 //   title: 'Create Next App',
@@ -23,7 +25,13 @@ import StoreProvider from './StoreProvider';
 // };
 
 export default function RootLayout({ children }) {
-  
+  // // redux
+  // const dispatch = useDispatch();
+  // const toggleMenuHandler = () => {
+  //   dispatch(uiActions.toggleMenu());
+  // }
+  // const showMenu = useSelector((state) => state.ui.menuIsVisible);
+
   // state and function for menuModal
   const [menuVisibility, setMenuVisibility] = useState(false);
   const menuToggler = () => {
