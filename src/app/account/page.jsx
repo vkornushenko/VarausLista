@@ -9,7 +9,7 @@ import { motion } from 'framer-motion';
 import { AnimatePresence } from 'framer-motion';
 
 import Image from 'next/image';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { sorce_sans_3 } from '@/app/utils/fonts';
 import classes from './page.module.css';
@@ -25,7 +25,33 @@ import Button from '../components/ui/Button';
 import Account from '../components/modal/Account';
 import ModalLayout from '../components/ui/ModalLayout';
 
+// async function getUser(id){
+//   const res = await fetch('http://localhost:4001/users/' + id, {
+//     next: {
+//       revalidate: 60,
+//     },
+//   });
+
+//   if (!res.ok) {
+//     // notFound();
+//     //console.log('error, res not ok')
+//   }
+//   return res.json();
+// }
+
 export default function AccountPage() {
+  const [user, setUser] = useState();
+
+  const userId = 2;
+  useEffect(() => {
+    const getUser = async (id) => {
+      const response = await fetch('http://localhost:4001/users/' + id);
+      const resData = await response.json();
+      setUser(resData);
+    };
+    getUser(userId);
+  }, [userId]);
+
   // redux
   const dispatch = useDispatch();
   // for confirmation
@@ -67,13 +93,13 @@ export default function AccountPage() {
           <div className={classes.avatar_block}>
             <Image src={AvatarIcon} alt='avatar icon' width={36} />
           </div>
-          <h1 className={sorce_sans_3.className}>New User</h1>
+          <h1 className={sorce_sans_3.className}>{user && user.first_name || 'New User'}</h1>
         </div>
 
         <ul className={classes.account__list}>
           <li>
             <p className={classes.field_name}>Address:</p>
-            <p className={classes.text_content}>Kulmakatu 47</p>
+            <p className={classes.text_content}>{user && user.address || ''}</p>
             <Image
               src={BinIcon}
               alt='bin icon'
@@ -82,18 +108,19 @@ export default function AccountPage() {
               onClick={toggleConfirmationHandler}
             />
           </li>
+
           <li>
             <p className={classes.field_name}>Apartment:</p>
-            <p className={classes.text_content}>A1</p>
+            <p className={classes.text_content}>{user && user.apartment || ''}</p>
           </li>
           <li>
             <p className={classes.field_name}>Email:</p>
-            <p className={classes.text_content}>johanna@gmail.com</p>
+            <p className={classes.text_content}>{user && user.email || ''}</p>
           </li>
           <li>
             <p className={classes.field_name}>Password:</p>
             <p className={classes.text_content}>
-              {passwordDisplayState ? 'W4X38CRc6bhm' : '*****'}
+              {passwordDisplayState ? user && user.password || '' : '*****'}
             </p>
             <Image
               className='img_btn'

@@ -1,3 +1,5 @@
+import { useRouter } from 'next/navigation';
+
 import CardLayout from '../ui/CardLayout';
 import ModalLayout from '../ui/ModalLayout';
 import classes from './Reservation.module.css';
@@ -5,16 +7,39 @@ import classes from './Reservation.module.css';
 import { sorce_sans_3 } from '@/app/utils/fonts';
 
 export default function Account(props) {
-
-
+  const router = useRouter();
   // handle form submission
-  const submitHandler = (event) => {
+  const submitHandler = async (event) => {
     event.preventDefault();
     // To do: get form data
+    const formData = new FormData(event.target);
+    const data = Object.fromEntries(formData.entries());
+    console.log(data);
+
+    const newUser = {
+      first_name: data.first_name,
+      address: data.address,
+      apartment: data.apartment,
+      email: data.email,
+      password: data.password,
+    };
+
+    const res = await fetch('http://localhost:4001/users', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newUser),
+    });
+
+    if (res.status === 201) {
+      // refresh to refresh cach (page is not refreshing)
+      router.refresh();
+      // // navigate to tickets
+      // router.push('/account');
+    }
 
     // close popup
     props.toggleLayover();
-  }
+  };
 
   return (
     <ModalLayout toggleLayover={props.toggleLayover}>
@@ -23,7 +48,6 @@ export default function Account(props) {
           Create Account
         </h1>
         <form className={classes.form} onSubmit={submitHandler}>
-
           <div className={classes.input_block}>
             <label htmlFor='username' className={sorce_sans_3.className}>
               Name
@@ -34,6 +58,7 @@ export default function Account(props) {
               name='first_name'
               placeholder='Your name'
               className={sorce_sans_3.className}
+              required
             />
           </div>
 
@@ -47,6 +72,7 @@ export default function Account(props) {
               name='address'
               placeholder='Your address'
               className={sorce_sans_3.className}
+              required
             />
           </div>
 
@@ -60,6 +86,7 @@ export default function Account(props) {
               name='apartment'
               placeholder='Apartment number'
               className={sorce_sans_3.className}
+              required
             />
           </div>
 
@@ -73,6 +100,7 @@ export default function Account(props) {
               name='email'
               placeholder='Your email'
               className={sorce_sans_3.className}
+              required
             />
           </div>
 
@@ -86,10 +114,16 @@ export default function Account(props) {
               name='password'
               placeholder='Password'
               className={sorce_sans_3.className}
+              required
             />
           </div>
 
-          <button type='submit' className={sorce_sans_3.className + ' ' + classes.submit_button}>Create Account</button>
+          <button
+            type='submit'
+            className={sorce_sans_3.className + ' ' + classes.submit_button}
+          >
+            Create Account
+          </button>
         </form>
       </CardLayout>
     </ModalLayout>
