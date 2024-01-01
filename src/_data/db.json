@@ -15,6 +15,14 @@
       "email": "vkornushenko@gmail.com",
       "password": "ZLcYkdpjWqrte8p",
       "id": 2
+    },
+    {
+      "first_name": "Hugo",
+      "address": "Kulmakatu 47",
+      "apartment": "A1",
+      "email": "hugokissa@gmail.com",
+      "password": "hPXywzYA5VmuWSb",
+      "id": 3
     }
   ]
 }

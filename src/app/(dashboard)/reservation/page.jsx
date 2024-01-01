@@ -4,14 +4,14 @@ import { sorce_sans_3 } from '@/app/utils/fonts';
 import { useState } from 'react';
 import Image from 'next/image';
 
-import LocationIcon from '../../../public/icons/location.svg';
+import LocationIcon from '../../../../public/icons/location.svg';
 
-import CardLayout from '../components/ui/CardLayout';
-import SharedPropertyNavigation from '../components/reservation/SharedPropertyNavigation';
-import DateNavigation from '../components/reservation/DateNavigation';
-import ReservationTable from '../components/reservation/ReservationTable';
-import Button from '../components/ui/Button';
-import Reservation from '../components/modal/Reservation';
+import CardLayout from '@/app/components/ui/CardLayout';
+import SharedPropertyNavigation from '@/app/components/reservation/SharedPropertyNavigation';
+import DateNavigation from '@/app/components/reservation/DateNavigation';
+import ReservationTable from '@/app/components/reservation/ReservationTable';
+import Button from '@/app/components/ui/Button';
+import Reservation from '@/app/components/modal/Reservation';
 
 import classes from './page.module.css';
 

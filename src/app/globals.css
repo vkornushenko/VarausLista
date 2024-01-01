@@ -35,6 +35,8 @@ h1{
   align-items: center;
   width: 100%;
   min-width: 360px;
+  /* min height not to cut round background img (468 - 150 px) */
+  min-height:318px;
   gap:32px;
   background-position: 50% -150px;
   background-repeat: no-repeat;

@@ -14,16 +14,18 @@ import { useEffect, useState } from 'react';
 import { sorce_sans_3 } from '@/app/utils/fonts';
 import classes from './page.module.css';
 
-import AvatarIcon from '../../../public/icons/avatar.svg';
-import BinIcon from '../../../public/icons/bin.svg';
-import EyeIcon from '../../../public/icons/eye.svg';
-import EyeSlashedIcon from '../../../public/icons/eye_slashed.svg';
-import CopyIcon from '../../../public/icons/copy.svg';
+// icons
+import AvatarIcon from '../../../../public/icons/avatar.svg';
+import BinIcon from '../../../../public/icons/bin.svg';
+import EyeIcon from '../../../../public/icons/eye.svg';
+import EyeSlashedIcon from '../../../../public/icons/eye_slashed.svg';
+import CopyIcon from '../../../../public/icons/copy.svg';
 
-import CardLayout from '../components/ui/CardLayout';
-import Button from '../components/ui/Button';
-import Account from '../components/modal/Account';
-import ModalLayout from '../components/ui/ModalLayout';
+// components
+import CardLayout from '@/app/components/ui/CardLayout';
+import Button from '@/app/components/ui/Button';
+import Account from '@/app/components/modal/Account';
+import ModalLayout from '@/app/components/ui/ModalLayout';
 
 // async function getUser(id){
 //   const res = await fetch('http://localhost:4001/users/' + id, {
@@ -42,7 +44,7 @@ import ModalLayout from '../components/ui/ModalLayout';
 export default function AccountPage() {
   const [user, setUser] = useState();
 
-  const userId = 2;
+  const userId = 3;
   useEffect(() => {
     const getUser = async (id) => {
       const response = await fetch('http://localhost:4001/users/' + id);

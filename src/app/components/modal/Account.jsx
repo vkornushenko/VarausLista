@@ -1,5 +1,8 @@
 import { useRouter } from 'next/navigation';
 
+//supabase
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+
 import CardLayout from '../ui/CardLayout';
 import ModalLayout from '../ui/ModalLayout';
 import classes from './Reservation.module.css';
@@ -8,34 +11,48 @@ import { sorce_sans_3 } from '@/app/utils/fonts';
 
 export default function Account(props) {
   const router = useRouter();
+
   // handle form submission
   const submitHandler = async (event) => {
     event.preventDefault();
+
     // To do: get form data
     const formData = new FormData(event.target);
     const data = Object.fromEntries(formData.entries());
     console.log(data);
 
-    const newUser = {
-      first_name: data.first_name,
-      address: data.address,
-      apartment: data.apartment,
+    // const newUser = {
+    //   first_name: data.first_name,
+    //   address: data.address,
+    //   apartment: data.apartment,
+    //   email: data.email,
+    //   password: data.password,
+    // };
+
+    // connect to supabase
+    const supabase = createClientComponentClient();
+    const { error } = await supabase.auth.signUp({
       email: data.email,
       password: data.password,
-    };
-
-    const res = await fetch('http://localhost:4001/users', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(newUser),
+      options: {
+        emailRedirectTo: `${location.origin}/api/auth/callback`,
+      },
     });
 
-    if (res.status === 201) {
-      // refresh to refresh cach (page is not refreshing)
-      router.refresh();
-      // // navigate to tickets
-      // router.push('/account');
-    }
+    error ? console.log(error.message) : router.push('/verify');
+
+    // const res = await fetch('http://localhost:4001/users', {
+    //   method: 'POST',
+    //   headers: { 'Content-Type': 'application/json' },
+    //   body: JSON.stringify(newUser),
+    // });
+
+    // if (res.status === 201) {
+    //   // refresh to refresh cach (page is not refreshing)
+    //   router.refresh();
+    //   // // navigate to tickets
+    //   // router.push('/account');
+    // }
 
     // close popup
     props.toggleLayover();
