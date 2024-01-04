@@ -16,17 +16,27 @@ import Reservation from '@/app/components/modal/Reservation';
 import classes from './page.module.css';
 
 // redux
+import { toggleModal } from '@/redux/features/ui-slice';
 import { useDispatch, useSelector } from 'react-redux';
-import { uiActions } from '@/lib/ui_slice';
 
 export default function ReservationPage() {
   // redux
   const dispatch = useDispatch();
   // for layover
   const toggleModalrHandler = () => {
-    dispatch(uiActions.toggleModal());
+    dispatch(toggleModal());
+    // if we want to pass a payload/action/data to a function:
+    // dispatch(logIn(username));
   };
-  const showModal = useSelector((state) => state.ui.modalIsVisible);
+  // NOTE!!!
+  // selector could be used in another component separatly
+  // all we need is to import selector and use useSelector
+  // like we using it below
+  const showModal = useSelector(
+    (state) => state.uiReducer.value.modalIsVisible
+    // the same way we can get data from the store:
+    // (state) => state.uiReducer.value.username
+  );
 
   const [currentSharedPropertyIndex, setCurrentSharedPropertyIndex] =
     useState(0);

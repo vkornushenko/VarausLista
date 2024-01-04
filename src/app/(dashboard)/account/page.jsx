@@ -1,16 +1,18 @@
 'use client';
 
+import { useState } from 'react';
+
 // redux
+import { toggleConfirmation, toggleModal } from '@/redux/features/ui-slice';
 import { useDispatch, useSelector } from 'react-redux';
-import { uiActions } from '@/lib/ui_slice';
 
 // framer motion
 import { motion } from 'framer-motion';
 import { AnimatePresence } from 'framer-motion';
 
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
 
+// style
 import { sorce_sans_3 } from '@/app/utils/fonts';
 import classes from './page.module.css';
 
@@ -27,48 +29,30 @@ import Button from '@/app/components/ui/Button';
 import Account from '@/app/components/modal/Account';
 import ModalLayout from '@/app/components/ui/ModalLayout';
 
-// async function getUser(id){
-//   const res = await fetch('http://localhost:4001/users/' + id, {
-//     next: {
-//       revalidate: 60,
-//     },
-//   });
-
-//   if (!res.ok) {
-//     // notFound();
-//     //console.log('error, res not ok')
-//   }
-//   return res.json();
-// }
-
 export default function AccountPage() {
-  const [user, setUser] = useState();
-
-  const userId = 3;
-  useEffect(() => {
-    const getUser = async (id) => {
-      const response = await fetch('http://localhost:4001/users/' + id);
-      const resData = await response.json();
-      setUser(resData);
-    };
-    getUser(userId);
-  }, [userId]);
-
   // redux
   const dispatch = useDispatch();
+
+
   // for confirmation
   const toggleConfirmationHandler = () => {
-    dispatch(uiActions.toggleConfirmation());
+    // redux, dispatch
+    dispatch(toggleConfirmation());
+
     console.log('toggled');
   };
+  // redux, state value
   const showConfirmation = useSelector(
-    (state) => state.ui.confirmationIsVisible
+    (state) => state.uiReducer.value.confirmationIsVisible
   );
+
   // for layover
   const toggleModalrHandler = () => {
-    dispatch(uiActions.toggleModal());
+    // redux dispatch
+    dispatch(toggleModal());
   };
-  const showModal = useSelector((state) => state.ui.modalIsVisible);
+  // redux, state value
+  const showModal = useSelector((state) => state.uiReducer.value.modalIsVisible);
 
   // state for password state
   const [passwordDisplayState, setPasswordDisplayState] = useState(false);
@@ -95,13 +79,14 @@ export default function AccountPage() {
           <div className={classes.avatar_block}>
             <Image src={AvatarIcon} alt='avatar icon' width={36} />
           </div>
-          <h1 className={sorce_sans_3.className}>{user && user.first_name || 'New User'}</h1>
+          <h1 className={sorce_sans_3.className}>Johanna</h1>
         </div>
 
         <ul className={classes.account__list}>
+
           <li>
             <p className={classes.field_name}>Address:</p>
-            <p className={classes.text_content}>{user && user.address || ''}</p>
+            <p className={classes.text_content}>Kulmakatu 47</p>
             <Image
               src={BinIcon}
               alt='bin icon'
@@ -113,16 +98,18 @@ export default function AccountPage() {
 
           <li>
             <p className={classes.field_name}>Apartment:</p>
-            <p className={classes.text_content}>{user && user.apartment || ''}</p>
+            <p className={classes.text_content}>A1</p>
           </li>
+
           <li>
             <p className={classes.field_name}>Email:</p>
-            <p className={classes.text_content}>{user && user.email || ''}</p>
+            <p className={classes.text_content}>johanna@gmail.com</p>
           </li>
+
           <li>
             <p className={classes.field_name}>Password:</p>
             <p className={classes.text_content}>
-              {passwordDisplayState ? user && user.password || '' : '*****'}
+              {passwordDisplayState ? '8ff4cc7a21005' : '*****'}
             </p>
             <Image
               className='img_btn'
@@ -132,6 +119,7 @@ export default function AccountPage() {
               onClick={togglePasswordDisplayState}
             />
           </li>
+
           <li>
             <p className={classes.field_name}>Invitation link:</p>
             <p className={classes.text_content}>
@@ -163,6 +151,7 @@ export default function AccountPage() {
               )}
             </AnimatePresence>
           </li>
+
         </ul>
 
         <div className={classes.info_block}>
