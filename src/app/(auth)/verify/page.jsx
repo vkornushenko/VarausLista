@@ -1,6 +1,6 @@
 'use client';
 
-import CardLayout from '../../components/ui/CardLayout';
+import CardLayout from '@/app/components/ui/CardLayout';
 
 export default function page() {
   return (

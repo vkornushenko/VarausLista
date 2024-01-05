@@ -6,6 +6,7 @@ const initialState = {
   value: {
     modalIsVisible: false,
     confirmationIsVisible: false,
+    menuIsVisible: false,
   },
 };
 
@@ -35,13 +36,16 @@ export const ui = createSlice({
       state.value.modalIsVisible = !state.value.modalIsVisible;
     },
     // another toggle action
-    toggleConfirmation(state) {
+    toggleConfirmation: (state) => {
       state.value.confirmationIsVisible = !state.value.confirmationIsVisible;
     },
+    toggleMenu: (state) => {
+      state.value.menuIsVisible = !state.value.menuIsVisible;
+    }
   },
 });
 
 // export all the actions
-export const { toggleModal, toggleConfirmation } = ui.actions;
+export const { toggleModal, toggleConfirmation, toggleMenu } = ui.actions;
 // export reducer
 export default ui.reducer;

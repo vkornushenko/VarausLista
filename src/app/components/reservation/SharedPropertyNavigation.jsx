@@ -25,7 +25,9 @@ export default function SharedPropertyNavigation(props) {
             }`}
           >
             <p>{propertyItem}</p>
-            { propertyItem === selected && <motion.div layoutId='underlined' className={classes.line} /> }
+            {propertyItem === selected && (
+              <motion.div layoutId='underlined' className={classes.line} />
+            )}
           </li>
         ))}
         <li>+Add</li>

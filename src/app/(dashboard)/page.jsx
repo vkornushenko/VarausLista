@@ -1,5 +1,3 @@
-'use client';
-
 import CardLayout from '../components/ui/CardLayout';
 import Intro from '../components/Intro';
 
