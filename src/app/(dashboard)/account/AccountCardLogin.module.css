@@ -1,0 +1,11 @@
+.login_container{
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+}
+
+.login_container a{
+    font-weight: 600;
+    text-decoration: underline;
+    color: inherit;
+}

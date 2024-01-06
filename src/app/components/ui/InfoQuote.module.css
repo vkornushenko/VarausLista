@@ -1,0 +1,11 @@
+.info_block {
+  padding: 8px 11px;
+  border-radius: 0px 2px 2px 0px;
+  box-sizing: border-box;
+  background-color: #d9f4ff;
+  border-left: 3px solid #498ba5;
+}
+
+.info_block p {
+  color: #3f788f;
+}

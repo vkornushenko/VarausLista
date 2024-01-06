@@ -9,7 +9,8 @@ import classes from './Reservation.module.css';
 // fonts
 import { sorce_sans_3 } from '@/app/utils/fonts';
 
-export default function Account(props) {
+
+export default function AccountForm(props) {
   const router = useRouter();
 
   // handle form submission
@@ -40,19 +41,6 @@ export default function Account(props) {
     });
 
     error ? console.log(error.message) : router.push('/verify');
-
-    // const res = await fetch('http://localhost:4001/users', {
-    //   method: 'POST',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify(newUser),
-    // });
-
-    // if (res.status === 201) {
-    //   // refresh to refresh cach (page is not refreshing)
-    //   router.refresh();
-    //   // // navigate to tickets
-    //   // router.push('/account');
-    // }
 
     // close popup
     props.toggleLayover();

@@ -13,22 +13,19 @@ import ShareIcon from '../../../public/icons/share.svg';
 // style
 import classes from './Intro.module.css';
 import Button from './ui/Button';
-
+import CardHeader from './ui/CardHeader';
 
 export default function Intro() {
   const router = useRouter();
-  
+
   // button action
   const buttonAction = () => {
     router.push('/account');
-  }
-
+  };
 
   return (
     <>
-      <h1 className={sorce_sans_3.className + ' ' + classes.welcome__header}>
-        Join VarausLista App
-      </h1>
+      <CardHeader title='Join VarausLista App' />
 
       <ul className={classes.welcome__list}>
         <li>
