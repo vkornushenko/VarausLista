@@ -4,7 +4,6 @@
 import { toggleConfirmation, toggleModal } from '@/redux/features/ui-slice';
 import { useDispatch, useSelector } from 'react-redux';
 
-
 // components
 import CardLayout from '@/app/components/ui/CardLayout';
 import Button from '@/app/components/ui/Button';
@@ -16,8 +15,17 @@ import UserDataList from './UserDataList';
 import AccountCardLogin from './AccountCardLogin';
 
 import ConfirmationCard from '@/app/components/ui/ConfirmationCard';
+import { useEffect, useState } from 'react';
+import AccountCardLogOut from './AccountCardLogOut';
 
-export default function AccountCard() {
+export default function AccountCard({ session }) {
+  // const [user, setUser] = useState('');
+  // useEffect(() => {
+  //   if (data) {
+  //     setUser(data.session?.user);
+  //   }
+  // }, [data]);
+
   // redux
   const dispatch = useDispatch();
 
@@ -45,18 +53,18 @@ export default function AccountCard() {
 
   // todo fetch user data from supabase
   const userData = {
-    name: 'Johanna',
-    address: 'Kulmakatu 47',
-    apartment: 'A1',
-    email: 'johanna@gmail.com',
-    password: '8ff4cc7a21005',
-    invitationLink: '4cae2cc2a0017e88ff4cc7a210051a79',
+    name: session?.user.user_metadata.first_name,
+    address: session?.user.user_metadata.address,
+    apartment: session?.user.user_metadata.apartment,
+    email: session?.user.email,
+    password: session?.user.user_metadata.password,
+    invitationLink: 'canBeSendToEmail',
   };
   // const userData = null;
 
-  const userDataFromSupabase = {
-    userData,
-  };
+  // const userDataFromSupabase = {
+  //   userData,
+  // };
 
   // content for info quote
   const infoQuoteContent = {
@@ -64,29 +72,39 @@ export default function AccountCard() {
     message:
       'Create account to get access to VarausLista App from multiple devices and make reservations faster.',
   };
+  console.log(userData);
 
   return (
     <>
       <CardLayout>
-        <AccountCardHeader name={userDataFromSupabase.userData.name} />
+        <AccountCardHeader name={userData.name} />
 
-        <UserDataList
-          toggleConfirmationHandler={toggleConfirmationHandler}
-          userData={userDataFromSupabase.userData}
-        />
+        {session && (
+          <UserDataList
+            toggleConfirmationHandler={toggleConfirmationHandler}
+            userData={userData}
+          />
+        )}
 
         <InfoQuote data={infoQuoteContent} />
 
-        <Button name='Create Account' action={toggleModalrHandler} />
-        <AccountCardLogin />
+        <Button
+          name={session ? 'Edit Account' : 'Create Account'}
+          action={toggleModalrHandler}
+        />
+
+        {session ? <AccountCardLogOut /> : <AccountCardLogin />}
+
       </CardLayout>
 
-      {showModal && <AccountForm toggleLayover={toggleModalrHandler} />}
+      {showModal && (
+        <AccountForm toggleLayover={toggleModalrHandler} user={session?.user} />
+      )}
 
       {showConfirmation && (
         <ModalLayout toggleLayover={toggleConfirmationHandler}>
           <CardLayout>
-          <ConfirmationCard />
+            <ConfirmationCard />
           </CardLayout>
         </ModalLayout>
       )}

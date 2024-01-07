@@ -1,54 +1,52 @@
-import CardHeader from "@/app/components/ui/CardHeader";
+'use client';
 
+import CardHeader from '@/app/components/ui/CardHeader';
+import InfoQuote from '@/app/components/ui/InfoQuote';
+import '@/app/globals.css';
+import { sorce_sans_3 } from '@/app/utils/fonts';
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import Link from 'next/link';
+import '@/app/globals.css';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 export default function LoginForm() {
+  const router = useRouter();
+  // eerorState
+  const [errorMessage, setErrorMessage] = useState();
+  
+  const messageCreateAccount = (
+    <p>
+      If you don't have account, navigate to{' '}
+      <Link href='/account'>Create Account page</Link>.
+    </p>
+  )
+  
+
+
+  const submitHandler = async (event) => {
+    event.preventDefault();
+    // get form data
+    const formData = new FormData(event.target);
+    const data = Object.fromEntries(formData.entries());
+    //console.log(data);
+
+    const supabase = createClientComponentClient();
+    const { error } = await supabase.auth.signInWithPassword({
+      email: data.email,
+      password: data.password,
+    });
+
+    error
+      ? (setErrorMessage(error), console.log(JSON.stringify(errorMessage)))
+      : (router.push('/account'), router.refresh());
+  };
+
   return (
     <>
-      <CardHeader title='Log In'/>
-      {/* <form className={classes.form} onSubmit={submitHandler}>
-        <div className={classes.input_block}>
-          <label htmlFor='username' className={sorce_sans_3.className}>
-            Name
-          </label>
-          <input
-            type='text'
-            id='username'
-            name='first_name'
-            placeholder='Your name'
-            className={sorce_sans_3.className}
-            required
-          />
-        </div>
-
-        <div className={classes.input_block}>
-          <label htmlFor='address' className={sorce_sans_3.className}>
-            Address
-          </label>
-          <input
-            type='text'
-            id='address'
-            name='address'
-            placeholder='Your address'
-            className={sorce_sans_3.className}
-            required
-          />
-        </div>
-
-        <div className={classes.input_block}>
-          <label htmlFor='apartment' className={sorce_sans_3.className}>
-            Apartment No
-          </label>
-          <input
-            type='text'
-            id='apartment'
-            name='apartment'
-            placeholder='Apartment number'
-            className={sorce_sans_3.className}
-            required
-          />
-        </div>
-
-        <div className={classes.input_block}>
+      <CardHeader title='Log In' />
+      <form className='form' onSubmit={submitHandler}>
+        <div className='input_block'>
           <label htmlFor='email' className={sorce_sans_3.className}>
             Email address
           </label>
@@ -61,8 +59,7 @@ export default function LoginForm() {
             required
           />
         </div>
-
-        <div className={classes.input_block}>
+        <div className='input_block'>
           <label htmlFor='password' className={sorce_sans_3.className}>
             Password
           </label>
@@ -75,14 +72,23 @@ export default function LoginForm() {
             required
           />
         </div>
-
         <button
           type='submit'
-          className={sorce_sans_3.className + ' ' + classes.submit_button}
+          className={sorce_sans_3.className + ' ' + 'submit_button'}
         >
-          Create Account
+          Log In
         </button>
-      </form> */}
+
+        {errorMessage && (
+          <>
+            <InfoQuote
+              data={{ message: errorMessage.message, type: 'error' }}
+            />
+
+            <InfoQuote data={{ message: messageCreateAccount, type: 'info' }} />
+          </>
+        )}
+      </form>
     </>
   );
 }

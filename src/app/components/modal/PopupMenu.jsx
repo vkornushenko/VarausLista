@@ -10,6 +10,7 @@ import { sorce_sans_3 } from '../../utils/fonts';
 
 import Link from 'next/link';
 import classes from './PopupMenu.module.css';
+import LogOut from './LogOut';
 
 
 export default function PopupMenu(props) {
@@ -79,7 +80,7 @@ export default function PopupMenu(props) {
                     Account
                   </Link>
                 </li>
-                <li>
+                {/* <li>
                   <Link
                     href='/faq'
                     className={sorce_sans_3.className + ' ' + classes.link}
@@ -87,6 +88,9 @@ export default function PopupMenu(props) {
                   >
                     How to use
                   </Link>
+                </li> */}
+                <li>
+                  <LogOut toggleMenu={props.toggleMenu} />
                 </li>
               </ul>
             </nav>

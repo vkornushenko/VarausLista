@@ -2,10 +2,30 @@
   padding: 8px 11px;
   border-radius: 0px 2px 2px 0px;
   box-sizing: border-box;
+}
+
+
+
+.info{
   background-color: #d9f4ff;
   border-left: 3px solid #498ba5;
 }
-
-.info_block p {
+.info p{
   color: #3f788f;
+}
+
+.error{
+  background-color: #FFD9DF;
+  border-left: 3px solid #C73C52;
+}
+.error p {
+  color: #C73C52;
+}
+
+.success{
+  background-color: #CEE0D4;
+  border-left: 3px solid #007729;
+}
+.success p {
+  color: #007729;
 }

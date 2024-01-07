@@ -1,6 +1,5 @@
 import CardLayout from '../ui/CardLayout';
 import ModalLayout from '../ui/ModalLayout';
-import classes from './Reservation.module.css';
 // fonts
 import { sorce_sans_3 } from '@/app/utils/fonts';
 
