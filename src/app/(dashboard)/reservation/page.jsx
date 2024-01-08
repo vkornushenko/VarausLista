@@ -11,7 +11,7 @@ import SharedPropertyNavigation from '@/app/components/reservation/SharedPropert
 import DateNavigation from '@/app/components/reservation/DateNavigation';
 import ReservationTable from '@/app/components/reservation/ReservationTable';
 import Button from '@/app/components/ui/Button';
-import Reservation from '@/app/components/modal/Reservation';
+import ReservationForm from '@/app/components/modal/ReservationForm';
 
 import classes from './page.module.css';
 
@@ -63,7 +63,7 @@ export default function ReservationPage() {
           name={`Reserve ${SharedPropName}`}
         />
       </CardLayout>
-      {showModal && <Reservation toggleLayover={toggleModalrHandler} />}
+      {showModal && <ReservationForm toggleLayover={toggleModalrHandler} />}
     </main>
   );
 }

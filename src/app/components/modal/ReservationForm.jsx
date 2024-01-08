@@ -1,9 +1,11 @@
+import CardHeader from '../ui/CardHeader';
 import CardLayout from '../ui/CardLayout';
 import ModalLayout from '../ui/ModalLayout';
 // fonts
 import { sorce_sans_3 } from '@/app/utils/fonts';
+import '@/app/globals.css';
 
-export default function Reservation(props) {
+export default function ReservationForm(props) {
 
   // get current time, count timezone, prepare for input format
   const now = new Date();
@@ -22,11 +24,12 @@ export default function Reservation(props) {
   return (
     <ModalLayout toggleLayover={props.toggleLayover}>
       <CardLayout>
-        <h1 className={sorce_sans_3.className + ' ' + classes.popup_header}>
+        {/* <h1 className={sorce_sans_3.className + ' ' + classes.popup_header}>
           Reserve Laundry
-        </h1>
-        <form className={classes.form} onSubmit={submitHandler}>
-          <div className={classes.input_block}>
+        </h1> */}
+        <CardHeader title='Reserve Laundry'/>
+        <form className='form' onSubmit={submitHandler}>
+          <div className='input_block'>
             <label htmlFor='username' className={sorce_sans_3.className}>
               Name
             </label>
@@ -38,7 +41,7 @@ export default function Reservation(props) {
               className={sorce_sans_3.className}
             />
           </div>
-          <div className={classes.input_block}>
+          <div className='input_block'>
             <label htmlFor='apartment' className={sorce_sans_3.className}>
               Apartment No
             </label>
@@ -50,7 +53,7 @@ export default function Reservation(props) {
               className={sorce_sans_3.className}
             />
           </div>
-          <div className={classes.input_block}>
+          <div className='input_block'>
             <label htmlFor='washing_machine' className={sorce_sans_3.className}>
               Washing machine No
             </label>
@@ -62,7 +65,7 @@ export default function Reservation(props) {
               className={sorce_sans_3.className}
             />
           </div>
-          <div className={classes.input_block}>
+          <div className='input_block'>
             <label htmlFor='start_time' className={sorce_sans_3.className}>
               Start time
             </label>
@@ -74,7 +77,7 @@ export default function Reservation(props) {
               className={sorce_sans_3.className}
             />
           </div>
-          <div className={classes.input_block}>
+          <div className='input_block'>
             <label htmlFor='duration' className={sorce_sans_3.className}>
               Duration
             </label>
@@ -86,7 +89,7 @@ export default function Reservation(props) {
               className={sorce_sans_3.className}
             />
           </div>
-          <button type='submit' className={sorce_sans_3.className + ' ' + classes.submit_button}>Reserve Sauna</button>
+          <button type='submit' className={sorce_sans_3.className + ' ' + 'submit_button'}>Reserve Sauna</button>
         </form>
       </CardLayout>
     </ModalLayout>
