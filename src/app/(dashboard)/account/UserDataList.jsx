@@ -12,7 +12,7 @@ import EyeIcon from '../../../../public/icons/eye.svg';
 import EyeSlashedIcon from '../../../../public/icons/eye_slashed.svg';
 import CopyIcon from '../../../../public/icons/copy.svg';
 
-export default function UserDataList(props) {
+export default function UserDataList({userData, toggleConfirmationHandler}) {
   // state for password state
   const [passwordDisplayState, setPasswordDisplayState] = useState(false);
   const togglePasswordDisplayState = () => {
@@ -33,39 +33,39 @@ export default function UserDataList(props) {
   return (
 
     <ul className={classes.account__list}>
-      {props.userData.address && (
+      {userData.address && (
         <li>
           <p className={classes.field_name}>Address:</p>
-          <p className={classes.text_content}>{props.userData.address}</p>
+          <p className={classes.text_content}>{userData.address}</p>
           <Image
             src={BinIcon}
             alt='bin icon'
             height={15}
             className='img_btn'
-            onClick={props.toggleConfirmationHandler}
+            onClick={toggleConfirmationHandler}
           />
         </li>
       )}
 
-      {props.userData.apartment && (
+      {userData.apartment && (
         <li>
           <p className={classes.field_name}>Apartment:</p>
-          <p className={classes.text_content}>{props.userData.apartment}</p>
+          <p className={classes.text_content}>{userData.apartment}</p>
         </li>
       )}
 
-      {props.userData.email && (
+      {userData.email && (
         <li>
           <p className={classes.field_name}>Email:</p>
-          <p className={classes.text_content}>{props.userData.email}</p>
+          <p className={classes.text_content}>{userData.email}</p>
         </li>
       )}
 
-      {props.userData.password && (
+      {userData.password && (
         <li>
           <p className={classes.field_name}>Password:</p>
           <p className={classes.text_content}>
-            {passwordDisplayState ? props.userData.password : '*****'}
+            {passwordDisplayState ? userData.password : '*****'}
           </p>
           <Image
             className='img_btn'
@@ -77,11 +77,11 @@ export default function UserDataList(props) {
         </li>
       )}
 
-      {props.userData.invitationLink && (
+      {userData.invitationLink && (
         <li>
           <p className={classes.field_name}>Invitation link:</p>
           <p className={classes.text_content}>
-            {props.userData.invitationLink}
+            {userData.invitationLink}
           </p>
           <Image
             className='img_btn'
@@ -89,7 +89,7 @@ export default function UserDataList(props) {
             alt='copy icon'
             height={18}
             onClick={() => {
-              copyToClipboard(props.userData.invitationLink);
+              copyToClipboard(userData.invitationLink);
             }}
           />
           <AnimatePresence>

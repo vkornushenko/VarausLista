@@ -102,6 +102,12 @@ main{
   /* font-family: 'Times New Roman', Times, serif; */
 }
 
+.form input:disabled{
+  background-color: #E6EFF2;
+  color: #6C7A80;
+  cursor: not-allowed;
+}
+
 .input_block {
   display: flex;
   flex-direction: column;

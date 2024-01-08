@@ -14,22 +14,20 @@ export default function LoginForm() {
   const router = useRouter();
   // eerorState
   const [errorMessage, setErrorMessage] = useState();
-  
+
+  // error message template
   const messageCreateAccount = (
     <p>
       If you don't have account, navigate to{' '}
       <Link href='/account'>Create Account page</Link>.
     </p>
-  )
-  
-
+  );
 
   const submitHandler = async (event) => {
     event.preventDefault();
     // get form data
     const formData = new FormData(event.target);
     const data = Object.fromEntries(formData.entries());
-    //console.log(data);
 
     const supabase = createClientComponentClient();
     const { error } = await supabase.auth.signInWithPassword({

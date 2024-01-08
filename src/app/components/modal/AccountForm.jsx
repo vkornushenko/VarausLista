@@ -10,67 +10,96 @@ import ModalLayout from '../ui/ModalLayout';
 // fonts
 import { sorce_sans_3 } from '@/app/utils/fonts';
 import CardHeader from '../ui/CardHeader';
-import InfoQuote from '../ui/InfoQuote';
-import { useState } from 'react';
+// import InfoQuote from '../ui/InfoQuote';
+// import { useState } from 'react';
 
-export default function AccountForm(props) {
+export default function AccountForm({
+  toggleLayover,
+  userData,
+  userDataIsEmpty,
+}) {
   // // state for error
   // const [errorIsFound, setErrorIsFound] = useState(false);
 
   const router = useRouter();
 
-  // handle form submission
-  const submitHandler = async (event) => {
+  // handle form Create Account submission
+  const submitCreateAccountHandler = async (event) => {
     event.preventDefault();
     // set error to undefined when start (for resubmit cases)
     // error = undefined;
 
-    // To do: get form data
+    // get form data
     const formData = new FormData(event.target);
-    const data = Object.fromEntries(formData.entries());
-    console.log(data);
-
-    // const newUser = {
-    //   first_name: data.first_name,
-    //   address: data.address,
-    //   apartment: data.apartment,
-    //   email: data.email,
-    //   password: data.password,
-    // };
+    const dataFromForm = Object.fromEntries(formData.entries());
 
     // connect to supabase
     const supabase = createClientComponentClient();
-    const { error } = await supabase.auth.signUp({
-      email: data.email,
-      password: data.password,
+    const { data, error } = await supabase.auth.signUp({
+      email: dataFromForm.email,
+      password: dataFromForm.password,
       options: {
         emailRedirectTo: `${location.origin}/api/auth/callback`,
         // user_metadata
         data: {
-          first_name: data.first_name,
-          address: data.address,
-          apartment: data.apartment,
-          password: data.password,
+          first_name: dataFromForm.first_name,
+          address: dataFromForm.address,
+          apartment: dataFromForm.apartment,
+          password: dataFromForm.password,
         },
       },
     });
 
     if (error) {
-      // setErrorIsFound(true);
-      console.log(error.message);
+      console.log(error);
     } else {
       router.push('/verify');
       // close popup
-      props.toggleLayover();
+      toggleLayover();
+    }
+  };
+
+  // handle Edit Account submission
+  const submitEditAccountHandler = async (event) => {
+    event.preventDefault();
+
+    // get form data
+    const formData = new FormData(event.target);
+    const dataFromForm = Object.fromEntries(formData.entries());
+
+    // connect to supabase
+    const supabase = createClientComponentClient();
+    const { data, error } = await supabase.auth.updateUser({
+      data: {
+        first_name: dataFromForm.first_name,
+        address: dataFromForm.address,
+        apartment: dataFromForm.apartment,
+      },
+    });
+    if (error) {
+      console.log(error);
+    }
+    if (!error) {
+      router.push('/account');
+      router.refresh();
+      // close popup
+      toggleLayover();
     }
   };
 
   return (
-    <ModalLayout toggleLayover={props.toggleLayover}>
+    <ModalLayout toggleLayover={toggleLayover}>
       <CardLayout>
         <CardHeader title='Create Account' />
 
-        <form className='form' onSubmit={submitHandler}>
+        <form
+          className='form'
+          onSubmit={
+            !userDataIsEmpty
+              ? submitEditAccountHandler
+              : submitCreateAccountHandler
+          }
+        >
           <div className='input_block'>
             <label htmlFor='username' className={sorce_sans_3.className}>
               Name
@@ -80,7 +109,7 @@ export default function AccountForm(props) {
               id='username'
               name='first_name'
               placeholder='Your name'
-              defaultValue={props.user?.user_metadata.first_name || ''}
+              defaultValue={userData?.name || ''}
               className={sorce_sans_3.className}
               required
             />
@@ -95,7 +124,7 @@ export default function AccountForm(props) {
               id='address'
               name='address'
               placeholder='Your address'
-              defaultValue={props.user?.user_metadata.address || ''}
+              defaultValue={userData?.address || ''}
               className={sorce_sans_3.className}
               required
             />
@@ -110,7 +139,7 @@ export default function AccountForm(props) {
               id='apartment'
               name='apartment'
               placeholder='Apartment number'
-              defaultValue={props.user?.user_metadata.apartment || ''}
+              defaultValue={userData?.apartment || ''}
               className={sorce_sans_3.className}
               required
             />
@@ -125,9 +154,10 @@ export default function AccountForm(props) {
               id='email'
               name='email'
               placeholder='Your email'
-              defaultValue={props.user?.email || ''}
+              defaultValue={userData?.email || ''}
               className={sorce_sans_3.className}
               required
+              disabled={!userDataIsEmpty}
             />
           </div>
 
@@ -140,9 +170,10 @@ export default function AccountForm(props) {
               id='password'
               name='password'
               placeholder='Password'
-              defaultValue={props.user?.user_metadata.password || ''}
+              defaultValue={userData?.password || ''}
               className={sorce_sans_3.className}
               required
+              disabled={!userDataIsEmpty}
             />
           </div>
 
@@ -150,7 +181,7 @@ export default function AccountForm(props) {
             type='submit'
             className={sorce_sans_3.className + ' ' + 'submit_button'}
           >
-            Create Account
+            {!userDataIsEmpty ? 'Edit Account' : 'Create Account'}
           </button>
 
           {/* {errorIsFound && (
