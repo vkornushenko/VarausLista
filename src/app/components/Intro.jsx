@@ -2,10 +2,8 @@
 
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-// fonts
-import { sorce_sans_3 } from '@/app/utils/fonts';
 // icons
-import AccountIcon from '../../../public/icons/Account.svg';
+import AccountIcon from '../../../public/icons/account.svg';
 import BuildingIcon from '../../../public/icons/building.svg';
 import ShareIcon from '../../../public/icons/share.svg';
 // components
