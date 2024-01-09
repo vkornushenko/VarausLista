@@ -130,5 +130,6 @@ main{
   cursor: pointer;
 }
 
-
-
+.form button:focus{
+  outline: none;
+}

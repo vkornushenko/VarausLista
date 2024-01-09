@@ -2,6 +2,8 @@
 
 // redux
 import { toggleConfirmation, toggleModal } from '@/redux/features/ui-slice';
+import { setUser } from '@/redux/features/user-slice';
+
 import { useDispatch, useSelector } from 'react-redux';
 
 // react hooks
@@ -20,17 +22,32 @@ import ConfirmationCard from '@/app/components/ui/ConfirmationCard';
 import AccountCardLogOut from './AccountCardLogOut';
 
 export default function AccountCard({ userData }) {
+  // redux
+  const dispatch = useDispatch();
+
+  const [useEffectCounterValue, setUseEffectCounterValue] = useState(0);
   // empty data state
   const [userDataIsEmpty, setUserDataIsEmpty] = useState(false);
   // if userData object empty => state is true
   useEffect(() => {
+    setUseEffectCounterValue((prevState) => prevState + 1);
+    console.log('useEffectCounterValue = ' + useEffectCounterValue);
     if (Object.keys(userData).length === 0) {
       setUserDataIsEmpty(true);
     }
   }, [userData]);
 
-  // redux
-  const dispatch = useDispatch();
+  // redux for user slice
+  if (userData.email) {
+    dispatch(setUser(userData));
+    const userFromStore = useSelector((state) => state.userReducer);
+    console.log('this is userFromStore state');
+    console.log(userFromStore);
+
+    userData = userFromStore;
+    console.log('this is new userData');
+    console.log(userData);
+  }
 
   // for layover
   const toggleModalrHandler = () => {

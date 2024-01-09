@@ -22,6 +22,9 @@ export default async function AccountPage() {
     // invitationLink: 'canBeSendToEmail',
   };
 
+  console.log('userData from page.jsx');
+  console.log(userData);
+
   return (
     <main>
       <AccountCard userData={userData} />
