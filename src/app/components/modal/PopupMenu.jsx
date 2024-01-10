@@ -11,76 +11,77 @@ import { sorce_sans_3 } from '../../utils/fonts';
 import Link from 'next/link';
 import classes from './PopupMenu.module.css';
 import LogOut from './LogOut';
-
+import { useSelector } from 'react-redux';
 
 export default function PopupMenu(props) {
+  const userData = useSelector((state) => state.userReducer);
 
   return (
-        <>
-          <motion.div
-            className={classes.backdrop}
-            variants={{
-              hidden: { opacity: 0 },
-              visible: { opacity: 100 },
-            }}
-            initial='hidden'
-            animate='visible'
-            exit='hidden'
+    <>
+      <motion.div
+        className={classes.backdrop}
+        variants={{
+          hidden: { opacity: 0 },
+          visible: { opacity: 100 },
+        }}
+        initial='hidden'
+        animate='visible'
+        exit='hidden'
+        onClick={props.toggleMenu}
+      ></motion.div>
+      <motion.div
+        className={classes.menu}
+        variants={{
+          hidden: { opacity: 100, x: -200 },
+          visible: { opacity: 100, x: 0 },
+        }}
+        transition={{ ease: 'easeOut', stiffness: 500 }}
+        initial='hidden'
+        animate='visible'
+        exit='hidden'
+      >
+        <header className={classes.header}>
+          <Link href='/'>
+            <Image src={Logo} alt='VarausLista logo' width={123} />
+          </Link>
+          <Image
+            src={CloseIcon}
+            alt='Close Menu'
+            width={19}
             onClick={props.toggleMenu}
-          ></motion.div>
-          <motion.div
-            className={classes.menu}
-            variants={{
-              hidden: { opacity: 100, x: -200 },
-              visible: { opacity: 100, x: 0 },
-            }}
-            transition={{ ease: 'easeOut', stiffness: 500 }}
-            initial='hidden'
-            animate='visible'
-            exit='hidden'
-          >
-            <header className={classes.header}>
-              <Link href='/'>
-                <Image src={Logo} alt='VarausLista logo' width={123} />
-              </Link>
-              <Image
-                src={CloseIcon}
-                alt='Close Menu'
-                width={19}
+            className='img_btn'
+          />
+        </header>
+        <nav>
+          <ul className={classes.menu_list}>
+            <li>
+              <Link
+                href='/'
+                className={sorce_sans_3.className + ' ' + classes.link}
                 onClick={props.toggleMenu}
-                className='img_btn'
-              />
-            </header>
-            <nav>
-              <ul className={classes.menu_list}>
-                <li>
-                  <Link
-                    href='/'
-                    className={sorce_sans_3.className + ' ' + classes.link}
-                    onClick={props.toggleMenu}
-                  >
-                    Home
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href='/reservation'
-                    className={sorce_sans_3.className + ' ' + classes.link}
-                    onClick={props.toggleMenu}
-                  >
-                    Check Reservations
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href='/account'
-                    className={sorce_sans_3.className + ' ' + classes.link}
-                    onClick={props.toggleMenu}
-                  >
-                    Account
-                  </Link>
-                </li>
-                {/* <li>
+              >
+                Home
+              </Link>
+            </li>
+            <li>
+              <Link
+                href='/reservation'
+                className={sorce_sans_3.className + ' ' + classes.link}
+                onClick={props.toggleMenu}
+              >
+                Check Reservations
+              </Link>
+            </li>
+            <li>
+              <Link
+                href='/account'
+                className={sorce_sans_3.className + ' ' + classes.link}
+                onClick={props.toggleMenu}
+              >
+                Account
+              </Link>
+            </li>
+            {/* <li>
                   <Link
                     href='/faq'
                     className={sorce_sans_3.className + ' ' + classes.link}
@@ -89,12 +90,14 @@ export default function PopupMenu(props) {
                     How to use
                   </Link>
                 </li> */}
-                <li>
-                  <LogOut toggleMenu={props.toggleMenu} />
-                </li>
-              </ul>
-            </nav>
-          </motion.div>
+            {userData.email && (
+              <li>
+                <LogOut toggleMenu={props.toggleMenu} />
+              </li>
+            )}
+          </ul>
+        </nav>
+      </motion.div>
     </>
   );
 }
