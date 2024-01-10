@@ -11,6 +11,10 @@ a{
   color: #3F788F;
 }
 
+a img{
+  display: block;
+}
+
 body {
   background-color: #e6eff2;
   color: #333c40;
