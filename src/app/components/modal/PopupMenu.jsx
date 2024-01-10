@@ -1,19 +1,20 @@
 'use client';
 
 import Image from 'next/image';
-import { motion } from 'framer-motion';
-
-import Logo from '../../../../public/logo/varauslista-logo.svg';
-import CloseIcon from '../../../../public/icons/close.svg';
-
-import { sorce_sans_3 } from '../../utils/fonts';
-
 import Link from 'next/link';
-import classes from './PopupMenu.module.css';
-import LogOut from './LogOut';
+// hooks
+import { motion } from 'framer-motion';
 import { useSelector } from 'react-redux';
+// style
+import classes from './PopupMenu.module.css';
+import { sorce_sans_3 } from '../../utils/fonts';
+import CloseIcon from '../../../../public/icons/close.svg';
+import Logo from '../../../../public/logo/varauslista-logo.svg';
+// components
+import LogOut from './LogOut';
 
 export default function PopupMenu(props) {
+  // selector for userData from the Store
   const userData = useSelector((state) => state.userReducer);
 
   return (
