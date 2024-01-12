@@ -25,13 +25,11 @@ export default function AccountCard({ userData }) {
   // redux
   const dispatch = useDispatch();
 
-  const [useEffectCounterValue, setUseEffectCounterValue] = useState(0);
   // empty data state
   const [userDataIsEmpty, setUserDataIsEmpty] = useState(false);
+
   // if userData object empty => state is true
   useEffect(() => {
-    setUseEffectCounterValue((prevState) => prevState + 1);
-    console.log('useEffectCounterValue = ' + useEffectCounterValue);
     if (Object.keys(userData).length === 0) {
       setUserDataIsEmpty(true);
     }
@@ -40,13 +38,7 @@ export default function AccountCard({ userData }) {
   // redux for user slice
   if (userData.email) {
     dispatch(setUser(userData));
-    const userFromStore = useSelector((state) => state.userReducer);
-    console.log('this is userFromStore state');
-    console.log(userFromStore);
-
-    userData = userFromStore;
-    console.log('this is new userData');
-    console.log(userData);
+    userData = useSelector((state) => state.userReducer);
   }
 
   // for layover
@@ -54,7 +46,6 @@ export default function AccountCard({ userData }) {
     // redux dispatch
     dispatch(toggleModal());
   };
-
   // redux, state value
   const showModal = useSelector(
     (state) => state.uiReducer.value.modalIsVisible
@@ -64,10 +55,8 @@ export default function AccountCard({ userData }) {
   const showConfirmation = useSelector(
     (state) => state.uiReducer.value.confirmationIsVisible
   );
-
   // for deleting address confirmation
   const toggleConfirmationHandler = () => {
-    // redux, dispatch
     dispatch(toggleConfirmation());
   };
 

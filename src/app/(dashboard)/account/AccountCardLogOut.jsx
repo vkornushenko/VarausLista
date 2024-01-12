@@ -14,7 +14,7 @@ export default function AccountCardLogOut() {
     const { error } = await supabase.auth.signOut();
     if (!error) {
       console.log('logout successfully');
-      // after logout user data is still on account page
+      // // after logout user data is still on account page
       router.refresh();
     }
     if (error) {

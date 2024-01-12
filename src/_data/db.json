@@ -1,28 +1,12 @@
 {
   "users": [
     {
-      "first_name": "Johanna",
-      "address": "Kulmakatu 47",
-      "apartment": "A1",
-      "email": "johanna@gmail.com",
-      "password": "svP4QRQyfRZN4kU",
-      "id": 1
-    },
-    {
       "first_name": "Vladislav",
       "address": "Kulmakatu 47",
       "apartment": "A1",
       "email": "vkornushenko@gmail.com",
-      "password": "ZLcYkdpjWqrte8p",
-      "id": 2
-    },
-    {
-      "first_name": "Hugo",
-      "address": "Kulmakatu 47",
-      "apartment": "A1",
-      "email": "hugokissa@gmail.com",
-      "password": "hPXywzYA5VmuWSb",
-      "id": 3
+      "password": "svP4QRQyfRZN4kU",
+      "id": 1
     }
   ]
 }

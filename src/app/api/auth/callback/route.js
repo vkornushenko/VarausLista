@@ -12,4 +12,5 @@ export async function GET(request) {
   }
 
   return NextResponse.redirect(url.origin + '/account')
+
 }

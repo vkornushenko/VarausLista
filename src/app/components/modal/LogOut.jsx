@@ -4,23 +4,32 @@ import { sorce_sans_3 } from '../../utils/fonts';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { useRouter } from 'next/navigation';
 
-export default function LogOut(props) {
+// redux
+import { unsetUser } from '@/redux/features/user-slice';
+import { useDispatch } from 'react-redux';
+
+export default function LogOut({toggleMenu}) {
   const router = useRouter();
+  
+  const dispatch = useDispatch();
+
   const handleLogout = async () => {
     // supabase
     const supabase = createClientComponentClient();
     const { error } = await supabase.auth.signOut();
     if (!error) {
-      // router.push('/login');
       // close menu
-      props.toggleMenu();
-      // after logout user data is still on account page
+      toggleMenu();
+      // unsetUser from Store
+      dispatch(unsetUser());
+      // after logout user refresh data from DB
       router.refresh();
     }
     if (error) {
       console.log(error);
     }
   };
+
   return (
     <Link
       href='/login'

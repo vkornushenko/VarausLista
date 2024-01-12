@@ -13,9 +13,12 @@ import Logo from '../../../../public/logo/varauslista-logo.svg';
 // components
 import LogOut from './LogOut';
 
-export default function PopupMenu(props) {
+export default function PopupMenu({toggleMenu}) {
   // selector for userData from the Store
   const userData = useSelector((state) => state.userReducer);
+
+  console.log('userData from the store (PopupMenu component)');
+  console.log(userData);
 
   return (
     <>
@@ -28,7 +31,7 @@ export default function PopupMenu(props) {
         initial='hidden'
         animate='visible'
         exit='hidden'
-        onClick={props.toggleMenu}
+        onClick={toggleMenu}
       ></motion.div>
       <motion.div
         className={classes.menu}
@@ -49,7 +52,7 @@ export default function PopupMenu(props) {
             src={CloseIcon}
             alt='Close Menu'
             width={19}
-            onClick={props.toggleMenu}
+            onClick={toggleMenu}
             className='img_btn'
           />
         </header>
@@ -59,7 +62,7 @@ export default function PopupMenu(props) {
               <Link
                 href='/'
                 className={sorce_sans_3.className + ' ' + classes.link}
-                onClick={props.toggleMenu}
+                onClick={toggleMenu}
               >
                 Home
               </Link>
@@ -68,7 +71,7 @@ export default function PopupMenu(props) {
               <Link
                 href='/reservation'
                 className={sorce_sans_3.className + ' ' + classes.link}
-                onClick={props.toggleMenu}
+                onClick={toggleMenu}
               >
                 Check Reservations
               </Link>
@@ -77,7 +80,7 @@ export default function PopupMenu(props) {
               <Link
                 href='/account'
                 className={sorce_sans_3.className + ' ' + classes.link}
-                onClick={props.toggleMenu}
+                onClick={toggleMenu}
               >
                 Account
               </Link>
@@ -86,14 +89,14 @@ export default function PopupMenu(props) {
                   <Link
                     href='/faq'
                     className={sorce_sans_3.className + ' ' + classes.link}
-                    onClick={props.toggleMenu}
+                    onClick={toggleMenu}
                   >
                     How to use
                   </Link>
                 </li> */}
-            {userData.email && (
+            {userData?.email && (
               <li>
-                <LogOut toggleMenu={props.toggleMenu} />
+                <LogOut toggleMenu={toggleMenu} />
               </li>
             )}
           </ul>
