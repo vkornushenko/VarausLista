@@ -7,10 +7,10 @@ import { useRouter } from 'next/navigation';
 // redux
 import { unsetUser } from '@/redux/features/user-slice';
 import { useDispatch } from 'react-redux';
+// import { revalidatePath } from 'next/cache';
 
 export default function LogOut({toggleMenu}) {
   const router = useRouter();
-  
   const dispatch = useDispatch();
 
   const handleLogout = async () => {
@@ -22,6 +22,7 @@ export default function LogOut({toggleMenu}) {
       toggleMenu();
       // unsetUser from Store
       dispatch(unsetUser());
+      // revalidatePath('/');
       // after logout user refresh data from DB
       router.refresh();
     }

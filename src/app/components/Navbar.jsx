@@ -32,7 +32,7 @@ export default function Navbar(props) {
       <header className={classes.header}>
         <nav className={classes.nav}>
           <Link href='/'>
-            <Image src={Logo} alt='VarausLista logo' width={123} />
+            <Image src={Logo} alt='VarausLista logo' width={123} priority={true}/>
           </Link>
           <Image
             src={BurgerMenu}
