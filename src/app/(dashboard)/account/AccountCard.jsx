@@ -21,25 +21,31 @@ import AccountCardLogin from './AccountCardLogin';
 import ConfirmationCard from '@/app/components/ui/ConfirmationCard';
 import AccountCardLogOut from './AccountCardLogOut';
 
-export default function AccountCard({ userData }) {
+export default function AccountCard() {
+
+  const userData = useSelector((state) => state.userReducer);
+  // console.log('This is userData from the Redux Store (AccountCard.jsx file:)');
+  // console.log(userData);
+  // console.log('userData object length = ' + Object.keys(userData).length);
+  // console.log('Are all the values in userData are undefined? Answer: ' + Object.values(userData).every(el => el === undefined));
+
   // redux
   const dispatch = useDispatch();
 
   // empty data state
   const [userDataIsEmpty, setUserDataIsEmpty] = useState(false);
-
   // if userData object empty => state is true
   useEffect(() => {
-    if (Object.keys(userData).length === 0) {
+    if (Object.keys(userData).length === 0 || userData.email === undefined) {
       setUserDataIsEmpty(true);
     }
   }, [userData]);
 
-  // redux for user slice
-  if (userData.email) {
-    dispatch(setUser(userData));
-    userData = useSelector((state) => state.userReducer);
-  }
+  // // redux for user slice
+  // if (userData.email) {
+  //   dispatch(setUser(userData));
+  //   userData = useSelector((state) => state.userReducer);
+  // }
 
   // for layover
   const toggleModalrHandler = () => {

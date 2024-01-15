@@ -21,7 +21,7 @@ export const metadata = {
 export const dynamic = 'force-dynamic';
 // after a mutation you should also invalidate the cache
 // https://nextjs.org/docs/app/api-reference/functions/revalidatePath
-import { revalidatePath } from 'next/cache';
+// import { revalidatePath } from 'next/cache';
 
 export default async function RootLayout({ children }) {
   // get user from supabase
@@ -40,6 +40,11 @@ export default async function RootLayout({ children }) {
     password: user?.user_metadata.password,
     // invitationLink: 'canBeSendToEmail',
   };
+  // console.log('ACHTUNG');
+  // console.log('ACHTUNG');
+  // console.log('Data was fetched from supabase');
+  // console.log('This is userData from the supabase (layout.jsx file:)');
+  // console.log(userData);
 
   return (
     <html lang='en'>

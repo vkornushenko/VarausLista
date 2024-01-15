@@ -17,8 +17,8 @@ export default function PopupMenu({toggleMenu}) {
   // selector for userData from the Store
   const userData = useSelector((state) => state.userReducer);
 
-  console.log('userData from the store (PopupMenu component)');
-  console.log(userData);
+  // console.log('userData from the store (PopupMenu component)');
+  // console.log(userData);
 
   return (
     <>
