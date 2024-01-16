@@ -33,7 +33,7 @@ export default async function RootLayout({ children }) {
 
   // destructure supabase data to userData
   const userData = {
-    name: user?.user_metadata.given-name,
+    name: user?.user_metadata.first_name,
     address: user?.user_metadata.address,
     apartment: user?.user_metadata.apartment,
     email: user?.email,

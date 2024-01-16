@@ -42,7 +42,7 @@ export default function AccountForm({
         emailRedirectTo: `${location.origin}/api/auth/callback`,
         // user_metadata
         data: {
-          given-name: dataFromForm.given-name,
+          first_name: dataFromForm.first_name,
           address: dataFromForm.address,
           apartment: dataFromForm.apartment,
           password: dataFromForm.password,
@@ -71,7 +71,7 @@ export default function AccountForm({
     const supabase = createClientComponentClient();
     const { data, error } = await supabase.auth.updateUser({
       data: {
-        given-name: dataFromForm.given-name,
+        first_name: dataFromForm.first_name,
         address: dataFromForm.address,
         apartment: dataFromForm.apartment,
       },
@@ -143,7 +143,7 @@ export default function AccountForm({
               autoComplete='given-name'
               type='text'
               id='given-name'
-              name='given-name'
+              name='first_name'
               placeholder='Your name'
               defaultValue={userData?.name || ''}
               className={sorce_sans_3.className}

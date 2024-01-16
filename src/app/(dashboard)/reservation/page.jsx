@@ -33,7 +33,7 @@ export default function ReservationPage() {
   const showModal = useSelector(
     (state) => state.uiReducer.value.modalIsVisible
     // the same way we can get data from the store:
-    // (state) => state.uiReducer.value.given-name
+    // (state) => state.uiReducer.value.first_name
   );
 
   const [currentSharedPropertyIndex, setCurrentSharedPropertyIndex] =
