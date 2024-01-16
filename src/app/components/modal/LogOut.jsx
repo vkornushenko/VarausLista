@@ -2,15 +2,12 @@ import Link from 'next/link';
 import classes from './PopupMenu.module.css';
 import { sorce_sans_3 } from '../../utils/fonts';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
-import { useRouter } from 'next/navigation';
-
 // redux
 import { unsetUser } from '@/redux/features/user-slice';
 import { useDispatch } from 'react-redux';
 // import { revalidatePath } from 'next/cache';
 
 export default function LogOut({toggleMenu}) {
-  const router = useRouter();
   const dispatch = useDispatch();
 
   const handleLogout = async () => {
@@ -22,9 +19,6 @@ export default function LogOut({toggleMenu}) {
       toggleMenu();
       // unsetUser from Store
       dispatch(unsetUser());
-      // revalidatePath('/');
-      // after logout user refresh data from DB
-      router.refresh();
     }
     if (error) {
       console.log(error);

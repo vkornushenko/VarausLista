@@ -3,13 +3,11 @@ import Link from 'next/link';
 import { sorce_sans_3 } from '@/app/utils/fonts';
 
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
-import { useRouter } from 'next/navigation';
 import { useDispatch } from 'react-redux';
 import { unsetUser } from '@/redux/features/user-slice';
 // import { revalidatePath } from 'next/cache';
 
 export default function AccountCardLogOut() {
-  const router = useRouter();
   const dispatch = useDispatch();
 
   const handleLogout = async () => {
@@ -19,10 +17,6 @@ export default function AccountCardLogOut() {
     if (!error) {
       // unsetUser from Store
       dispatch(unsetUser());
-      // revalidatePath('/');
-      console.log('logout successfully');
-      // // after logout user data is still on account page
-      router.refresh();
     }
     if (error) {
       console.log(error);

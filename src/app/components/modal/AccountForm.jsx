@@ -93,6 +93,7 @@ export default function AccountForm({
         <CardHeader title='Create Account' />
 
         <form
+          autoComplete='on'
           className='form'
           onSubmit={
             !userDataIsEmpty
@@ -101,55 +102,11 @@ export default function AccountForm({
           }
         >
           <div className='input_block'>
-            <label htmlFor='username' className={sorce_sans_3.className}>
-              Name
-            </label>
-            <input
-              type='text'
-              id='username'
-              name='first_name'
-              placeholder='Your name'
-              defaultValue={userData?.name || ''}
-              className={sorce_sans_3.className}
-              required
-            />
-          </div>
-
-          <div className='input_block'>
-            <label htmlFor='address' className={sorce_sans_3.className}>
-              Address
-            </label>
-            <input
-              type='text'
-              id='address'
-              name='address'
-              placeholder='Your address'
-              defaultValue={userData?.address || ''}
-              className={sorce_sans_3.className}
-              required
-            />
-          </div>
-
-          <div className='input_block'>
-            <label htmlFor='apartment' className={sorce_sans_3.className}>
-              Apartment No
-            </label>
-            <input
-              type='text'
-              id='apartment'
-              name='apartment'
-              placeholder='Apartment number'
-              defaultValue={userData?.apartment || ''}
-              className={sorce_sans_3.className}
-              required
-            />
-          </div>
-
-          <div className='input_block'>
             <label htmlFor='email' className={sorce_sans_3.className}>
               Email address
             </label>
             <input
+              autoComplete='email'
               type='email'
               id='email'
               name='email'
@@ -166,6 +123,7 @@ export default function AccountForm({
               Password
             </label>
             <input
+              autoComplete={!userDataIsEmpty ? 'current-password' : 'new-password'}
               type='password'
               id='password'
               name='password'
@@ -174,6 +132,54 @@ export default function AccountForm({
               className={sorce_sans_3.className}
               required
               disabled={!userDataIsEmpty}
+            />
+          </div>
+
+          <div className='input_block'>
+            <label htmlFor='username' className={sorce_sans_3.className}>
+              Name
+            </label>
+            <input
+              autoComplete='given-name'
+              type='text'
+              id='username'
+              name='first_name'
+              placeholder='Your name'
+              defaultValue={userData?.name || ''}
+              className={sorce_sans_3.className}
+              required
+            />
+          </div>
+
+          <div className='input_block'>
+            <label htmlFor='address' className={sorce_sans_3.className}>
+              Address
+            </label>
+            <input
+              autoComplete='off'
+              type='text'
+              id='address'
+              name='address'
+              placeholder='Your address'
+              defaultValue={userData?.address || ''}
+              className={sorce_sans_3.className}
+              required
+            />
+          </div>
+
+          <div className='input_block'>
+            <label htmlFor='apartment' className={sorce_sans_3.className}>
+              Apartment No
+            </label>
+            <input
+              autoComplete='off'
+              type='text'
+              id='apartment'
+              name='apartment'
+              placeholder='Apartment number'
+              defaultValue={userData?.apartment || ''}
+              className={sorce_sans_3.className}
+              required
             />
           </div>
 

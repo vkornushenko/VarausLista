@@ -3,7 +3,6 @@ import { motion } from 'framer-motion';
 import classes from './SharedPropertyNavigation.module.css';
 
 export default function SharedPropertyNavigation(props) {
-  // const sharedPropertyList = ['Sauna', 'Laundry', 'GYM', 'Grill'];
 
   const sharedPropertyList = props.sharedPropertyList;
   const selected = props.selectedProperty;

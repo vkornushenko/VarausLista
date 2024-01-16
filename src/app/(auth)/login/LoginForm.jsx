@@ -43,12 +43,13 @@ export default function LoginForm() {
   return (
     <>
       <CardHeader title='Log In' />
-      <form className='form' onSubmit={submitHandler}>
+      <form className='form' onSubmit={submitHandler} autoComplete='on'>
         <div className='input_block'>
           <label htmlFor='email' className={sorce_sans_3.className}>
             Email address
           </label>
           <input
+          autoComplete='email'
             type='email'
             id='email'
             name='email'
@@ -62,6 +63,7 @@ export default function LoginForm() {
             Password
           </label>
           <input
+          autoComplete='current-password'
             type='password'
             id='password'
             name='password'
