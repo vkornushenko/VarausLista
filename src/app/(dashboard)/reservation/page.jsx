@@ -24,7 +24,7 @@ export default function ReservationPage() {
   const toggleModalrHandler = () => {
     dispatch(toggleModal());
     // if we want to pass a payload/action/data to a function:
-    // dispatch(logIn(username));
+    // dispatch(logIn(given-name));
   };
   // NOTE!!!
   // selector could be used in another component separatly
@@ -33,7 +33,7 @@ export default function ReservationPage() {
   const showModal = useSelector(
     (state) => state.uiReducer.value.modalIsVisible
     // the same way we can get data from the store:
-    // (state) => state.uiReducer.value.username
+    // (state) => state.uiReducer.value.given-name
   );
 
   const [currentSharedPropertyIndex, setCurrentSharedPropertyIndex] =

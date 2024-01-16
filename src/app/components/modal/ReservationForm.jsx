@@ -30,13 +30,13 @@ export default function ReservationForm(props) {
         <CardHeader title='Reserve Laundry'/>
         <form className='form' onSubmit={submitHandler}>
           <div className='input_block'>
-            <label htmlFor='username' className={sorce_sans_3.className}>
+            <label htmlFor='given-name' className={sorce_sans_3.className}>
               Name
             </label>
             <input
               type='text'
-              id='username'
-              name='first_name'
+              id='given-name'
+              name='given-name'
               placeholder='Your name'
               className={sorce_sans_3.className}
             />
