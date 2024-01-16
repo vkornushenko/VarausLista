@@ -80,6 +80,7 @@ main{
 }
 
 .form input {
+  width: 100%;
   border: 1px solid #acbabf;
   padding: 8px 16px;
   border-radius: 4px;
