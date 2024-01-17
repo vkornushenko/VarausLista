@@ -8,7 +8,7 @@ import bg from '../../public/img/bg-img.png';
 import StoreProvider from './StoreProvider';
 
 // supabase
-import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
+import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 
 export const metadata = {
@@ -26,7 +26,18 @@ export const dynamic = 'force-dynamic';
 export default async function RootLayout({ children }) {
   // get user from supabase
   // from supabase we getting user=null or object with data
-  const supabase = createServerComponentClient({ cookies });
+  const cookieStore = cookies();
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+    {
+      cookies: {
+        get(name) {
+          return cookieStore.get(name)?.value
+        },
+      },
+    }
+  );
   const {
     data: { user },
   } = await supabase.auth.getUser();

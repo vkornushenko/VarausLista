@@ -1,7 +1,8 @@
 import Link from 'next/link';
 import classes from './PopupMenu.module.css';
 import { sorce_sans_3 } from '../../utils/fonts';
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { createBrowserClient } from '@supabase/ssr';
+
 // redux
 import { unsetUser } from '@/redux/features/user-slice';
 import { useDispatch } from 'react-redux';
@@ -12,7 +13,10 @@ export default function LogOut({toggleMenu}) {
 
   const handleLogout = async () => {
     // supabase
-    const supabase = createClientComponentClient();
+    const supabase = createBrowserClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+    );
     const { error } = await supabase.auth.signOut();
     if (!error) {
       // close menu

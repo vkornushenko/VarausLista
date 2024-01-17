@@ -1,5 +1,5 @@
 // supabase
-// import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
+// import { createServerClient } from '@supabase/ssr';
 // import { cookies } from 'next/headers';
 // components
 import AccountCard from './AccountCard';
@@ -7,7 +7,7 @@ import AccountCard from './AccountCard';
 export default async function AccountPage() {
   // // get user from supabase
   // // from supabase we getting user=null or object with data
-  // const supabase = createServerComponentClient({ cookies });
+  // const supabase = createServerClient({ cookies });
   // const {
   //   data: { user },
   // } = await supabase.auth.getUser();

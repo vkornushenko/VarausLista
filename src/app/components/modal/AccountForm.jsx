@@ -3,7 +3,8 @@ import { useRouter } from 'next/navigation';
 import '@/app/globals.css';
 
 //supabase
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { createBrowserClient } from '@supabase/ssr';
+
 
 import CardLayout from '../ui/CardLayout';
 import ModalLayout from '../ui/ModalLayout';
@@ -34,7 +35,10 @@ export default function AccountForm({
     const dataFromForm = Object.fromEntries(formData.entries());
 
     // connect to supabase
-    const supabase = createClientComponentClient();
+    const supabase = createBrowserClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+    );
     const { data, error } = await supabase.auth.signUp({
       email: dataFromForm.email,
       password: dataFromForm.password,
@@ -68,7 +72,10 @@ export default function AccountForm({
     const dataFromForm = Object.fromEntries(formData.entries());
 
     // connect to supabase
-    const supabase = createClientComponentClient();
+    const supabase = createBrowserClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+    );
     const { data, error } = await supabase.auth.updateUser({
       data: {
         first_name: dataFromForm.first_name,

@@ -4,7 +4,8 @@ import CardHeader from '@/app/components/ui/CardHeader';
 import InfoQuote from '@/app/components/ui/InfoQuote';
 import '@/app/globals.css';
 import { sorce_sans_3 } from '@/app/utils/fonts';
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { createBrowserClient } from '@supabase/ssr';
+
 import Link from 'next/link';
 import '@/app/globals.css';
 import { useRouter } from 'next/navigation';
@@ -29,7 +30,10 @@ export default function LoginForm() {
     const formData = new FormData(event.target);
     const data = Object.fromEntries(formData.entries());
 
-    const supabase = createClientComponentClient();
+    const supabase = createBrowserClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+    );
     const { error } = await supabase.auth.signInWithPassword({
       email: data.email,
       password: data.password,
@@ -49,7 +53,7 @@ export default function LoginForm() {
             Email address
           </label>
           <input
-          autoComplete='email'
+            autoComplete='email'
             type='email'
             id='email'
             name='email'
@@ -63,7 +67,7 @@ export default function LoginForm() {
             Password
           </label>
           <input
-          autoComplete='current-password'
+            autoComplete='current-password'
             type='password'
             id='password'
             name='password'
