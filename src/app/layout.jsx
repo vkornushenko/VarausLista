@@ -33,29 +33,40 @@ export default async function RootLayout({ children }) {
     {
       cookies: {
         get(name) {
-          return cookieStore.get(name)?.value
+          return cookieStore.get(name)?.value;
         },
       },
     }
   );
+
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
+  // TO DO
+  // here we need try to check address for this user
+  // and put it to store if it exists
+  let intersections_user_address = await supabase
+    .from('intersections_user_address')
+    .select('*');
+    if(intersections_user_address.error){
+      console.log(intersections_user_address.error);
+    }
+    else{
+      console.log(intersections_user_address.data);
+    }
+
+
   // destructure supabase data to userData
   const userData = {
     name: user?.user_metadata.first_name,
-    address: user?.user_metadata.address,
+    address: intersections_user_address.data[0]?.address_id,
     apartment: user?.user_metadata.apartment,
     email: user?.email,
     password: user?.user_metadata.password,
     // invitationLink: 'canBeSendToEmail',
+    user_id: user?.id,
   };
-  // console.log('ACHTUNG');
-  // console.log('ACHTUNG');
-  // console.log('Data was fetched from supabase');
-  // console.log('This is userData from the supabase (layout.jsx file:)');
-  // console.log(userData);
 
   return (
     <html lang='en'>

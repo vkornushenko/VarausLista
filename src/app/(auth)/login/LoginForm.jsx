@@ -18,10 +18,10 @@ export default function LoginForm() {
 
   // error message template
   const messageCreateAccount = (
-    <p>
+    <>
       If you don't have account, navigate to{' '}
       <Link href='/account'>Create Account page</Link>.
-    </p>
+    </>
   );
 
   const submitHandler = async (event) => {

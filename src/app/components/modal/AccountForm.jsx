@@ -5,12 +5,12 @@ import '@/app/globals.css';
 //supabase
 import { createBrowserClient } from '@supabase/ssr';
 
-
 import CardLayout from '../ui/CardLayout';
 import ModalLayout from '../ui/ModalLayout';
 // fonts
 import { sorce_sans_3 } from '@/app/utils/fonts';
 import CardHeader from '../ui/CardHeader';
+
 // import InfoQuote from '../ui/InfoQuote';
 // import { useState } from 'react';
 
@@ -19,7 +19,7 @@ export default function AccountForm({
   userData,
   userDataIsEmpty,
 }) {
-  // // state for error
+  // state for error
   // const [errorIsFound, setErrorIsFound] = useState(false);
 
   const router = useRouter();
@@ -56,6 +56,7 @@ export default function AccountForm({
 
     if (error) {
       console.log(error);
+      // setErrorIsFound(true);
     } else {
       router.push('/verify');
       // close popup
@@ -76,6 +77,7 @@ export default function AccountForm({
       process.env.NEXT_PUBLIC_SUPABASE_URL,
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
     );
+
     const { data, error } = await supabase.auth.updateUser({
       data: {
         first_name: dataFromForm.first_name,
@@ -83,8 +85,10 @@ export default function AccountForm({
         apartment: dataFromForm.apartment,
       },
     });
+
     if (error) {
       console.log(error);
+      // setErrorIsFound(true);
     }
     if (!error) {
       router.push('/account');
@@ -130,7 +134,9 @@ export default function AccountForm({
               Password
             </label>
             <input
-              autoComplete={!userDataIsEmpty ? 'current-password' : 'new-password'}
+              autoComplete={
+                !userDataIsEmpty ? 'current-password' : 'new-password'
+              }
               type='password'
               id='password'
               name='password'

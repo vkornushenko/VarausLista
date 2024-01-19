@@ -2,10 +2,9 @@
 
 // redux
 import { toggleConfirmation, toggleModal } from '@/redux/features/ui-slice';
-import { setUser } from '@/redux/features/user-slice';
+// import { setUser } from '@/redux/features/user-slice';
 
 import { useDispatch, useSelector } from 'react-redux';
-
 
 // react hooks
 import { useEffect, useState } from 'react';
@@ -21,9 +20,10 @@ import UserDataList from './UserDataList';
 import AccountCardLogin from './AccountCardLogin';
 import ConfirmationCard from '@/app/components/ui/ConfirmationCard';
 import AccountCardLogOut from './AccountCardLogOut';
+import { useRouter } from 'next/navigation';
 
 export default function AccountCard() {
-
+  const router = useRouter();
   const userData = useSelector((state) => state.userReducer);
   // console.log('This is userData from the Redux Store (AccountCard.jsx file:)');
   // console.log(userData);
@@ -37,7 +37,7 @@ export default function AccountCard() {
   const [userDataIsEmpty, setUserDataIsEmpty] = useState(false);
   // if userData object empty => state is true
   useEffect(() => {
-    if (Object.keys(userData).length === 0 || userData.email === undefined) {
+    if (Object.values(userData).every((el) => el === undefined)) {
       setUserDataIsEmpty(true);
     }
   }, [userData]);
@@ -88,10 +88,19 @@ export default function AccountCard() {
 
         {userDataIsEmpty && <InfoQuote data={infoQuoteContent} />}
 
-        <Button
-          name={!userDataIsEmpty ? 'Edit Account' : 'Create Account'}
-          action={toggleModalrHandler}
-        />
+        {userDataIsEmpty && (
+          <Button name={'Create Account'} action={toggleModalrHandler} />
+        )}
+        {!userDataIsEmpty && (
+          <Button
+            name={userData.address ? 'Edit Account' : 'Manage Address'}
+            action={
+              userData.address
+                ? toggleModalrHandler
+                : () => router.push('/address')
+            }
+          />
+        )}
 
         {!userDataIsEmpty ? <AccountCardLogOut /> : <AccountCardLogin />}
       </CardLayout>

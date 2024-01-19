@@ -8,6 +8,7 @@ const initialState = {
   apartment: undefined,
   email: undefined,
   password: undefined,
+  user_id: undefined
 };
 
 // slice
@@ -22,6 +23,7 @@ export const user = createSlice({
       state.apartment = action.payload.apartment;
       state.email = action.payload.email;
       state.password = action.payload.password;
+      state.user_id = action.payload.user_id;
     },
     unsetUser(state) {
       state.name = initialState.name;
@@ -29,6 +31,7 @@ export const user = createSlice({
       state.apartment = initialState.apartment;
       state.email = initialState.email;
       state.password = initialState.password;
+      state.user_id = initialState.user_id;
     }
   },
 });

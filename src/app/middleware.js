@@ -1,7 +1,6 @@
 // import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs';
 // import { NextResponse } from 'next/server';
 
-
 // export async function middleware(req) {
 //   const res = NextResponse.next();
 //   const supabase = createMiddlewareClient({ req, res });
@@ -9,16 +8,18 @@
 //   return res;
 // }
 
-
-import { createServerClient } from '@supabase/ssr'
-import { NextResponse } from 'next/server'
+// Server Components only have read access to cookies.
+// This Middleware example can be used to refresh expired
+// sessions before loading Server Component routes.
+import { createServerClient } from '@supabase/ssr';
+import { NextResponse } from 'next/server';
 
 export async function middleware(request) {
   let response = NextResponse.next({
     request: {
       headers: request.headers,
     },
-  })
+  });
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL,
@@ -26,49 +27,49 @@ export async function middleware(request) {
     {
       cookies: {
         get(name) {
-          return request.cookies.get(name)?.value
+          return request.cookies.get(name)?.value;
         },
         set(name, value, options) {
           request.cookies.set({
             name,
             value,
             ...options,
-          })
+          });
           response = NextResponse.next({
             request: {
               headers: request.headers,
             },
-          })
+          });
           response.cookies.set({
             name,
             value,
             ...options,
-          })
+          });
         },
         remove(name, options) {
           request.cookies.set({
             name,
             value: '',
             ...options,
-          })
+          });
           response = NextResponse.next({
             request: {
               headers: request.headers,
             },
-          })
+          });
           response.cookies.set({
             name,
             value: '',
             ...options,
-          })
+          });
         },
       },
     }
-  )
+  );
 
-  await supabase.auth.getUser()
+  await supabase.auth.getUser();
 
-  return response
+  return response;
 }
 
 export const config = {
@@ -82,4 +83,4 @@ export const config = {
      */
     '/((?!_next/static|_next/image|favicon.ico).*)',
   ],
-}
+};

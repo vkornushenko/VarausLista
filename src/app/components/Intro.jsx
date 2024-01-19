@@ -19,11 +19,14 @@ export default function Intro() {
   // selector for userData from the Store
   const userData = useSelector((state) => state.userReducer);
 
-  
-
   // button action
   const buttonAction = () => {
-    router.push(userData.address ? '/reservation' : '/account');
+    if(userData.email){
+      router.push(userData.address ? '/reservation' : '/address');
+    }
+    else{
+      router.push('/account');
+    }
   };
 
   return (
@@ -61,10 +64,18 @@ export default function Intro() {
           </p>
         </div>
       )}
-      <Button
-        action={buttonAction}
-        name={userData.address ? 'Check Reservations' : 'Get Started'}
-      />
+      {userData.email && (
+        <Button
+          action={buttonAction}
+          name={userData.address ? 'Check Reservations' : 'Manage Address'}
+        />
+      )}
+      {!userData.email && (
+        <Button
+          action={buttonAction}
+          name='Get Started'
+        />
+      )}
     </>
   );
 }

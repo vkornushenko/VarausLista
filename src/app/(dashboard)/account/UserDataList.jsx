@@ -12,7 +12,7 @@ import EyeIcon from '../../../../public/icons/eye.svg';
 import EyeSlashedIcon from '../../../../public/icons/eye_slashed.svg';
 import CopyIcon from '../../../../public/icons/copy.svg';
 
-export default function UserDataList({userData, toggleConfirmationHandler}) {
+export default function UserDataList({ userData, toggleConfirmationHandler }) {
   // state for password state
   const [passwordDisplayState, setPasswordDisplayState] = useState(false);
   const togglePasswordDisplayState = () => {
@@ -31,7 +31,6 @@ export default function UserDataList({userData, toggleConfirmationHandler}) {
   };
 
   return (
-
     <ul className={classes.account__list}>
       {userData.address && (
         <li>
@@ -58,6 +57,15 @@ export default function UserDataList({userData, toggleConfirmationHandler}) {
         <li>
           <p className={classes.field_name}>Email:</p>
           <p className={classes.text_content}>{userData.email}</p>
+          <Image
+            className='img_btn'
+            src={CopyIcon}
+            alt='copy icon'
+            height={18}
+            onClick={() => {
+              copyToClipboard(userData.email);
+            }}
+          />
         </li>
       )}
 
@@ -77,7 +85,7 @@ export default function UserDataList({userData, toggleConfirmationHandler}) {
         </li>
       )}
 
-      {userData.invitationLink && (
+      {/* {userData.invitationLink && (
         <li>
           <p className={classes.field_name}>Invitation link:</p>
           <p className={classes.text_content}>
@@ -109,8 +117,39 @@ export default function UserDataList({userData, toggleConfirmationHandler}) {
             )}
           </AnimatePresence>
         </li>
-      )}
+      )} */}
 
+      {userData.user_id && (
+        <li>
+          <p className={classes.field_name}>User Id:</p>
+          <p className={classes.text_content}>{userData.user_id}</p>
+          <Image
+            className='img_btn'
+            src={CopyIcon}
+            alt='copy icon'
+            height={18}
+            onClick={() => {
+              copyToClipboard(userData.user_id);
+            }}
+          />
+          <AnimatePresence>
+            {copyState && (
+              <motion.div
+                className={classes.ux_feedback}
+                variants={{
+                  hidden: { opacity: 0 },
+                  visible: { opacity: 100 },
+                }}
+                initial='hidden'
+                animate='visible'
+                exit='hidden'
+              >
+                User Id is copied
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </li>
+      )}
     </ul>
   );
 }
