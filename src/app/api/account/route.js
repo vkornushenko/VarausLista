@@ -1,8 +1,27 @@
-import { NextResponse } from 'next/server';
+import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers';
-import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
+import { NextResponse } from 'next/server';
 
 export async function POST(request) {
+  const cookieStore = cookies();
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+    {
+      cookies: {
+        get(name) {
+          return cookieStore.get(name)?.value
+        },
+        set(name, value, options) {
+          cookieStore.set({ name, value, ...options })
+        },
+        remove(name, options) {
+          cookieStore.set({ name, value: '', ...options })
+        },
+      },
+    }
+  )
+
   // write to users: name, email, apartment,
   // write to addresses: address_name, email
 
@@ -14,7 +33,7 @@ export async function POST(request) {
   const user = await request.json();
 
   // get supabase instance
-  const supabase = createRouteHandlerClient({ cookies });
+  // const supabase = createRouteHandlerClient({ cookies });
 
   // get current user session
   const {
