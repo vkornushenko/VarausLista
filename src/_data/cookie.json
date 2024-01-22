@@ -1,0 +1,45 @@
+{
+  "access_token": "eyJhbGciOiJIUzI1NiIsImtpZCI6InVwekE1OFhETXVad3owenEiLCJ0eXAiOiJKV1QifQ.eyJhdWQiOiJhdXRoZW50aWNhdGVkIiwiZXhwIjoxNzA1OTM4NzM4LCJpYXQiOjE3MDU5MzUxMzgsImlzcyI6Imh0dHBzOi8vbnh4dG9qYnNvenBuZ2hzeGhtcnIuc3VwYWJhc2UuY28vYXV0aC92MSIsInN1YiI6IjA4YmU1OWEzLTdjM2YtNDY2OC04Nzc5LTA2OTllYzA2ZGVkNSIsImVtYWlsIjoidmtvcm51c2hlbmtvQGdtYWlsLmNvbSIsInBob25lIjoiIiwiYXBwX21ldGFkYXRhIjp7InByb3ZpZGVyIjoiZW1haWwiLCJwcm92aWRlcnMiOlsiZW1haWwiXX0sInVzZXJfbWV0YWRhdGEiOnsiYWRkcmVzcyI6ImFkZHJlc3NfaWQgPSAzMCIsImFwYXJ0bWVudCI6IkExIiwiZmlyc3RfbmFtZSI6IlZsYWRpc2xhdiIsInBhc3N3b3JkIjoiZHpEVGpDYjUzWENWVnBwIn0sInJvbGUiOiJhdXRoZW50aWNhdGVkIiwiYWFsIjoiYWFsMSIsImFtciI6W3sibWV0aG9kIjoicGFzc3dvcmQiLCJ0aW1lc3RhbXAiOjE3MDU5MzUxMzh9XSwic2Vzc2lvbl9pZCI6IjRlODZlMWM0LWEwN2QtNGJjNS04MzM4LTZjNGYyMGFlM2JlYyJ9.6UFwhFwKf4jwSleieg2IRcbPFIj2y9GUYS06Bb-BSB8",
+  "token_type": "bearer",
+  "expires_in": 3600,
+  "expires_at": 1705938738,
+  "refresh_token": "DxiiTEJ_MuJFnFdgL08brg",
+  "user": {
+    "id": "08be59a3-7c3f-4668-8779-0699ec06ded5",
+    "aud": "authenticated",
+    "role": "authenticated",
+    "email": "vkornushenko@gmail.com",
+    "email_confirmed_at": "2024-01-13T19:05:27.761623Z",
+    "phone": "",
+    "confirmation_sent_at": "2024-01-13T19:05:01.164371Z",
+    "confirmed_at": "2024-01-13T19:05:27.761623Z",
+    "last_sign_in_at": "2024-01-22T14:52:18.153337Z",
+    "app_metadata": { "provider": "email", "providers": ["email"] },
+    "user_metadata": {
+      "address": "Kulmakatu 47",
+      "apartment": "A1",
+      "first_name": "Vladislav",
+      "password": "dzDTjCb53XCVVpp"
+    },
+    "identities": [
+      {
+        "identity_id": "c7e201c1-3e79-4fc7-892f-3475fdd51473",
+        "id": "08be59a3-7c3f-4668-8779-0699ec06ded5",
+        "user_id": "08be59a3-7c3f-4668-8779-0699ec06ded5",
+        "identity_data": {
+          "email": "vkornushenko@gmail.com",
+          "email_verified": false,
+          "phone_verified": false,
+          "sub": "08be59a3-7c3f-4668-8779-0699ec06ded5"
+        },
+        "provider": "email",
+        "last_sign_in_at": "2024-01-13T19:05:01.161546Z",
+        "created_at": "2024-01-13T19:05:01.161594Z",
+        "updated_at": "2024-01-13T19:05:01.161594Z",
+        "email": "vkornushenko@gmail.com"
+      }
+    ],
+    "created_at": "2024-01-13T19:05:01.159188Z",
+    "updated_at": "2024-01-22T14:53:48.406632Z"
+  }
+}

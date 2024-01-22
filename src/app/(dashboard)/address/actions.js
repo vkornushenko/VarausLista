@@ -22,8 +22,11 @@ export async function addAddress(addressFormData) {
   // write unique property array in formData obj
   formData.property_types = uniquePropertyTypeArr;
   
+  // at the moment we are getting user_id from the hidden input
+  // we can get it from the supabase also
   console.log('formData');
   console.log(formData);
+
 
   // insert for table 'address'
   const insertValForTable_address = [{ address_name: formData.address }];
@@ -84,7 +87,7 @@ export async function addAddress(addressFormData) {
       const insertValForTable_intersections_user_address = [
         {
           address_id: address_id,
-          user_id: '08be59a3-7c3f-4668-8779-0699ec06ded5',
+          user_id: formData.user_id,
         },
       ];
 

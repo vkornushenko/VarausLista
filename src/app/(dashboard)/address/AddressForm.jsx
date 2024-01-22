@@ -8,8 +8,10 @@ import { useState } from 'react';
 
 import { addAddress } from './actions';
 import SubmitButton from '@/app/components/ui/SubmitButton';
+import { useSelector } from 'react-redux';
 
 export default function AddressForm({ propertyList }) {
+  const userData = useSelector((state) => state.userReducer);
   const [sharedPlaceQty, setSharedPlaceQty] = useState(1);
 
   const addSharedPlaceHandler = () => {
@@ -24,6 +26,7 @@ export default function AddressForm({ propertyList }) {
   return (
     <form autoComplete='on' className='form' action={addAddress}>
       <div className='input_block'>
+        <input type="hidden" id='user_id' name='user_id' value={userData.user_id} />
         <label htmlFor='address' className={sorce_sans_3.className}>
           Address
         </label>

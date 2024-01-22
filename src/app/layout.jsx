@@ -49,7 +49,7 @@ export default async function RootLayout({ children }) {
   let intersections_user_address = await supabase
     .from('intersections_user_address')
     .select('*')
-    .eq('user_id', user.id)
+    .eq('user_id', user?.id)
     .single();
   if (intersections_user_address.error) {
     console.log(intersections_user_address.error);
