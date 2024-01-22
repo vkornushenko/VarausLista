@@ -48,7 +48,7 @@ export default function AddressForm({ propertyList }) {
           </label>
           <select
             id={`shared_property_type_${index}`}
-            name={`property_types_${index}`}
+            name={`property_types`}
             size='1'
           >
             {propertyList.map((propertyItem, itemIndex) => (

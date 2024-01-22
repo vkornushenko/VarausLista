@@ -48,19 +48,32 @@ export default async function RootLayout({ children }) {
   // and put it to store if it exists
   let intersections_user_address = await supabase
     .from('intersections_user_address')
-    .select('*');
-    if(intersections_user_address.error){
-      console.log(intersections_user_address.error);
-    }
-    else{
-      console.log(intersections_user_address.data);
-    }
+    .select('*')
+    .eq('user_id', user.id)
+    .single();
+  if (intersections_user_address.error) {
+    console.log(intersections_user_address.error);
+  } else {
+    console.log('from layout.jsx:');
+    console.log(intersections_user_address.data);
+  }
 
+  let table_address = await supabase
+    .from('address')
+    .select('*')
+    .eq('id', intersections_user_address.data?.address_id)
+    .single();
+  if (table_address.error) {
+    console.log(table_address.error);
+  } else {
+    console.log('from table address, layout.jsx:');
+    console.log(table_address.data);
+  }
 
   // destructure supabase data to userData
   const userData = {
     name: user?.user_metadata.first_name,
-    address: intersections_user_address.data[0]?.address_id,
+    address: table_address.data?.address_name,
     apartment: user?.user_metadata.apartment,
     email: user?.email,
     password: user?.user_metadata.password,

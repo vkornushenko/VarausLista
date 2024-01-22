@@ -7,8 +7,24 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
 export async function addAddress(addressFormData) {
-  // data from form
+  // console.log('this we get RAW from the form addressFormData');
+  // console.log(addressFormData);
+
+  // collecting data from multiple selects with the same input name
+  // otherwise they will be overwrited
+  const propertyTypeList = addressFormData.getAll('property_types');
+  // left only unique values
+  const uniquePropertyTypeArr = [...new Set(propertyTypeList)];
+  
+  // cleaning data from form
   const formData = Object.fromEntries(addressFormData);
+  
+  // write unique property array in formData obj
+  formData.property_types = uniquePropertyTypeArr;
+  
+  console.log('formData');
+  console.log(formData);
+
   // insert for table 'address'
   const insertValForTable_address = [{ address_name: formData.address }];
 
@@ -26,14 +42,6 @@ export async function addAddress(addressFormData) {
     }
   );
 
-  // preparing insert for table 'intersections_address_property'
-  // get property values arr from the form
-  const propertyTypeArr = Object.values(
-    Object.fromEntries(Object.entries(formData).slice(2))
-  );
-  // left only unique values in property list
-  const uniquePropertyTypeArr = [...new Set(propertyTypeArr)];
-
   const { data, error } = await supabase
     .from('address')
     .insert(insertValForTable_address)
@@ -50,7 +58,7 @@ export async function addAddress(addressFormData) {
     // if everything fine -> lets create 2nd table
     // prepare insert with new address_id
     let insertValForTable_intersections_address_property = [];
-    uniquePropertyTypeArr.map((property_id, index) => {
+    formData.property_types.map((property_id, index) => {
       insertValForTable_intersections_address_property[index] = {
         address_id: address_id,
         property_id: property_id,
@@ -64,6 +72,9 @@ export async function addAddress(addressFormData) {
     if (responce.error) {
       console.log(responce.error);
     } else {
+      console.log('data inserted in table (intersections_address_property):')
+      console.log(insertValForTable_intersections_address_property);
+      console.log('data returned from table (intersections_address_property) after insert:')
       console.log(responce.data);
 
       // now insert to the table 'intersections_user_address'
@@ -84,6 +95,7 @@ export async function addAddress(addressFormData) {
       if (responce.error) {
         console.log(responceFrom_intersections_user_address.error);
       } else {
+        console.log('responceFrom_intersections_user_address!!!');
         console.log(responceFrom_intersections_user_address.data);
       }
     }
