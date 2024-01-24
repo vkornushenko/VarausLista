@@ -26,7 +26,12 @@ export default function AddressForm({ propertyList }) {
   return (
     <form autoComplete='on' className='form' action={addAddress}>
       <div className='input_block'>
-        <input type="hidden" id='user_id' name='user_id' value={userData.user_id} />
+        <input
+          type='hidden'
+          id='user_id'
+          name='user_id'
+          value={userData.user_id}
+        />
         <label htmlFor='address' className={sorce_sans_3.className}>
           Address
         </label>

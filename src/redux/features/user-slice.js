@@ -4,6 +4,7 @@ import { createSlice } from '@reduxjs/toolkit';
 // lets keep initialState in a const
 const initialState = {
   name: undefined,
+  address_id: undefined,
   address: undefined,
   apartment: undefined,
   email: undefined,
@@ -19,6 +20,7 @@ export const user = createSlice({
   reducers: {
     setUser(state, action) {
       state.name = action.payload.name;
+      state.address_id = action.payload.address_id
       state.address = action.payload.address;
       state.apartment = action.payload.apartment;
       state.email = action.payload.email;
@@ -27,6 +29,7 @@ export const user = createSlice({
     },
     unsetUser(state) {
       state.name = initialState.name;
+      state.address_id = initialState.address_id;
       state.address = initialState.address;
       state.apartment = initialState.apartment;
       state.email = initialState.email;

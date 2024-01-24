@@ -1,0 +1,66 @@
+'use server';
+
+import { getDurationInSeconds } from '@/app/utils/time';
+import { getEndTime } from '@/app/utils/time';
+// supabase
+import { createServerClient } from '@supabase/ssr';
+import { cookies } from 'next/headers';
+
+// connect to supabase
+const cookieStore = cookies();
+const supabase = createServerClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+  {
+    cookies: {
+      get(name) {
+        return cookieStore.get(name)?.value;
+      },
+    },
+  }
+);
+
+// actions
+
+export async function sendReservation(reservationFormData) {
+
+  console.log('reservationFormData');
+  console.log(reservationFormData);
+  // cleaning data from form
+  const cleanReservationFormData = Object.fromEntries(reservationFormData);
+  console.log(cleanReservationFormData);
+
+  // will save time in 000Z (-2 hrs for finland)
+  const start = new Date(cleanReservationFormData.start_time);
+  // console.log('start');
+  // console.log(start);
+
+  // will output hours in local time (+2 hrs for finland)
+  // console.log(start.getHours());
+
+  const durationInSeconds = getDurationInSeconds(
+    cleanReservationFormData.duration
+  );
+  console.log('durationInSeconds');
+  console.log(durationInSeconds);
+
+  const endTime = getEndTime(start, durationInSeconds);
+
+  // insert data to supabase
+  const { data, error } = await supabase
+    .from('reservations')
+    .insert([
+      {
+        user_id: cleanReservationFormData.user_id,
+        property_id: cleanReservationFormData.property_id,
+        start_time: start,
+        end_time: endTime,
+      },
+    ])
+    .select();
+  if (error) {
+    console.log(error);
+  } else {
+    console.log(data);
+  }
+}

@@ -2,9 +2,9 @@
 import { source_serif_4 } from '@/app/utils/fonts';
 // style
 import '@/app/globals.css';
+import bg from '../../public/img/bg-img.png';
 
 import Navbar from './components/Navbar';
-import bg from '../../public/img/bg-img.png';
 import StoreProvider from './StoreProvider';
 
 // supabase
@@ -79,6 +79,9 @@ export default async function RootLayout({ children }) {
     password: user?.user_metadata.password,
     // invitationLink: 'canBeSendToEmail',
     user_id: user?.id,
+    address_id: table_address.data?.id
+    // property_id_list
+    // property_name_list
   };
 
   return (

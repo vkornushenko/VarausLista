@@ -4,41 +4,62 @@ import ModalLayout from '../ui/ModalLayout';
 // fonts
 import { sorce_sans_3 } from '@/app/utils/fonts';
 import '@/app/globals.css';
+import { sendReservation } from '@/app/(dashboard)/reservation/actions';
 
-export default function ReservationForm(props) {
-
+export default function ReservationForm({
+  userData,
+  property_id,
+  propertyName,
+  toggleLayover,
+}) {
   // get current time, count timezone, prepare for input format
   const now = new Date();
   now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
   const currentTime = now.toISOString().slice(0, 16);
 
-  // handle form submission
-  const submitHandler = (event) => {
-    event.preventDefault();
-    // To do: get form data
+  // // handle form submission
+  // const submitHandler = (event) => {
+  //   event.preventDefault();
+  //   // To do: get form data
 
-    // close popup
-    props.toggleLayover();
-  }
+  //   // close popup
+  //   toggleLayover();
+  // }
 
   return (
-    <ModalLayout toggleLayover={props.toggleLayover}>
+    <ModalLayout toggleLayover={toggleLayover}>
       <CardLayout>
         {/* <h1 className={sorce_sans_3.className + ' ' + classes.popup_header}>
           Reserve Laundry
         </h1> */}
-        <CardHeader title='Reserve Laundry'/>
-        <form className='form' onSubmit={submitHandler}>
+        <CardHeader title={`Reserve ${propertyName}`} />
+        <form className='form' action={sendReservation}>
+          <input
+            type='hidden'
+            id='user_id'
+            name='user_id'
+            value={userData.user_id}
+          />
+          <input
+            type='hidden'
+            id='property_id'
+            name='property_id'
+            value={property_id}
+          />
           <div className='input_block'>
             <label htmlFor='given-name' className={sorce_sans_3.className}>
               Name
             </label>
             <input
+              autoComplete='given-name'
               type='text'
               id='given-name'
-              name='given-name'
+              name='first_name'
               placeholder='Your name'
+              defaultValue={userData?.name || ''}
               className={sorce_sans_3.className}
+              disabled={userData.name}
+              required
             />
           </div>
           <div className='input_block'>
@@ -46,14 +67,18 @@ export default function ReservationForm(props) {
               Apartment No
             </label>
             <input
+              autoComplete='off'
               type='text'
               id='apartment'
               name='apartment'
               placeholder='Apartment number'
+              defaultValue={userData?.apartment || ''}
               className={sorce_sans_3.className}
+              disabled={userData.apartment}
+              required
             />
           </div>
-          <div className='input_block'>
+          {/* <div className='input_block'>
             <label htmlFor='washing_machine' className={sorce_sans_3.className}>
               Washing machine No
             </label>
@@ -64,7 +89,7 @@ export default function ReservationForm(props) {
               placeholder='Washing machine number'
               className={sorce_sans_3.className}
             />
-          </div>
+          </div> */}
           <div className='input_block'>
             <label htmlFor='start_time' className={sorce_sans_3.className}>
               Start time
@@ -72,11 +97,23 @@ export default function ReservationForm(props) {
             <input
               type='datetime-local'
               id='start_time'
-              name='start time'
+              name='start_time'
               defaultValue={currentTime}
               className={sorce_sans_3.className}
             />
           </div>
+          {/* <div className='input_block'>
+            <label htmlFor='end_time' className={sorce_sans_3.className}>
+              End time
+            </label>
+            <input
+              type='datetime-local'
+              id='end_time'
+              name='end_time'
+              defaultValue={currentTime}
+              className={sorce_sans_3.className}
+            />
+          </div> */}
           <div className='input_block'>
             <label htmlFor='duration' className={sorce_sans_3.className}>
               Duration
@@ -89,7 +126,12 @@ export default function ReservationForm(props) {
               className={sorce_sans_3.className}
             />
           </div>
-          <button type='submit' className={sorce_sans_3.className + ' ' + 'submit_button'}>Reserve Sauna</button>
+          <button
+            type='submit'
+            className={sorce_sans_3.className + ' ' + 'submit_button'}
+          >
+            {`Reserve ${propertyName}`}
+          </button>
         </form>
       </CardLayout>
     </ModalLayout>

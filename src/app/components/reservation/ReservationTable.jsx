@@ -1,3 +1,4 @@
+
 import InfoQuote from '../ui/InfoQuote';
 import classes from './ReservationTable.module.css';
 

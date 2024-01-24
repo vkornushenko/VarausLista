@@ -1,64 +1,51 @@
-'use client';
+import ReservationCard from './ReservationCard';
 
-import { useState } from 'react';
+// supabase
+import { createServerClient } from '@supabase/ssr';
+import { cookies } from 'next/headers';
 
-import CardLayout from '@/app/components/ui/CardLayout';
-import SharedPropertyNavigation from '@/app/components/reservation/SharedPropertyNavigation';
-import DateNavigation from '@/app/components/reservation/DateNavigation';
-import ReservationTable from '@/app/components/reservation/ReservationTable';
-import Button from '@/app/components/ui/Button';
-import ReservationForm from '@/app/components/modal/ReservationForm';
-
-
-
-// redux
-import { toggleModal } from '@/redux/features/ui-slice';
-import { useDispatch, useSelector } from 'react-redux';
-import ReservationCardHeader from './ReservationCardHeader';
-
-export default function ReservationPage() {
-  const userData = useSelector((state) => state.userReducer);
-  // redux
-  const dispatch = useDispatch();
-  // for layover
-  const toggleModalrHandler = () => {
-    dispatch(toggleModal());
-    // if we want to pass a payload/action/data to a function:
-    // dispatch(logIn(given-name));
-  };
-  // NOTE!!!
-  // selector could be used in another component separatly
-  // all we need is to import selector and use useSelector
-  // like we using it below
-  const showModal = useSelector(
-    (state) => state.uiReducer.value.modalIsVisible
-    // the same way we can get data from the store:
-    // (state) => state.uiReducer.value.first_name
+export default async function ReservationPage() {
+  const cookieStore = cookies();
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+    {
+      cookies: {
+        get(name) {
+          return cookieStore.get(name)?.value;
+        },
+      },
+    }
   );
 
-  const [currentSharedPropertyIndex, setCurrentSharedPropertyIndex] =
-    useState(0);
+  const address_id = 54;
 
-  const sharedPropertyList = ['Sauna', 'Laundry', 'GYM', 'Grill'];
-  const SharedPropName = sharedPropertyList[currentSharedPropertyIndex];
+  let { data, error } = await supabase
+    .from('intersections_address_property')
+    .select(
+      `
+        id,
+        address_id,
+        property_id,
+        address(address_name),
+        shared_property(name)
+        `
+    )
+    .eq('address_id', address_id);
+  if (error) {
+    console.log(error);
+  } else {
+    //console.log(data);
+  }
+
+  console.log('data from reservation/page.jsx');
+  console.log(data);
+
+
 
   return (
     <main>
-      <CardLayout>
-        <ReservationCardHeader address={userData.address} />
-        <SharedPropertyNavigation
-          selectedProperty={SharedPropName}
-          sharedPropertyList={sharedPropertyList}
-          changeProperty={setCurrentSharedPropertyIndex}
-        />
-        <DateNavigation />
-        <ReservationTable />
-        <Button
-          action={toggleModalrHandler}
-          name={`Reserve ${SharedPropName}`}
-        />
-      </CardLayout>
-      {showModal && <ReservationForm toggleLayover={toggleModalrHandler} />}
+      <ReservationCard propertyData={data}/>
     </main>
   );
 }
