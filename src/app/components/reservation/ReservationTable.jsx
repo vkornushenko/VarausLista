@@ -1,8 +1,14 @@
-
+import { printTimeInterval } from '@/app/utils/time';
 import InfoQuote from '../ui/InfoQuote';
 import classes from './ReservationTable.module.css';
+import TimeInterval from './TimeInterval';
 
-export default function ReservationTable() {
+export default function ReservationTable({
+  reservationData,
+  selectedPropertyId,
+}) {
+  // console.log('reservationData from ReservationTable.jsx');
+  // console.log(reservationData);
   // const reservationTableData = false;
   const reservationTableData = { data: 'data' };
 
@@ -29,70 +35,34 @@ export default function ReservationTable() {
           <div className={classes.reservation_grid__middle_column_items}>
             <p className={classes.reservation_grid__header_text}>asunto</p>
           </div>
-          <div className={classes.reservation_grid__middle_column_items}>
+          {/* <div className={classes.reservation_grid__middle_column_items}>
             <p className={classes.reservation_grid__header_text}>machine</p>
-          </div>
+          </div> */}
           <div className={classes.reservation_grid__last_column_items_header}>
             <p className={classes.reservation_grid__header_text}>time</p>
           </div>
 
-          {/* content - 1st line */}
-          <div className={classes.reservation_grid__first_column_items}>
-            Johanna
-          </div>
-          <div className={classes.reservation_grid__middle_column_items}>
-            A1
-          </div>
-          <div className={classes.reservation_grid__middle_column_items}>3</div>
-          <div className={classes.reservation_grid__last_column_items}>
-            15<sup>00</sup> - 17<sup>00</sup>
-          </div>
-          <div className={classes.brake_line}></div>
-
-          {/* content - 2nd line */}
-          <div className={classes.reservation_grid__first_column_items}>
-            Hugo
-          </div>
-          <div className={classes.reservation_grid__middle_column_items}>
-            A1
-          </div>
-          <div className={classes.reservation_grid__middle_column_items}>1</div>
-          <div className={classes.reservation_grid__last_column_items}>
-            <p className={classes.reservation_grid__content_time}>
-              15<sup>00</sup> - 17<sup>00</sup>
-            </p>
-          </div>
-          <div className={classes.brake_line}></div>
-
-          {/* content - 3rd line */}
-          <div className={classes.reservation_grid__first_column_items}>
-            Maija
-          </div>
-          <div className={classes.reservation_grid__middle_column_items}>
-            A7
-          </div>
-          <div className={classes.reservation_grid__middle_column_items}>3</div>
-          <div className={classes.reservation_grid__last_column_items}>
-            <p className={classes.reservation_grid__content_time}>
-              17<sup>00</sup> - 19<sup>00</sup>
-            </p>
-          </div>
-          <div className={classes.brake_line}></div>
-
-          {/* content - 4th line */}
-          <div className={classes.reservation_grid__first_column_items}>
-            Heikki
-          </div>
-          <div className={classes.reservation_grid__middle_column_items}>
-            A7
-          </div>
-          <div className={classes.reservation_grid__middle_column_items}>2</div>
-          <div className={classes.reservation_grid__last_column_items}>
-            <p className={classes.reservation_grid__content_time}>
-              21<sup>00</sup> - 23<sup>00</sup>
-            </p>
-          </div>
-
+          {reservationData.map((item, index) => (
+            <>
+              {selectedPropertyId === item.property_id && (
+                <>
+                  <div className={classes.reservation_grid__first_column_items}>
+                    {item.name}
+                  </div>
+                  <div
+                    className={classes.reservation_grid__middle_column_items}
+                  >
+                    {item.apartment}
+                  </div>
+                  {/* <div className={classes.reservation_grid__middle_column_items}>3</div> */}
+                  <div className={classes.reservation_grid__last_column_items}>
+                    <TimeInterval start={item.start_time} end={item.end_time} />
+                  </div>
+                  <div className={classes.brake_line}></div>
+                </>
+              )}
+            </>
+          ))}
         </div>
       )}
     </>

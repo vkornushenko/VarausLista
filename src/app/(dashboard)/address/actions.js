@@ -24,8 +24,8 @@ export async function addAddress(addressFormData) {
   
   // at the moment we are getting user_id from the hidden input
   // we can get it from the supabase also
-  console.log('formData');
-  console.log(formData);
+  // console.log('formData');
+  // console.log(formData);
 
 
   // insert for table 'address'
@@ -53,7 +53,7 @@ export async function addAddress(addressFormData) {
   if (error) {
     console.log(error);
   } else {
-    console.log(data);
+    // console.log(data);
 
     // here should be new adress_id from DB
     const address_id = data[0].id;
@@ -75,10 +75,10 @@ export async function addAddress(addressFormData) {
     if (responce.error) {
       console.log(responce.error);
     } else {
-      console.log('data inserted in table (intersections_address_property):')
-      console.log(insertValForTable_intersections_address_property);
-      console.log('data returned from table (intersections_address_property) after insert:')
-      console.log(responce.data);
+      // console.log('data inserted in table (intersections_address_property):')
+      // console.log(insertValForTable_intersections_address_property);
+      // console.log('data returned from table (intersections_address_property) after insert:')
+      // console.log(responce.data);
 
       // now insert to the table 'intersections_user_address'
       // user_id + address_id
@@ -98,8 +98,8 @@ export async function addAddress(addressFormData) {
       if (responce.error) {
         console.log(responceFrom_intersections_user_address.error);
       } else {
-        console.log('responceFrom_intersections_user_address!!!');
-        console.log(responceFrom_intersections_user_address.data);
+        // console.log('responceFrom_intersections_user_address!!!');
+        // console.log(responceFrom_intersections_user_address.data);
       }
     }
   }

@@ -6,6 +6,9 @@ import { getEndTime } from '@/app/utils/time';
 import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 
+import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
+
 // connect to supabase
 const cookieStore = cookies();
 const supabase = createServerClient(
@@ -23,7 +26,6 @@ const supabase = createServerClient(
 // actions
 
 export async function sendReservation(reservationFormData) {
-
   console.log('reservationFormData');
   console.log(reservationFormData);
   // cleaning data from form
@@ -52,6 +54,9 @@ export async function sendReservation(reservationFormData) {
     .insert([
       {
         user_id: cleanReservationFormData.user_id,
+        name: cleanReservationFormData.first_name,
+        address_id: cleanReservationFormData.address_id,
+        apartment: cleanReservationFormData.apartment,
         property_id: cleanReservationFormData.property_id,
         start_time: start,
         end_time: endTime,
@@ -63,4 +68,6 @@ export async function sendReservation(reservationFormData) {
   } else {
     console.log(data);
   }
+  revalidatePath('/reservation');
+  redirect('/reservation');
 }

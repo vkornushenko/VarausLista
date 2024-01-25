@@ -24,9 +24,7 @@ export default async function ReservationPage() {
     .from('intersections_address_property')
     .select(
       `
-        id,
-        address_id,
-        property_id,
+        *,
         address(address_name),
         shared_property(name)
         `
@@ -38,14 +36,39 @@ export default async function ReservationPage() {
     //console.log(data);
   }
 
-  console.log('data from reservation/page.jsx');
-  console.log(data);
+  // console.log('data from reservation/page.jsx');
+  // console.log(data);
 
+  // calculate today
+  var now = new Date();
+  var startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  var timestamp = startOfDay / 1000;
+  // console.log('from page.jsx - start of today timestamp');
+  // console.log(timestamp);
+  const todayIsoString = startOfDay.toISOString();
+  // console.log(todayIsoString);
 
+  const reservationData = await supabase
+    .from('reservations')
+    .select(
+      `
+      *,
+      shared_property(id, name)
+      `
+    )
+    .eq('address_id', address_id)
+    .gte('start_time', todayIsoString)
+    .order('start_time', { ascending: true });
+  if (reservationData.error) {
+    console.log(reservationData.error);
+  } else {
+    // console.log('reservation data from supabase - reservations/page.jsx')
+    // console.log(reservationData.data);
+  }
 
   return (
     <main>
-      <ReservationCard propertyData={data}/>
+      <ReservationCard propertyData={data} reservationData={reservationData.data} />
     </main>
   );
 }

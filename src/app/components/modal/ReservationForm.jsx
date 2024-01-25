@@ -1,6 +1,7 @@
 import CardHeader from '../ui/CardHeader';
 import CardLayout from '../ui/CardLayout';
 import ModalLayout from '../ui/ModalLayout';
+
 // fonts
 import { sorce_sans_3 } from '@/app/utils/fonts';
 import '@/app/globals.css';
@@ -42,6 +43,12 @@ export default function ReservationForm({
           />
           <input
             type='hidden'
+            id='address_id'
+            name='address_id'
+            value={userData.address_id}
+          />
+          <input
+            type='hidden'
             id='property_id'
             name='property_id'
             value={property_id}
@@ -58,7 +65,7 @@ export default function ReservationForm({
               placeholder='Your name'
               defaultValue={userData?.name || ''}
               className={sorce_sans_3.className}
-              disabled={userData.name}
+              // disabled={userData.name}
               required
             />
           </div>
@@ -74,7 +81,7 @@ export default function ReservationForm({
               placeholder='Apartment number'
               defaultValue={userData?.apartment || ''}
               className={sorce_sans_3.className}
-              disabled={userData.apartment}
+              // disabled={userData.apartment}
               required
             />
           </div>
@@ -100,6 +107,7 @@ export default function ReservationForm({
               name='start_time'
               defaultValue={currentTime}
               className={sorce_sans_3.className}
+              required
             />
           </div>
           {/* <div className='input_block'>
@@ -124,6 +132,7 @@ export default function ReservationForm({
               name='duration'
               defaultValue='02:00'
               className={sorce_sans_3.className}
+              required
             />
           </div>
           <button

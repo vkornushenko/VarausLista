@@ -14,7 +14,7 @@ import { toggleModal } from '@/redux/features/ui-slice';
 import { useDispatch, useSelector } from 'react-redux';
 import ReservationCardHeader from './ReservationCardHeader';
 
-export default function ReservationCard({ propertyData }) {
+export default function ReservationCard({ propertyData, reservationData }) {
   const[selectedPropertyId, setSelectedPropertyId] = useState(propertyData[0].property_id);
   const userData = useSelector((state) => state.userReducer);
   // console.log(userData);
@@ -43,8 +43,6 @@ const currentPropertyName = propertyArr[selectedPropertyId];
     // (state) => state.uiReducer.value.first_name
   );
 
-  const [currentSharedPropertyIndex, setCurrentSharedPropertyIndex] =
-    useState(0);
 
   // const sharedPropertyList = ['Sauna', 'Laundry', 'GYM', 'Grill'];
   // const SharedPropName = sharedPropertyList[currentSharedPropertyIndex];
@@ -59,7 +57,7 @@ const currentPropertyName = propertyArr[selectedPropertyId];
           setSelectedPropertyId={setSelectedPropertyId}
         />
         <DateNavigation />
-        <ReservationTable />
+        <ReservationTable reservationData={reservationData} selectedPropertyId={selectedPropertyId}/>
         <Button
           action={toggleModalrHandler}
           name={`Reserve ${currentPropertyName}`}
@@ -71,7 +69,6 @@ const currentPropertyName = propertyArr[selectedPropertyId];
           property_id={selectedPropertyId}
           propertyName={currentPropertyName}
           toggleLayover={toggleModalrHandler}
-
         />
       )}
     </>

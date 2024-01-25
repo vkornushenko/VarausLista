@@ -10,27 +10,11 @@ export function getDurationInSeconds(duration) {
 }
 
 export function getEndTime(start, durationInSeconds) {
-  console.log(start.getTime());
-  console.log(start.getTime() + durationInSeconds * 1000);
+  // console.log(start.getTime());
+  // console.log(start.getTime() + durationInSeconds * 1000);
   const endTime = new Date(start.getTime() + durationInSeconds * 1000);
-  console.log('startTime');
-  console.log(start);
-  console.log('endTime');
-  console.log(endTime);
-
-  console.log(
-    start.getHours() +
-      ':' +
-      (start.getMinutes() < 10
-        ? '0' + start.getMinutes()
-        : start.getMinutes()) +
-      ' - ' +
-      endTime.getHours() +
-      ':' +
-      (endTime.getMinutes() < 10
-        ? '0' + endTime.getMinutes()
-        : endTime.getMinutes())
-  );
-
-  return endTime;
+  // console.log('startTime');
+  // console.log(start);
+  // console.log('endTime');
+  // console.log(endTime);
 }

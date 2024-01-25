@@ -54,8 +54,8 @@ export default async function RootLayout({ children }) {
   if (intersections_user_address.error) {
     console.log(intersections_user_address.error);
   } else {
-    console.log('from layout.jsx:');
-    console.log(intersections_user_address.data);
+    // console.log('from layout.jsx:');
+    // console.log(intersections_user_address.data);
   }
 
   let table_address = await supabase
@@ -66,8 +66,8 @@ export default async function RootLayout({ children }) {
   if (table_address.error) {
     console.log(table_address.error);
   } else {
-    console.log('from table address, layout.jsx:');
-    console.log(table_address.data);
+    // console.log('from table address, layout.jsx:');
+    // console.log(table_address.data);
   }
 
   // destructure supabase data to userData
