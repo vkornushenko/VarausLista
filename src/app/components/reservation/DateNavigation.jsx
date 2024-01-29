@@ -7,18 +7,27 @@ import classes from './DateNavigation.module.css';
 import { sorce_sans_3 } from '@/app/utils/fonts';
 
 import returnSevenDaysObject from '../../utils/sevenDays.js';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
-export default function DateNavigation() {
+export default function DateNavigation({setSelectedDateObject}) {
   const[offset, setOffset] = useState(-1);
+  // console.log('offset | DateNavigation.jsx');
+  // console.log(offset);
 
   const offsetHandler = (event) => {
-    // we need this + to convert string to number
+    // we need this '+' to convert string to number
     setOffset(+ event.currentTarget.getAttribute('offset'));
   }
 
   const sevenDays = returnSevenDaysObject(offset);
-  //console.log(sevenDays);
+  const selectedDateObject = sevenDays[1]['date'];
+  
+  useEffect(() => {
+    // console.log(selectedDateObject);
+    setSelectedDateObject(selectedDateObject);
+    // console.log('setSelectedDateObject triggered');
+  }, [offset]);
+
 
   return (
     <nav>

@@ -20,11 +20,12 @@ export default function returnSevenDaysObject(offset) {
       weekday: d.getDate(),
       //weekdayIndex: d.getDay(),
       weekdayName: weekdayNamesStartsFromSunday[d.getDay()],
-      offset: startingDay
+      offset: startingDay,
+      date: d
     };
     daysArray.push(element);
     startingDay++;
   });
-  //console.log(daysArray);
+  // console.log(daysArray);
   return daysArray;
 }

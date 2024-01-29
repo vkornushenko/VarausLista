@@ -12,9 +12,12 @@ export default function ReservationForm({
   property_id,
   propertyName,
   toggleLayover,
+  selectedDateObject,
 }) {
   // get current time, count timezone, prepare for input format
-  const now = new Date();
+
+  // const now = new Date();
+  const now = new Date(selectedDateObject);
   now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
   const currentTime = now.toISOString().slice(0, 16);
 
@@ -124,14 +127,15 @@ export default function ReservationForm({
           </div> */}
           <div className='input_block'>
             <label htmlFor='duration' className={sorce_sans_3.className}>
-              Duration
+              Duration (hh:mm)
             </label>
             <input
-              type='time'
+              type='text'
               id='duration'
               name='duration'
               defaultValue='02:00'
               className={sorce_sans_3.className}
+              pattern="([01][0-9]|2[0-3]):([0-5][0-9])"
               required
             />
           </div>

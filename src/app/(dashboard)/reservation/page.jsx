@@ -33,11 +33,11 @@ export default async function ReservationPage() {
   if (error) {
     console.log(error);
   } else {
-    //console.log(data);
+    // console.log(data);
   }
 
-  // console.log('data from reservation/page.jsx');
-  // console.log(data);
+  console.log('data from intersections_address_property table reservation/page.jsx');
+  console.log(data);
 
   // calculate today
   var now = new Date();
@@ -62,8 +62,8 @@ export default async function ReservationPage() {
   if (reservationData.error) {
     console.log(reservationData.error);
   } else {
-    // console.log('reservation data from supabase - reservations/page.jsx')
-    // console.log(reservationData.data);
+    console.log('data from reservations table - reservations/page.jsx')
+    console.log(reservationData.data);
   }
 
   return (

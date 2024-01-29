@@ -1,4 +1,3 @@
-import { printTimeInterval } from '@/app/utils/time';
 import InfoQuote from '../ui/InfoQuote';
 import classes from './ReservationTable.module.css';
 import TimeInterval from './TimeInterval';
@@ -6,15 +5,36 @@ import TimeInterval from './TimeInterval';
 export default function ReservationTable({
   reservationData,
   selectedPropertyId,
+  propertyName,
+  selectedDateObject,
 }) {
   // console.log('reservationData from ReservationTable.jsx');
   // console.log(reservationData);
-  // const reservationTableData = false;
-  const reservationTableData = { data: 'data' };
 
+
+  // checking for any reservations for selectedPropertyId
+  const reservationsFound = reservationData.some(item => item.property_id === selectedPropertyId);
+  //console.log('found value = ' + reservationsFound);
+
+
+  const monthNames = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ];
+
+  // empty reservations message
   const quoteData = {
-    message:
-      'Laundry is not reserved by your neighbours for 19 November. You can be the first to reserve it.',
+    message: `${propertyName} is not reserved by your neighbours for ${selectedDateObject?.getDate()} ${monthNames[selectedDateObject?.getMonth()]}. You can be the first to reserve it.`,
     type: 'info',
   };
 
@@ -24,7 +44,7 @@ export default function ReservationTable({
         <p>Laundry is not reserved by your neighbours for 19 November.</p>
         <p>You can be the first to reserve it.</p>
       </div> */}
-      {!reservationTableData ? (
+      {!reservationsFound ? (
         <InfoQuote data={quoteData} />
       ) : (
         <div className={classes.reservations_grid}>

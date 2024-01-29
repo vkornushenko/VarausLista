@@ -15,15 +15,19 @@ import { useDispatch, useSelector } from 'react-redux';
 import ReservationCardHeader from './ReservationCardHeader';
 
 export default function ReservationCard({ propertyData, reservationData }) {
-  const[selectedPropertyId, setSelectedPropertyId] = useState(propertyData[0].property_id);
+  const [selectedDateObject, setSelectedDateObject] = useState();
+  const [selectedPropertyId, setSelectedPropertyId] = useState(
+    propertyData[0].property_id
+  );
   const userData = useSelector((state) => state.userReducer);
   // console.log(userData);
 
-// return property array with key as id
-let propertyArr = {};
-propertyData.map((item) => propertyArr[item.property_id] = item.shared_property.name);
-const currentPropertyName = propertyArr[selectedPropertyId];
-
+  // return property array with key as id
+  let propertyArr = {};
+  propertyData.map(
+    (item) => (propertyArr[item.property_id] = item.shared_property.name)
+  );
+  const currentPropertyName = propertyArr[selectedPropertyId];
 
   // redux
   const dispatch = useDispatch();
@@ -43,7 +47,22 @@ const currentPropertyName = propertyArr[selectedPropertyId];
     // (state) => state.uiReducer.value.first_name
   );
 
+  const monthNames = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
+  ];
 
+  
   // const sharedPropertyList = ['Sauna', 'Laundry', 'GYM', 'Grill'];
   // const SharedPropName = sharedPropertyList[currentSharedPropertyIndex];
 
@@ -56,11 +75,20 @@ const currentPropertyName = propertyArr[selectedPropertyId];
           selectedPropertyId={selectedPropertyId}
           setSelectedPropertyId={setSelectedPropertyId}
         />
-        <DateNavigation />
-        <ReservationTable reservationData={reservationData} selectedPropertyId={selectedPropertyId}/>
+        <DateNavigation setSelectedDateObject={setSelectedDateObject} />
+        <ReservationTable
+          reservationData={reservationData}
+          selectedPropertyId={selectedPropertyId}
+          propertyName={currentPropertyName}
+          selectedDateObject={selectedDateObject}
+        />
         <Button
           action={toggleModalrHandler}
-          name={`Reserve ${currentPropertyName}`}
+          name={`Reserve ${currentPropertyName}
+          for ${selectedDateObject?.getDate()} ${
+            monthNames[selectedDateObject?.getMonth()]
+          }
+          `}
         />
       </CardLayout>
       {showModal && (
@@ -69,6 +97,7 @@ const currentPropertyName = propertyArr[selectedPropertyId];
           property_id={selectedPropertyId}
           propertyName={currentPropertyName}
           toggleLayover={toggleModalrHandler}
+          selectedDateObject={selectedDateObject}
         />
       )}
     </>

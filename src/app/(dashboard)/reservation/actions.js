@@ -66,6 +66,7 @@ export async function sendReservation(reservationFormData) {
   if (error) {
     console.log(error);
   } else {
+    console.log('this was inserted in reservations table')
     console.log(data);
   }
   revalidatePath('/reservation');

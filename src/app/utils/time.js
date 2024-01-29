@@ -17,4 +17,5 @@ export function getEndTime(start, durationInSeconds) {
   // console.log(start);
   // console.log('endTime');
   // console.log(endTime);
+  return endTime;
 }
