@@ -19,3 +19,11 @@ export function getEndTime(start, durationInSeconds) {
   // console.log(endTime);
   return endTime;
 }
+
+export function returnStartOfTheDayByOffset(selectedDayOffset){
+  let date = new Date();
+  date.setDate(date.getDate() + selectedDayOffset)
+  // console.log(date);
+
+  return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+}
