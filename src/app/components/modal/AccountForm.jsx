@@ -56,7 +56,6 @@ export default function AccountForm({
 
     if (error) {
       console.log(error);
-      // setErrorIsFound(true);
     } else {
       router.push('/verify');
       // close popup
@@ -144,6 +143,7 @@ export default function AccountForm({
               defaultValue={userData?.password || ''}
               className={sorce_sans_3.className}
               required
+              minLength={6}
               disabled={!userDataIsEmpty}
             />
           </div>
@@ -202,10 +202,6 @@ export default function AccountForm({
           >
             {!userDataIsEmpty ? 'Edit Account' : 'Create Account'}
           </button>
-
-          {/* {errorIsFound && (
-            <InfoQuote data={{ message: error.message, type: 'error' }} />
-          )} */}
         </form>
       </CardLayout>
     </ModalLayout>
