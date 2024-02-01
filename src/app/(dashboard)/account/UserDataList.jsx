@@ -1,4 +1,6 @@
 import classes from './UserDataList.module.css';
+import '@/app/globals.css';
+
 import Image from 'next/image';
 import { useState } from 'react';
 
@@ -11,6 +13,8 @@ import BinIcon from '../../../../public/icons/bin.svg';
 import EyeIcon from '../../../../public/icons/eye.svg';
 import EyeSlashedIcon from '../../../../public/icons/eye_slashed.svg';
 import CopyIcon from '../../../../public/icons/copy.svg';
+import { IoSettingsOutline } from 'react-icons/io5';
+import Link from 'next/link';
 
 export default function UserDataList({ userData, toggleConfirmationHandler }) {
   // state for password state
@@ -36,13 +40,18 @@ export default function UserDataList({ userData, toggleConfirmationHandler }) {
         <li>
           <p className={classes.field_name}>Address:</p>
           <p className={classes.text_content}>{userData.address}</p>
-          <Image
+          {/* <Link href='/'>Liny<IoSettingsOutline /></Link> */}
+          {/* <Image
             src={BinIcon}
             alt='bin icon'
             height={15}
             className='img_btn'
             onClick={toggleConfirmationHandler}
-          />
+          /> */}
+          {/* not to let icon stretch li element icon size 28 li height 39 (22+8+8) overflow hidden */}
+          <Link href='/address' className='link_icons'>
+          <IoSettingsOutline width={48}/>
+          </Link>
         </li>
       )}
 

@@ -69,7 +69,7 @@ export async function addAddress(addressFormData) {
     });
 
     const responce = await supabase
-      .from('intersections_address_property')
+      .from('address_property_map')
       .insert(insertValForTable_intersections_address_property)
       .select();
     if (responce.error) {
@@ -80,7 +80,7 @@ export async function addAddress(addressFormData) {
       // console.log('data returned from table (intersections_address_property) after insert:')
       // console.log(responce.data);
 
-      // now insert to the table 'intersections_user_address'
+      // now insert to the table 'user_address_map'
       // user_id + address_id
 
       // prepare insert object:
@@ -92,7 +92,7 @@ export async function addAddress(addressFormData) {
       ];
 
       const responceFrom_intersections_user_address = await supabase
-        .from('intersections_user_address')
+        .from('user_address_map')
         .insert(insertValForTable_intersections_user_address)
         .select();
       if (responce.error) {

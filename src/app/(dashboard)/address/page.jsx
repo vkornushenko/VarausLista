@@ -17,7 +17,7 @@ async function getPropertyList() {
     }
   );
 
-  const { data, error } = await supabase.from('shared_property').select();
+  const { data, error } = await supabase.from('property').select();
   if (error) {
     console.log(error.message);
   }

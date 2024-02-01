@@ -47,7 +47,7 @@ export default async function RootLayout({ children }) {
   // here we need try to check address for this user
   // and put it to store if it exists
   let intersections_user_address = await supabase
-    .from('intersections_user_address')
+    .from('user_address_map')
     .select('*')
     .eq('user_id', user?.id)
     .single();

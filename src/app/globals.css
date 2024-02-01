@@ -15,6 +15,13 @@ a img {
   display: block;
 }
 
+.link_icons{
+  display: flex;
+  align-items: center;
+  color: #333C40;
+  vertical-align: bottom;
+}
+
 body {
   background-color: #e6eff2;
   color: #333c40;

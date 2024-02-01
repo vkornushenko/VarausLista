@@ -21,7 +21,7 @@ export default async function ReservationPage() {
   const address_id = 54;
 
   let { data, error } = await supabase
-    .from('intersections_address_property')
+    .from('address_property_map')
     .select(
       `
         *,
