@@ -10,7 +10,7 @@ import { useEffect, useState } from 'react';
 import { returnStartOfTheDayByOffset } from '@/app/utils/time';
 // import { useRouter } from 'next/navigation';
 
-export default function DateNavigation({ setSelectedDateObject, setReservationDataState }) {
+export default function DateNavigation({ setSelectedDateObject, setReservationDataState, address_id }) {
   // const router = useRouter();
   // offset -1 means that the list of the days starts from today - 1 = yesterday
   const [offset, setOffset] = useState(-1);
@@ -29,7 +29,6 @@ export default function DateNavigation({ setSelectedDateObject, setReservationDa
     // data for fetch request
     const selectedDayIsoStringFrom = selectedDayFrom.toISOString();
     const selectedDayIsoStringTo = selectedDayTo.toISOString();
-    const address_id = 54;
 
     const selectValues = { selectedDayIsoStringFrom, selectedDayIsoStringTo, address_id };
 

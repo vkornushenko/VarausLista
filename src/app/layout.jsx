@@ -46,22 +46,22 @@ export default async function RootLayout({ children }) {
   // TO DO
   // here we need try to check address for this user
   // and put it to store if it exists
-  let intersections_user_address = await supabase
+  let user_address_map = await supabase
     .from('user_address_map')
     .select('*')
     .eq('user_id', user?.id)
     .single();
-  if (intersections_user_address.error) {
-    console.log(intersections_user_address.error);
+  if (user_address_map.error) {
+    console.log(user_address_map.error);
   } else {
     // console.log('from layout.jsx:');
-    // console.log(intersections_user_address.data);
+    // console.log(user_address_map.data);
   }
 
   let table_address = await supabase
     .from('address')
     .select('*')
-    .eq('id', intersections_user_address.data?.address_id)
+    .eq('id', user_address_map.data?.address_id)
     .single();
   if (table_address.error) {
     console.log(table_address.error);
@@ -83,6 +83,9 @@ export default async function RootLayout({ children }) {
     // property_id_list
     // property_name_list
   };
+
+  console.log('userData | layout.jsx');
+  console.log(userData);
 
   return (
     <html lang='en'>

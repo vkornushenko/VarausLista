@@ -66,9 +66,26 @@ export async function sendReservation(reservationFormData) {
   if (error) {
     console.log(error);
   } else {
-    console.log('this was inserted in reservations table')
+    console.log('this was inserted in reservations table');
     console.log(data);
   }
   revalidatePath('/reservation');
   redirect('/reservation');
+}
+
+export async function getUsersAddressId() {
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  // console.log(user.id);
+
+  let { data: user_address_map, error } = await supabase
+    .from('user_address_map')
+    .select('address_id')
+    .eq('user_id', user.id);
+  if (user_address_map) {
+    return user_address_map[0].address_id;
+  } else {
+    console.log(error);
+  }
 }

@@ -15,6 +15,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import ReservationCardHeader from './ReservationCardHeader';
 
 export default function ReservationCard({ propertyData, reservationData }) {
+
   const [reservationDataState, setReservationDataState] = useState(reservationData);
 
   const [selectedDateObject, setSelectedDateObject] = useState();
@@ -27,7 +28,7 @@ export default function ReservationCard({ propertyData, reservationData }) {
   // return property array with key as id
   let propertyArr = {};
   propertyData.map(
-    (item) => (propertyArr[item.property_id] = item.shared_property.name)
+    (item) => (propertyArr[item.property_id] = item.property.name)
   );
   const currentPropertyName = propertyArr[selectedPropertyId];
 
@@ -77,7 +78,7 @@ export default function ReservationCard({ propertyData, reservationData }) {
           selectedPropertyId={selectedPropertyId}
           setSelectedPropertyId={setSelectedPropertyId}
         />
-        <DateNavigation setSelectedDateObject={setSelectedDateObject} setReservationDataState={setReservationDataState} />
+        <DateNavigation setSelectedDateObject={setSelectedDateObject} setReservationDataState={setReservationDataState} address_id={userData.address_id} />
         <ReservationTable
           reservationData={reservationDataState}
           selectedPropertyId={selectedPropertyId}

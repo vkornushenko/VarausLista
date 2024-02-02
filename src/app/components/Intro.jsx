@@ -12,6 +12,7 @@ import CardHeader from './ui/CardHeader';
 import Button from './ui/Button';
 // style
 import classes from './Intro.module.css';
+import '@/app/globals.css';
 
 export default function Intro() {
   const router = useRouter();

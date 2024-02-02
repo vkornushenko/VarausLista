@@ -13,7 +13,7 @@ import Logo from '../../../../public/logo/varauslista-logo.svg';
 // components
 import LogOut from './LogOut';
 
-export default function PopupMenu({toggleMenu}) {
+export default function PopupMenu({ toggleMenu }) {
   // selector for userData from the Store
   const userData = useSelector((state) => state.userReducer);
 
@@ -85,6 +85,17 @@ export default function PopupMenu({toggleMenu}) {
                 Account
               </Link>
             </li>
+            {userData?.address_id && (
+              <li>
+                <Link
+                  href='/address'
+                  className={sorce_sans_3.className + ' ' + classes.link}
+                  onClick={toggleMenu}
+                >
+                  {userData.address}
+                </Link>
+              </li>
+            )}
             {/* <li>
                   <Link
                     href='/faq'

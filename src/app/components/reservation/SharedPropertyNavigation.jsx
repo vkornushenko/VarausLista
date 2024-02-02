@@ -18,7 +18,7 @@ export default function SharedPropertyNavigation({selectedPropertyId, setSelecte
                 item.property_id === selectedPropertyId && ' ' + classes.selected
               }`}
             >
-              <p>{item.shared_property.name}</p>
+              <p>{item.property.name}</p>
               {item.property_id === selectedPropertyId && (
                 <motion.div layoutId='underlined' className={classes.line} />
               )}

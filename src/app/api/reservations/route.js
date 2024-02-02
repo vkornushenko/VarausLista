@@ -24,8 +24,8 @@ export async function POST(request) {
   );
 
   const selectValues = await request.json();
-  console.log('selectValues');
-  console.log(selectValues);
+  // console.log('selectValues');
+  // console.log(selectValues);
 
   // get current user session
   //   const { data: { session } } = await supabase.auth.getSession()
@@ -36,7 +36,7 @@ export async function POST(request) {
     .select(
       `
     *,
-    shared_property(id, name)
+    property(id, name)
     `
     )
     .eq('address_id', selectValues.address_id)

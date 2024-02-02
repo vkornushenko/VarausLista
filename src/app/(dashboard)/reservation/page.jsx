@@ -3,6 +3,7 @@ import ReservationCard from './ReservationCard';
 // supabase
 import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
+import { getUsersAddressId } from './actions';
 
 export default async function ReservationPage() {
   const cookieStore = cookies();
@@ -18,7 +19,12 @@ export default async function ReservationPage() {
     }
   );
 
-  const address_id = 54;
+  
+
+  // hardcoded address_id
+  // const address_id = 54;
+  const address_id = await getUsersAddressId();
+
 
   let { data, error } = await supabase
     .from('address_property_map')
@@ -26,7 +32,7 @@ export default async function ReservationPage() {
       `
         *,
         address(address_name),
-        shared_property(name)
+        property(name)
         `
     )
     .eq('address_id', address_id);
@@ -36,7 +42,7 @@ export default async function ReservationPage() {
     // console.log(data);
   }
 
-  // console.log('data from intersections_address_property table reservation/page.jsx');
+  // console.log('data from address_property_map table reservation/page.jsx');
   // console.log(data);
 
   // calculate today
@@ -56,7 +62,7 @@ export default async function ReservationPage() {
     .select(
       `
       *,
-      shared_property(id, name)
+      property(id, name)
       `
     )
     .eq('address_id', address_id)
