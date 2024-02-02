@@ -119,8 +119,11 @@ export async function getPropertyList() {
 export async function getUserIdList(address_id) {
   let { data: user_address_map, error } = await supabase
     .from('user_address_map')
-    .select('user_id, id')
+    .select(
+      `user_id, id, users (user_id, name)`
+    )
     .eq('address_id', address_id);
-    // console.log(user_address_map);
+  // console.log('user_address_map | address/actions.js');
+  // console.log(user_address_map);
   return user_address_map;
 }

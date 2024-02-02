@@ -79,13 +79,44 @@ export default async function RootLayout({ children }) {
     password: user?.user_metadata.password,
     // invitationLink: 'canBeSendToEmail',
     user_id: user?.id,
-    address_id: table_address.data?.id
+    address_id: table_address.data?.id,
     // property_id_list
     // property_name_list
   };
 
   console.log('userData | layout.jsx');
   console.log(userData);
+
+  // checking if user exists in table users by user_id
+  // if not - insert user in users table
+  let { data: users, error } = await supabase
+    .from('users')
+    .select('*')
+    .eq('user_id', userData.user_id);
+  if (error) {
+    console.log(error);
+  } else {
+    // console.log('users table | layout.jsx');
+    if (users.length === 0) {
+      // inserting user
+      const { data, error } = await supabase
+        .from('users')
+        .insert([
+          {
+            user_id: userData.user_id,
+            name: userData.name,
+            apartment: userData.apartment,
+            email: userData.email,
+            address_id: userData.address_id,
+          },
+        ])
+        .select();
+
+      if (error) {
+        console.log(error);
+      }
+    }
+  }
 
   return (
     <html lang='en'>

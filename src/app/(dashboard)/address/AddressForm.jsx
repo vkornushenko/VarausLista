@@ -44,7 +44,9 @@ export default function AddressForm({ propertyList }) {
             id='address'
             name='address'
             placeholder='Example: Kulmakatu 47'
+            defaultValue={userData.address || ''}
             className={sorce_sans_3.className}
+            // disabled={userData.address}
             required
           />
         </div>

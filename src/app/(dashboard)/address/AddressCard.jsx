@@ -10,6 +10,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { toggleModal } from '@/redux/features/ui-slice';
 import Button from '@/app/components/ui/Button';
 import '@/app/globals.css';
+import { sorce_sans_3 } from '@/app/utils/fonts';
+import { useState } from 'react';
+import AddNeighbourForm from '@/app/components/modal/AddNeighbourForm';
 
 const infoQuoteData = {
   message: (
@@ -25,8 +28,14 @@ const infoQuoteData = {
 };
 
 export default function AddressCard({ propertyList, usersList }) {
+  const [handlerAddNeighbour, setHandlerAddNeighbour] = useState(false);
+  const handleAddNeighbour = () => {
+    setHandlerAddNeighbour((prevState) => !prevState);
+  };
+
+  console.log(usersList);
   const userData = useSelector((state) => state.userReducer);
-  // console.log(userData);
+  console.log(userData);
   // redux
   const dispatch = useDispatch();
   // for layover
@@ -58,9 +67,16 @@ export default function AddressCard({ propertyList, usersList }) {
           </p>
         </div>
         <ul>
+          <h3 className={sorce_sans_3.className}>
+            Neighbours list for {userData.address}
+          </h3>
           {usersList.map((user) => (
-            <li key={user.id}>{user.user_id} | end</li>
+            <li key={user.id} title={user.user_id}>
+              {user.users[0].name}{' '}
+              {userData.user_id === user.user_id && '(you)'}
+            </li>
           ))}
+          <li onClick={handleAddNeighbour}>+ Add Neighbour</li>
         </ul>
 
         {/* <InfoQuote data={infoQuoteData} /> */}
@@ -75,6 +91,8 @@ export default function AddressCard({ propertyList, usersList }) {
           </CardLayout>
         </ModalLayout>
       )}
+
+      {handlerAddNeighbour && (<AddNeighbourForm />)}
     </>
   );
 }
