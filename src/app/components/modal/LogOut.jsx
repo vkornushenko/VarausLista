@@ -1,22 +1,19 @@
 import Link from 'next/link';
 import classes from './PopupMenu.module.css';
 import { sorce_sans_3 } from '../../utils/fonts';
-import { createBrowserClient } from '@supabase/ssr';
 
+import { createClient } from '@/app/utils/supabase/client';
 // redux
 import { unsetUser } from '@/redux/features/user-slice';
 import { useDispatch } from 'react-redux';
 // import { revalidatePath } from 'next/cache';
 
-export default function LogOut({toggleMenu}) {
+export default function LogOut({ toggleMenu }) {
   const dispatch = useDispatch();
 
   const handleLogout = async () => {
     // supabase
-    const supabase = createBrowserClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-    );
+    const supabase = createClient();
     const { error } = await supabase.auth.signOut();
     if (!error) {
       // close menu

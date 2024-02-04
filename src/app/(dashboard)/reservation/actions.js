@@ -3,7 +3,7 @@
 import { getDurationInSeconds } from '@/app/utils/time';
 import { getEndTime } from '@/app/utils/time';
 // supabase
-import { createServerClient } from '@supabase/ssr';
+import { createClient } from '@/app/utils/supabase/server';
 import { cookies } from 'next/headers';
 
 import { revalidatePath } from 'next/cache';
@@ -11,17 +11,7 @@ import { redirect } from 'next/navigation';
 
 // connect to supabase
 const cookieStore = cookies();
-const supabase = createServerClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
-  {
-    cookies: {
-      get(name) {
-        return cookieStore.get(name)?.value;
-      },
-    },
-  }
-);
+const supabase = createClient(cookieStore);
 
 // actions
 
@@ -77,7 +67,14 @@ export async function getUsersAddressId() {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  // console.log(user.id);
+
+  console.log('try to get user');
+  console.log(user);
+  if (user === null) {
+    // if user not loged in and trying to reach reservations page
+    // he will be redirected to login page
+    redirect('/login');
+  }
 
   let { data: user_address_map, error } = await supabase
     .from('user_address_map')

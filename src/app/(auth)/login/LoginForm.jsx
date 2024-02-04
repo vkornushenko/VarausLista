@@ -4,12 +4,13 @@ import CardHeader from '@/app/components/ui/CardHeader';
 import InfoQuote from '@/app/components/ui/InfoQuote';
 import '@/app/globals.css';
 import { sorce_sans_3 } from '@/app/utils/fonts';
-import { createBrowserClient } from '@supabase/ssr';
+// import { createBrowserClient } from '@supabase/ssr';
 
 import Link from 'next/link';
 import '@/app/globals.css';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { createClient } from '@/app/utils/supabase/client';
 
 export default function LoginForm() {
   const router = useRouter();
@@ -30,10 +31,7 @@ export default function LoginForm() {
     const formData = new FormData(event.target);
     const data = Object.fromEntries(formData.entries());
 
-    const supabase = createBrowserClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-    );
+    const supabase = createClient();
     const { error } = await supabase.auth.signInWithPassword({
       email: data.email,
       password: data.password,

@@ -2,10 +2,9 @@ import classes from './AccountCardLogin.module.css';
 import Link from 'next/link';
 import { sorce_sans_3 } from '@/app/utils/fonts';
 
-import { createBrowserClient } from '@supabase/ssr';
-
 import { useDispatch } from 'react-redux';
 import { unsetUser } from '@/redux/features/user-slice';
+import { createClient } from '@/app/utils/supabase/client';
 // import { revalidatePath } from 'next/cache';
 
 export default function AccountCardLogOut() {
@@ -13,10 +12,7 @@ export default function AccountCardLogOut() {
 
   const handleLogout = async () => {
     // supabase
-    const supabase = createBrowserClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-    );
+    const supabase = createClient();
     const { error } = await supabase.auth.signOut();
     if (!error) {
       // unsetUser from Store

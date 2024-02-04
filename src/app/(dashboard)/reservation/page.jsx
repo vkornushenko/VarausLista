@@ -1,30 +1,17 @@
 import ReservationCard from './ReservationCard';
+import { getUsersAddressId } from './actions';
 
 // supabase
-import { createServerClient } from '@supabase/ssr';
+import { createClient } from '@/app/utils/supabase/server';
 import { cookies } from 'next/headers';
-import { getUsersAddressId } from './actions';
 
 export default async function ReservationPage() {
   const cookieStore = cookies();
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
-    {
-      cookies: {
-        get(name) {
-          return cookieStore.get(name)?.value;
-        },
-      },
-    }
-  );
-
-  
+  const supabase = createClient(cookieStore);
 
   // hardcoded address_id
   // const address_id = 54;
   const address_id = await getUsersAddressId();
-
 
   let { data, error } = await supabase
     .from('address_property_map')
@@ -77,7 +64,10 @@ export default async function ReservationPage() {
 
   return (
     <main>
-      <ReservationCard propertyData={data} reservationData={reservationData.data} />
+      <ReservationCard
+        propertyData={data}
+        reservationData={reservationData.data}
+      />
     </main>
   );
 }

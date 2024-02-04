@@ -1,75 +1,27 @@
-// import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs';
-// import { NextResponse } from 'next/server';
-
-// export async function middleware(req) {
-//   const res = NextResponse.next();
-//   const supabase = createMiddlewareClient({ req, res });
-//   await supabase.auth.getSession();
-//   return res;
-// }
-
-// Server Components only have read access to cookies.
-// This Middleware example can be used to refresh expired
-// sessions before loading Server Component routes.
-import { createServerClient } from '@supabase/ssr';
-import { NextResponse } from 'next/server';
+import { NextResponse } from "next/server";
+import { createClient } from '@/app/utils/supabase/middleware';
 
 export async function middleware(request) {
-  let response = NextResponse.next({
-    request: {
-      headers: request.headers,
-    },
-  });
+  try {
+    // This `try/catch` block is only here for the interactive tutorial.
+    // Feel free to remove once you have Supabase connected.
+    const { supabase, response } = createClient(request);
 
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
-    {
-      cookies: {
-        get(name) {
-          return request.cookies.get(name)?.value;
-        },
-        set(name, value, options) {
-          request.cookies.set({
-            name,
-            value,
-            ...options,
-          });
-          response = NextResponse.next({
-            request: {
-              headers: request.headers,
-            },
-          });
-          response.cookies.set({
-            name,
-            value,
-            ...options,
-          });
-        },
-        remove(name, options) {
-          request.cookies.set({
-            name,
-            value: '',
-            ...options,
-          });
-          response = NextResponse.next({
-            request: {
-              headers: request.headers,
-            },
-          });
-          response.cookies.set({
-            name,
-            value: '',
-            ...options,
-          });
-        },
+    // Refresh session if expired - required for Server Components
+    // https://supabase.com/docs/guides/auth/auth-helpers/nextjs#managing-session-with-middleware
+    await supabase.auth.getSession();
+
+    return response;
+  } catch (e) {
+    // If you are here, a Supabase client could not be created!
+    // This is likely because you have not set up environment variables.
+    // Check out http://localhost:3000 for Next Steps.
+    return NextResponse.next({
+      request: {
+        headers: request.headers,
       },
-    }
-  );
-
-  await supabase.auth.getUser();
-
-  return response;
+    });
+  }
 }
 
 export const config = {
@@ -81,6 +33,6 @@ export const config = {
      * - favicon.ico (favicon file)
      * Feel free to modify this pattern to include more paths.
      */
-    '/((?!_next/static|_next/image|favicon.ico).*)',
+    "/((?!_next/static|_next/image|favicon.ico).*)",
   ],
 };

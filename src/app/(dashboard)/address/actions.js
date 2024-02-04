@@ -1,25 +1,15 @@
 'use server';
 
 // supabase
-import { createServerClient } from '@supabase/ssr';
+import { createClient } from '@/app/utils/supabase/server';
 import { cookies } from 'next/headers';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
-import { user } from '@/redux/features/user-slice';
+// import { user } from '@/redux/features/user-slice';
 
 // connect to supabase
 const cookieStore = cookies();
-const supabase = createServerClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
-  {
-    cookies: {
-      get(name) {
-        return cookieStore.get(name)?.value;
-      },
-    },
-  }
-);
+const supabase = createClient(cookieStore);
 
 export async function addAddress(addressFormData) {
   // console.log('this we get RAW from the form addressFormData');

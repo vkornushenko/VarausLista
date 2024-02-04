@@ -3,7 +3,7 @@ import { useRouter } from 'next/navigation';
 import '@/app/globals.css';
 
 //supabase
-import { createBrowserClient } from '@supabase/ssr';
+import { createClient } from '@/app/utils/supabase/client';
 
 import CardLayout from '../ui/CardLayout';
 import ModalLayout from '../ui/ModalLayout';
@@ -23,6 +23,9 @@ export default function AccountForm({
   // const [errorIsFound, setErrorIsFound] = useState(false);
 
   const router = useRouter();
+  
+  // connect to supabase
+  const supabase = createClient();
 
   // handle form Create Account submission
   const submitCreateAccountHandler = async (event) => {
@@ -34,11 +37,6 @@ export default function AccountForm({
     const formData = new FormData(event.target);
     const dataFromForm = Object.fromEntries(formData.entries());
 
-    // connect to supabase
-    const supabase = createBrowserClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-    );
     const { data, error } = await supabase.auth.signUp({
       email: dataFromForm.email,
       password: dataFromForm.password,
@@ -71,11 +69,7 @@ export default function AccountForm({
     const formData = new FormData(event.target);
     const dataFromForm = Object.fromEntries(formData.entries());
 
-    // connect to supabase
-    const supabase = createBrowserClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-    );
+    
 
     const { data, error } = await supabase.auth.updateUser({
       data: {
