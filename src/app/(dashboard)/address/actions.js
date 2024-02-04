@@ -11,6 +11,9 @@ import { redirect } from 'next/navigation';
 const cookieStore = cookies();
 const supabase = createClient(cookieStore);
 
+console.log('supabase');
+console.log(supabase);
+
 export async function addAddress(addressFormData) {
   // console.log('this we get RAW from the form addressFormData');
   // console.log(addressFormData);

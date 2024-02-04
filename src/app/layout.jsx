@@ -11,6 +11,7 @@ import StoreProvider from './StoreProvider';
 // import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 import { createClient } from './utils/supabase/server';
+import { redirect } from 'next/navigation';
 
 export const metadata = {
   title: 'VarausLista App',
