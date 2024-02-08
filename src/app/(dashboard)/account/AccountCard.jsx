@@ -73,6 +73,16 @@ export default function AccountCard() {
     message:
       'Create account to get access to VarausLista App from multiple devices and make reservations faster.',
   };
+  // join your neighbours address info
+  const howToJoinNeighboursAddressQuoteData = {
+    message: (
+      <>
+        If your neighbours already using VarausLista App, ask any of them to
+        attach your User Id to existing address.
+      </>
+    ),
+    type: 'info',
+  };
 
   return (
     <>
@@ -87,6 +97,10 @@ export default function AccountCard() {
         )}
 
         {userDataIsEmpty && <InfoQuote data={infoQuoteContent} />}
+
+        {(!userData.address && !userDataIsEmpty) && (
+          <InfoQuote data={howToJoinNeighboursAddressQuoteData} />
+        )}
 
         {userDataIsEmpty && (
           <Button name={'Create Account'} action={toggleModalrHandler} />

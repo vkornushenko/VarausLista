@@ -105,6 +105,9 @@ export async function getPropertyList() {
 }
 
 export async function getUserIdList(address_id) {
+  if(address_id === null){
+    return null
+  }
   // connect to supabase
   const supabase = createClient();
   let { data: user_address_map, error } = await supabase

@@ -4,7 +4,10 @@
   box-sizing: border-box;
 }
 
-
+.info_block a{
+  text-decoration: underline;
+  /* border-bottom: 1px solid #3f788f; */
+}
 
 .info{
   background-color: #d9f4ff;

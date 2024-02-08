@@ -61,7 +61,7 @@ export default function Intro() {
             {userData.address && ` Your place is ${userData.address}.`}
           </p>
           <p className={classes.welcome__paragraph}>
-            You can make a reservation for your shared property.
+            {userData.address ? 'You can make a reservation for your shared property.' : 'As a next step you need to join your neighbours address or create new address and invite your neighbours.'}
           </p>
         </div>
       )}

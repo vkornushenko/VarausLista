@@ -129,9 +129,13 @@ export async function getUsersAddressId() {
     .from('user_address_map')
     .select('address_id')
     .eq('user_id', user.id);
-  if (user_address_map) {
+  // if no address attached to user we will get empty array [] -> so return null
+  if (user_address_map.length !== 0) {
+    console.log('user_address_map');
+    console.log(user_address_map);
     return user_address_map[0].address_id;
   } else {
     console.log(error);
+    return null;
   }
 }

@@ -27,13 +27,23 @@ const infoQuoteData = {
   type: 'info',
 };
 
+const howToFindUserIdQuoteData = {
+  message: (
+    <>
+      You can see and copy your User Id at{' '}
+      <Link href={'/account'}>Account Page</Link>
+    </>
+  ),
+  type: 'info',
+};
+
 export default function AddressCard({ propertyList, usersList }) {
   const [addNeighbourIsVisible, setAddNeighbourIsVisible] = useState(false);
   const toggleAddNeighbour = () => {
     setAddNeighbourIsVisible((prevState) => !prevState);
   };
-
-  console.log(usersList);
+  // console.log('usersList from AddressCard.jsx');
+  // console.log(usersList);
   const userData = useSelector((state) => state.userReducer);
   console.log(userData);
   // redux
@@ -54,30 +64,52 @@ export default function AddressCard({ propertyList, usersList }) {
     <>
       <CardLayout>
         <CardHeader title='Manage Address' />
-        <div className='text_block'>
-          <p>Your address is {userData.address}.</p>
-          <p>
-            To add neighbours to this address and use VarausLista App together,
-            ask them to create an account and share 'User Id' with you.
-          </p>
-          <p>
-            After you add neighbours 'User Id' to address {userData.address},
-            you will be able to see and make reservations together with your
-            neighbours.
-          </p>
-        </div>
-        <ul>
-          <h3 className={sorce_sans_3.className}>
-            Neighbours list for {userData.address}
-          </h3>
-          {usersList.map((user) => (
-            <li key={user.id} title={user.user_id}>
-              {user.users[0].name}{' '}
-              {userData.user_id === user.user_id && '(you)'}
-            </li>
-          ))}
-          <li onClick={toggleAddNeighbour}>+ Add Neighbour</li>
-        </ul>
+        {!userData.address && (
+          <>
+            <div className='text_block'>
+              <p>
+                If your neighbours already using VarausLista App, ask any of
+                them to attach your User Id to existing address.
+              </p>
+
+              <p>
+                Otherwise you need to create new address and attach your
+                neighbours by their Users Id.
+              </p>
+            </div>
+            <InfoQuote data={howToFindUserIdQuoteData} />
+          </>
+        )}
+
+        {userData.address && (
+          <div className='text_block'>
+            <p>Your address is {userData.address}.</p>
+            <p>
+              To add neighbours to this address and use VarausLista App
+              together, ask them to create an account and share 'User Id' with
+              you.
+            </p>
+            <p>
+              After you add neighbours 'User Id' to address {userData.address},
+              you will be able to see and make reservations together.
+            </p>
+          </div>
+        )}
+
+        {usersList && (
+          <ul>
+            <h3 className={sorce_sans_3.className}>
+              Neighbours list for {userData.address}
+            </h3>
+            {usersList.map((user) => (
+              <li key={user.id} title={user.user_id}>
+                {user.users[0].name}{' '}
+                {userData.user_id === user.user_id && '(you)'}
+              </li>
+            ))}
+            <li onClick={toggleAddNeighbour}>+ Add Neighbour</li>
+          </ul>
+        )}
 
         {/* <InfoQuote data={infoQuoteData} /> */}
 
