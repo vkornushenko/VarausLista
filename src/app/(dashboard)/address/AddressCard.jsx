@@ -28,9 +28,9 @@ const infoQuoteData = {
 };
 
 export default function AddressCard({ propertyList, usersList }) {
-  const [handlerAddNeighbour, setHandlerAddNeighbour] = useState(false);
-  const handleAddNeighbour = () => {
-    setHandlerAddNeighbour((prevState) => !prevState);
+  const [addNeighbourIsVisible, setAddNeighbourIsVisible] = useState(false);
+  const toggleAddNeighbour = () => {
+    setAddNeighbourIsVisible((prevState) => !prevState);
   };
 
   console.log(usersList);
@@ -76,7 +76,7 @@ export default function AddressCard({ propertyList, usersList }) {
               {userData.user_id === user.user_id && '(you)'}
             </li>
           ))}
-          <li onClick={handleAddNeighbour}>+ Add Neighbour</li>
+          <li onClick={toggleAddNeighbour}>+ Add Neighbour</li>
         </ul>
 
         {/* <InfoQuote data={infoQuoteData} /> */}
@@ -92,7 +92,13 @@ export default function AddressCard({ propertyList, usersList }) {
         </ModalLayout>
       )}
 
-      {handlerAddNeighbour && (<AddNeighbourForm />)}
+      {addNeighbourIsVisible && (
+        <ModalLayout toggleLayover={toggleAddNeighbour}>
+          <CardLayout>
+            <AddNeighbourForm />
+          </CardLayout>
+        </ModalLayout>
+      )}
     </>
   );
 }

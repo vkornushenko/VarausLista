@@ -8,12 +8,12 @@ export default function ReservationTable({
   propertyName,
   selectedDateObject,
 }) {
-  // console.log('reservationData from ReservationTable.jsx');
-  // console.log(reservationData);
+  console.log('reservationData from ReservationTable.jsx');
+  console.log(reservationData);
 
 
   // checking for any reservations for selectedPropertyId
-  const reservationsFound = reservationData.some(item => item.property_id === selectedPropertyId);
+  const reservationsFound = reservationData?.some(item => item.property_id === selectedPropertyId);
   //console.log('found value = ' + reservationsFound);
 
 

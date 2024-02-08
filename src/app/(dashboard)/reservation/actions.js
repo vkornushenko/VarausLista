@@ -4,23 +4,70 @@ import { getDurationInSeconds } from '@/app/utils/time';
 import { getEndTime } from '@/app/utils/time';
 // supabase
 import { createClient } from '@/app/utils/supabase/server';
-import { cookies } from 'next/headers';
 
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
 // connect to supabase
-const cookieStore = cookies();
-const supabase = createClient(cookieStore);
+// const cookieStore = cookies();
+// const supabase = createClient();
 
 // actions
 
+// get address and property data by address_id
+export async function getAddressPropertyData(address_id) {
+  const supabase = createClient();
+
+  let { data, error } = await supabase
+    .from('address_property_map')
+    .select(
+      `
+      *,
+      address(address_name),
+      property(name)
+      `
+    )
+    .eq('address_id', address_id);
+  if (error) {
+    console.log(error);
+  } else {
+    return data;
+  }
+}
+
+// get reservations data start from Day for address_id
+export async function getReservationData(address_id, todayIsoString) {
+  const supabase = createClient();
+
+  const reservationData = await supabase
+    .from('reservations')
+    .select(
+      `
+        *,
+        property(id, name)
+        `
+    )
+    .eq('address_id', address_id)
+    .gte('start_time', todayIsoString)
+    .order('start_time', { ascending: true });
+  if (reservationData.error) {
+    console.log(reservationData.error);
+    return reservationData.error;
+  } else {
+    // console.log('data from reservations table - reservations/page.jsx')
+    // console.log(reservationData.data);
+    return reservationData.data;
+  }
+}
+
 export async function sendReservation(reservationFormData) {
-  console.log('reservationFormData');
-  console.log(reservationFormData);
+  const supabase = createClient();
+
+  // console.log('reservationFormData');
+  // console.log(reservationFormData);
   // cleaning data from form
   const cleanReservationFormData = Object.fromEntries(reservationFormData);
-  console.log(cleanReservationFormData);
+  // console.log(cleanReservationFormData);
 
   // will save time in 000Z (-2 hrs for finland)
   const start = new Date(cleanReservationFormData.start_time);
@@ -33,8 +80,8 @@ export async function sendReservation(reservationFormData) {
   const durationInSeconds = getDurationInSeconds(
     cleanReservationFormData.duration
   );
-  console.log('durationInSeconds');
-  console.log(durationInSeconds);
+  // console.log('durationInSeconds');
+  // console.log(durationInSeconds);
 
   const endTime = getEndTime(start, durationInSeconds);
 
@@ -63,7 +110,9 @@ export async function sendReservation(reservationFormData) {
   redirect('/reservation');
 }
 
+// get users address_id
 export async function getUsersAddressId() {
+  const supabase = createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();

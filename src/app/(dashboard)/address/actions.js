@@ -2,19 +2,12 @@
 
 // supabase
 import { createClient } from '@/app/utils/supabase/server';
-import { cookies } from 'next/headers';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
-// import { user } from '@/redux/features/user-slice';
-
-// connect to supabase
-const cookieStore = cookies();
-const supabase = createClient(cookieStore);
-
-console.log('supabase');
-console.log(supabase);
 
 export async function addAddress(addressFormData) {
+  // connect to supabase
+  const supabase = createClient();
   // console.log('this we get RAW from the form addressFormData');
   // console.log(addressFormData);
 
@@ -102,6 +95,8 @@ export async function addAddress(addressFormData) {
 }
 
 export async function getPropertyList() {
+  // connect to supabase
+  const supabase = createClient();
   const { data, error } = await supabase.from('property').select();
   if (error) {
     console.log(error.message);
@@ -110,11 +105,11 @@ export async function getPropertyList() {
 }
 
 export async function getUserIdList(address_id) {
+  // connect to supabase
+  const supabase = createClient();
   let { data: user_address_map, error } = await supabase
     .from('user_address_map')
-    .select(
-      `user_id, id, users (user_id, name)`
-    )
+    .select(`user_id, id, users (user_id, name)`)
     .eq('address_id', address_id);
   // console.log('user_address_map | address/actions.js');
   // console.log(user_address_map);
