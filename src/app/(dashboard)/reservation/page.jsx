@@ -15,13 +15,16 @@ export default async function ReservationPage() {
   var startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   const todayIsoString = startOfDay.toISOString();
 
-  const reservationData = getReservationData(address_id, todayIsoString);
+  const reservationData = await getReservationData(address_id, todayIsoString);
+  console.log('reservationData from reservations/page.jsx line 18')
+  console.log(reservationData)
+  
 
   return (
     <main>
       <ReservationCard
         propertyData={data}
-        reservationData={reservationData.data}
+        reservationData={reservationData}
       />
     </main>
   );

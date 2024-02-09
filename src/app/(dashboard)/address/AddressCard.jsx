@@ -39,21 +39,27 @@ const howToFindUserIdQuoteData = {
 
 export default function AddressCard({ propertyList, usersList }) {
   const [addNeighbourIsVisible, setAddNeighbourIsVisible] = useState(false);
+
   const toggleAddNeighbour = () => {
     setAddNeighbourIsVisible((prevState) => !prevState);
   };
-  // console.log('usersList from AddressCard.jsx');
-  // console.log(usersList);
+  
+  console.log('usersList from AddressCard.jsx');
+  console.log(usersList);
+  
   const userData = useSelector((state) => state.userReducer);
   console.log(userData);
+  
   // redux
   const dispatch = useDispatch();
+  
   // for layover
   const toggleModalrHandler = () => {
     dispatch(toggleModal());
     // if we want to pass a payload/action/data to a function:
     // dispatch(logIn(given-name));
   };
+  
   const showModal = useSelector(
     (state) => state.uiReducer.value.modalIsVisible
     // the same way we can get data from the store:
@@ -99,11 +105,11 @@ export default function AddressCard({ propertyList, usersList }) {
         {usersList && (
           <ul>
             <h3 className={sorce_sans_3.className}>
-              Neighbours list for {userData.address}
+              Current Neighbours list for {userData.address}:
             </h3>
             {usersList.map((user) => (
               <li key={user.id} title={user.user_id}>
-                {user.users[0].name}{' '}
+                {user.name}{' '}
                 {userData.user_id === user.user_id && '(you)'}
               </li>
             ))}
@@ -127,7 +133,7 @@ export default function AddressCard({ propertyList, usersList }) {
       {addNeighbourIsVisible && (
         <ModalLayout toggleLayover={toggleAddNeighbour}>
           <CardLayout>
-            <AddNeighbourForm />
+            <AddNeighbourForm address_id={userData.address_id} toggleLayover={toggleAddNeighbour}/>
           </CardLayout>
         </ModalLayout>
       )}

@@ -105,16 +105,161 @@ export async function getPropertyList() {
 }
 
 export async function getUserIdList(address_id) {
-  if(address_id === null){
-    return null
+  if (address_id === null) {
+    return null;
   }
   // connect to supabase
   const supabase = createClient();
-  let { data: user_address_map, error } = await supabase
-    .from('user_address_map')
-    .select(`user_id, id, users (user_id, name)`)
+
+  let { data: users, error } = await supabase
+    .from('users')
+    .select('*')
     .eq('address_id', address_id);
-  // console.log('user_address_map | address/actions.js');
-  // console.log(user_address_map);
-  return user_address_map;
+  console.log('users | address/actions.js');
+  console.log(users);
+  return users;
+}
+
+export async function addNeighbour(_, addNeighbourFormData) {
+  // console.log('addNeighbourFormData from address/actions.js');
+  // console.log(addNeighbourFormData);
+  // cleaning data from form
+  const formData = Object.fromEntries(addNeighbourFormData);
+  console.log('formData');
+  console.log(formData);
+
+  // connect to supabase
+  // const supabase = createClient();
+
+  // check if user_id exists in users table
+  const userIdExistsInUsersTable = await isValueExistsInTablesColumn(
+    formData.user_id,
+    'users',
+    'user_id'
+  );
+  console.log('userIdExistsInUsersTable');
+  console.log(userIdExistsInUsersTable);
+  if (!userIdExistsInUsersTable) {
+    return 'User is not found. Check User Id and try again.';
+  }
+
+  // check if user_id exists in user_address_map table
+  const userIdExistsInUserAddressMapTable = await isValueExistsInTablesColumn(
+    formData.user_id,
+    'user_address_map',
+    'user_id'
+  );
+  console.log('userIdExistsInUserAddressMapTable');
+  console.log(userIdExistsInUserAddressMapTable);
+
+  // cancel submitting data, user already has address
+  if (userIdExistsInUserAddressMapTable) {
+    return 'User is already have been attached to address. Check User Id and try again.';
+  }
+
+  // update address_id for users table (for this user_id)
+  const isAddressIdUpdated = await updateAddressIdInUsersTable(
+    formData.address_id,
+    formData.user_id
+  );
+  console.log('isAddressIdUpdated');
+  console.log(isAddressIdUpdated);
+
+  // this will revalidate data and new neighbour will be already on address page
+  if (isAddressIdUpdated) {
+    console.log('address_id was successfully updated in users table');
+    var formSubmissionResult = 'success';
+  }
+  else{
+    return 'Error. Attaching user to address was failed. Problem was detected in users table.'
+  }
+
+  // insert user_id and address_id in user_address_map table
+  const isUserIdAndAddressIdInserted =
+    await insertUserIdAndAddressIdInUserAddressMap(
+      formData.user_id,
+      formData.address_id
+    );
+  console.log('isUserIdAndAddressIdInserted');
+  console.log(isUserIdAndAddressIdInserted);
+
+if (isUserIdAndAddressIdInserted) {
+  var formSubmissionResult = 'success'
+}
+else{
+  return 'Error. Attaching user to address was failed. Problem was detected in user_address_map table.';
+}
+
+  // redirect('/address');
+  revalidatePath('/address');
+  return formSubmissionResult;
+}
+
+// check if value exists in table
+export async function isValueExistsInTablesColumn(
+  value,
+  tableName,
+  columnName
+) {
+  // connect to supabase
+  const supabase = createClient();
+
+  let { data, error } = await supabase
+    .from(tableName)
+    .select('*')
+    .eq(columnName, value);
+  if (error) {
+    console.log(error);
+    return false;
+  } else {
+    console.log(data);
+    // console.log(typeof data);
+    console.log(data.length);
+    return data.length === 0 ? false : true;
+    // return true;
+  }
+}
+
+// update address_id for users table (for this user_id)
+export async function updateAddressIdInUsersTable(address_id, user_id) {
+  // connect to supabase
+  const supabase = createClient();
+
+  const { data, error } = await supabase
+    .from('users')
+    .update({ address_id: address_id })
+    .eq('user_id', user_id)
+    .select();
+  if (error) {
+    console.log(error);
+    return false;
+  } else {
+    console.log('users table updated successfully | address/actions.js');
+    console.log(data);
+    return true;
+  }
+}
+
+// insert user_id and address_id in user_address_map table
+export async function insertUserIdAndAddressIdInUserAddressMap(
+  user_id,
+  address_id
+) {
+  // connect to supabase
+  const supabase = createClient();
+
+  const { data, error } = await supabase
+    .from('user_address_map')
+    .insert([{ user_id: user_id, address_id: address_id }])
+    .select();
+  if (error) {
+    console.log(error);
+    return false;
+  } else {
+    console.log(
+      'user_id and address_id inserted successfully in user_address_map table | address/actions.js'
+    );
+    console.log(data);
+    return true;
+  }
 }

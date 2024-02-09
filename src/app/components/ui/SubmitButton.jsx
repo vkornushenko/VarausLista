@@ -1,8 +1,9 @@
 import { useFormStatus } from 'react-dom';
+
 import { sorce_sans_3 } from '@/app/utils/fonts';
 import '@/app/globals.css';
 
-export default function SubmitButton() {
+export default function SubmitButton({ pendingButtonName, buttonName }) {
   // for the button loading
   const { pending } = useFormStatus();
 
@@ -12,7 +13,9 @@ export default function SubmitButton() {
       type='submit'
       className={sorce_sans_3.className + ' ' + 'submit_button'}
     >
-      {pending ? 'Saving changes...' : 'Save Changes'}
+      {pending
+        ? pendingButtonName || 'Saving changes...'
+        : buttonName || 'Save Changes'}
     </button>
   );
 }

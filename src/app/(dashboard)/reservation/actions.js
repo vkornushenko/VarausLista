@@ -54,8 +54,8 @@ export async function getReservationData(address_id, todayIsoString) {
     console.log(reservationData.error);
     return reservationData.error;
   } else {
-    // console.log('data from reservations table - reservations/page.jsx')
-    // console.log(reservationData.data);
+    console.log('data from reservations table - reservations/page.jsx')
+    console.log(reservationData.data);
     return reservationData.data;
   }
 }
