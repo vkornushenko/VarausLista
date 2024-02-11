@@ -4,10 +4,12 @@
 import { createClient } from '@/app/utils/supabase/server';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
+import { getPublicUsersIdByUserId } from '../reservation/actions';
 
 export async function addAddress(addressFormData) {
   // connect to supabase
   const supabase = createClient();
+  
   // console.log('this we get RAW from the form addressFormData');
   // console.log(addressFormData);
 
@@ -25,8 +27,8 @@ export async function addAddress(addressFormData) {
 
   // at the moment we are getting user_id from the hidden input
   // we can get it from the supabase also
-  // console.log('formData');
-  // console.log(formData);
+  console.log('formData address/actions.js');
+  console.log(formData);
 
   // insert for table 'address'
   const insertValForTable_address = [{ address_name: formData.address }];
@@ -73,7 +75,7 @@ export async function addAddress(addressFormData) {
       const insertValForTable_user_address_map = [
         {
           address_id: address_id,
-          user_id: formData.user_id,
+          users_id: formData.users_id,
         },
       ];
 
@@ -90,8 +92,9 @@ export async function addAddress(addressFormData) {
     }
   }
 
-  revalidatePath('/account');
-  redirect('/account');
+  // TODO close modal (the same way as 'addNeighbour')
+  revalidatePath('/address');
+  redirect('/address');
 }
 
 export async function getPropertyList() {
@@ -112,8 +115,12 @@ export async function getUserIdList(address_id) {
   const supabase = createClient();
 
   let { data: users, error } = await supabase
-    .from('users')
-    .select('*')
+    .from('user_address_map')
+    .select(`
+    users (
+      id, name, user_id
+    )
+  `)
     .eq('address_id', address_id);
   console.log('users | address/actions.js');
   console.log(users);
@@ -128,14 +135,13 @@ export async function addNeighbour(_, addNeighbourFormData) {
   console.log('formData');
   console.log(formData);
 
-  // connect to supabase
-  // const supabase = createClient();
+  const users_id = await getPublicUsersIdByUserId(formData.user_id);
 
   // check if user_id exists in users table
   const userIdExistsInUsersTable = await isValueExistsInTablesColumn(
-    formData.user_id,
+    users_id,
     'users',
-    'user_id'
+    'id'
   );
   console.log('userIdExistsInUsersTable');
   console.log(userIdExistsInUsersTable);
@@ -144,46 +150,60 @@ export async function addNeighbour(_, addNeighbourFormData) {
   }
 
   // check if user_id exists in user_address_map table
-  const userIdExistsInUserAddressMapTable = await isValueExistsInTablesColumn(
-    formData.user_id,
+  const usersIdExistsInUserAddressMapTable = await isValueExistsInTablesColumn(
+    users_id,
     'user_address_map',
-    'user_id'
+    'users_id'
   );
-  console.log('userIdExistsInUserAddressMapTable');
-  console.log(userIdExistsInUserAddressMapTable);
+  console.log('usersIdExistsInUserAddressMapTable');
+  console.log(usersIdExistsInUserAddressMapTable);
 
   // cancel submitting data, user already has address
-  if (userIdExistsInUserAddressMapTable) {
+  if (usersIdExistsInUserAddressMapTable) {
     return 'User is already have been attached to address. Check User Id and try again.';
   }
 
-  // update address_id for users table (for this user_id)
-  const isAddressIdUpdated = await updateAddressIdInUsersTable(
-    formData.address_id,
-    formData.user_id
-  );
-  console.log('isAddressIdUpdated');
-  console.log(isAddressIdUpdated);
 
-  // this will revalidate data and new neighbour will be already on address page
-  if (isAddressIdUpdated) {
-    console.log('address_id was successfully updated in users table');
-    var formSubmissionResult = 'success';
-  }
-  else{
-    return 'Error. Attaching user to address was failed. Problem was detected in users table.'
-  }
+
+
+
+  // // WE PROPBABLY DON'T NEED IT ANYMORE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  // // update address_id for users table (for this user_id)
+  // const isAddressIdUpdated = await updateAddressIdInUsersTable(
+  //   formData.address_id,
+  //   formData.user_id
+  // );
+  // console.log('isAddressIdUpdated');
+  // console.log(isAddressIdUpdated);
+
+  // // this will revalidate data and new neighbour will be already on address page
+  // if (isAddressIdUpdated) {
+  //   console.log('address_id was successfully updated in users table');
+  //   var formSubmissionResult = 'success';
+  // }
+  // else{
+  //   return 'Error. Attaching user to address was failed. Problem was detected in users table.'
+  // }
+
+  // // WE PROPBABLY DON'T NEED IT ANYMORE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
+
+
+
 
   // insert user_id and address_id in user_address_map table
-  const isUserIdAndAddressIdInserted =
+  const isUsersIdAndAddressIdInserted =
     await insertUserIdAndAddressIdInUserAddressMap(
-      formData.user_id,
+      users_id,
       formData.address_id
     );
-  console.log('isUserIdAndAddressIdInserted');
-  console.log(isUserIdAndAddressIdInserted);
+  console.log('isUsersIdAndAddressIdInserted');
+  console.log(isUsersIdAndAddressIdInserted);
 
-if (isUserIdAndAddressIdInserted) {
+if (isUsersIdAndAddressIdInserted) {
   var formSubmissionResult = 'success'
 }
 else{
@@ -242,7 +262,7 @@ export async function updateAddressIdInUsersTable(address_id, user_id) {
 
 // insert user_id and address_id in user_address_map table
 export async function insertUserIdAndAddressIdInUserAddressMap(
-  user_id,
+  users_id,
   address_id
 ) {
   // connect to supabase
@@ -250,14 +270,14 @@ export async function insertUserIdAndAddressIdInUserAddressMap(
 
   const { data, error } = await supabase
     .from('user_address_map')
-    .insert([{ user_id: user_id, address_id: address_id }])
+    .insert([{ users_id: users_id, address_id: address_id }])
     .select();
   if (error) {
     console.log(error);
     return false;
   } else {
     console.log(
-      'user_id and address_id inserted successfully in user_address_map table | address/actions.js'
+      'users_id and address_id inserted successfully in user_address_map table | address/actions.js'
     );
     console.log(data);
     return true;

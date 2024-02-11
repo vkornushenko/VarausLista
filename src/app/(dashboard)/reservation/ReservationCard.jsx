@@ -15,6 +15,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import ReservationCardHeader from './ReservationCardHeader';
 
 export default function ReservationCard({ propertyData, reservationData }) {
+  console.log('propertyData | ReservationCard.jsx')
+  console.log(propertyData)
 
   const [reservationDataState, setReservationDataState] = useState(reservationData);
 

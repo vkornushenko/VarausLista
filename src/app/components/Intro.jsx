@@ -46,11 +46,11 @@ export default function Intro() {
           </li>
           <li>
             <Image src={BuildingIcon} alt='VarausLista logo' height={18} />
-            <p>Add address and shared property</p>
+            <p>Add address or join one created by your neighbours</p>
           </li>
           <li>
             <Image src={ShareIcon} alt='VarausLista logo' height={18} />
-            <p>Share invitation link with neighbours</p>
+            <p>Make shared property reservations together</p>
           </li>
         </ul>
       )}

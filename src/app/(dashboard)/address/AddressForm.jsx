@@ -11,8 +11,10 @@ import SubmitButton from '@/app/components/ui/SubmitButton';
 import { useSelector } from 'react-redux';
 import CardHeader from '@/app/components/ui/CardHeader';
 
-export default function AddressForm({ propertyList }) {
+export default function AddressForm({ propertyList, formTitle }) {
   const userData = useSelector((state) => state.userReducer);
+  console.log(userData);
+  
   const [sharedPlaceQty, setSharedPlaceQty] = useState(1);
 
   const addSharedPlaceHandler = () => {
@@ -26,14 +28,14 @@ export default function AddressForm({ propertyList }) {
 
   return (
     <>
-      <CardHeader title='Manage Address' />
+      <CardHeader title={formTitle} />
       <form autoComplete='on' className='form' action={addAddress}>
         <div className='input_block'>
           <input
             type='hidden'
-            id='user_id'
-            name='user_id'
-            value={userData.user_id}
+            id='users_id'
+            name='users_id'
+            value={userData.users_id}
           />
           <label htmlFor='address' className={sorce_sans_3.className}>
             Address

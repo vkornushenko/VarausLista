@@ -116,7 +116,7 @@ export default function AccountCard() {
           />
         )}
 
-        {!userDataIsEmpty ? <AccountCardLogOut /> : <AccountCardLogin />}
+        {!userDataIsEmpty ? <AccountCardLogOut /> : <AccountCardLogin questionText={'Already a user?'} actionText={'LogIn'} actionLink={'/login'} />}
       </CardLayout>
 
       {showModal && (

@@ -8,10 +8,13 @@ import Navbar from './components/Navbar';
 import StoreProvider from './StoreProvider';
 
 // supabase
-// import { createServerClient } from '@supabase/ssr';
-import { cookies } from 'next/headers';
 import { createClient } from './utils/supabase/server';
-import { redirect } from 'next/navigation';
+import {
+  findUserInUsersTable,
+  getAddressDataFromAddressTable,
+  getAddressIdFromUserAddressMapTable,
+  insertUserInUsersTable,
+} from './actions';
 
 export const metadata = {
   title: 'VarausLista App',
@@ -26,100 +29,88 @@ export const dynamic = 'force-dynamic';
 // import { revalidatePath } from 'next/cache';
 
 export default async function RootLayout({ children }) {
-  // get user from supabase
-  // from supabase we getting user=null or object with data
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
-  // const supabase = createServerClient(
-  //   process.env.NEXT_PUBLIC_SUPABASE_URL,
-  //   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
-  //   {
-  //     cookies: {
-  //       get(name) {
-  //         return cookieStore.get(name)?.value;
-  //       },
-  //     },
-  //   }
-  // );
+  // connect to supabase
+  const supabase = createClient();
 
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // TO DO
-  // here we need try to check address for this user
-  // and put it to store if it exists
-  let user_address_map = await supabase
-    .from('user_address_map')
-    .select('*')
-    .eq('user_id', user?.id)
-    .single();
-  if (user_address_map.error) {
-    console.log(user_address_map.error);
-  } else {
-    // console.log('from layout.jsx:');
-    // console.log(user_address_map.data);
-  }
-
-  let table_address = await supabase
-    .from('address')
-    .select('*')
-    .eq('id', user_address_map.data?.address_id)
-    .single();
-  if (table_address.error) {
-    console.log(table_address.error);
-  } else {
-    // console.log('from table address, layout.jsx:');
-    // console.log(table_address.data);
-  }
+  console.log('user from supabase (auth) user table');
+  console.log(user);
 
   // destructure supabase data to userData
   const userData = {
     name: user?.user_metadata.first_name,
-    address: table_address.data?.address_name,
+    address: undefined,
     apartment: user?.user_metadata.apartment,
     email: user?.email,
     password: user?.user_metadata.password,
-    // invitationLink: 'canBeSendToEmail',
     user_id: user?.id,
-    address_id: table_address.data?.id,
-    // property_id_list
-    // property_name_list
+    address_id: undefined,
+    users_id: undefined,
   };
 
-  console.log('userData | layout.jsx');
+  console.log('userData from (auth) user table:');
   console.log(userData);
 
-  // checking if user exists in table users by user_id
-  // if not - insert user in users table
-  let { data: users, error } = await supabase
-    .from('users')
-    .select('*')
-    .eq('user_id', userData.user_id);
-  if (error) {
-    console.log(error);
-  } else {
-    // console.log('users table | layout.jsx');
-    if (users.length === 0) {
-      // inserting user
-      const { data, error } = await supabase
-        .from('users')
-        .insert([
-          {
-            user_id: userData.user_id,
-            name: userData.name,
-            apartment: userData.apartment,
-            email: userData.email,
-            address_id: userData.address_id,
-          },
-        ])
-        .select();
+if(user !== null){
 
-      if (error) {
-        console.log(error);
-      }
-    }
+
+
+  // checking if user exists in table users by user_id
+  const users = await findUserInUsersTable(userData?.user_id);
+
+  // if user not exists -> insert user in users table
+  if (users?.length === 0) {
+    // inserting user
+    const isUserInserted = await insertUserInUsersTable(
+      userData?.user_id,
+      userData?.name,
+      userData?.apartment,
+      userData?.email
+    );
+
+    console.log('app/layout.jsx | isUserInserted = ');
+    console.log(isUserInserted);
+    console.log(
+      'new user was added to users table + users_id was added to userData obj!!!'
+    );
+
+    userData.users_id = isUserInserted?.id;
+    console.log(
+      'userData after new user was inserted to (public) table users:'
+    );
+    console.log(userData);
+  } else {
+    console.log(
+      'user already was in users table + users_id was added to userData obj!!!'
+    );
+    userData.users_id = users[0].id;
   }
+
+  // check users address from user_address_map table
+  const user_address_map = await getAddressIdFromUserAddressMapTable(
+    userData?.users_id
+  );
+  // add address_id to userData from user_address_map
+  userData.address_id = user_address_map?.address_id;
+
+  // get address name by address_id
+  const table_address = await getAddressDataFromAddressTable(
+    user_address_map?.address_id
+  );
+  if (table_address) {
+    console.log(
+      'adding address_name = (' +
+        table_address?.address_name +
+        ') to userData'
+    );
+    userData.address = table_address?.address_name;
+  }
+  console.log('final userData before adding to Redux Store | app/layout.jsx');
+  console.log(userData);
+}
 
   return (
     <html lang='en'>

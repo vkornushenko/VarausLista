@@ -9,7 +9,8 @@ const initialState = {
   apartment: undefined,
   email: undefined,
   password: undefined,
-  user_id: undefined
+  user_id: undefined,
+  users_id: undefined,
 };
 
 // slice
@@ -20,12 +21,13 @@ export const user = createSlice({
   reducers: {
     setUser(state, action) {
       state.name = action.payload.name;
-      state.address_id = action.payload.address_id
+      state.address_id = action.payload.address_id;
       state.address = action.payload.address;
       state.apartment = action.payload.apartment;
       state.email = action.payload.email;
       state.password = action.payload.password;
       state.user_id = action.payload.user_id;
+      state.users_id = action.payload.users_id;
     },
     unsetUser(state) {
       state.name = initialState.name;
@@ -35,7 +37,8 @@ export const user = createSlice({
       state.email = initialState.email;
       state.password = initialState.password;
       state.user_id = initialState.user_id;
-    }
+      state.users_id = initialState.users_id;
+    },
   },
 });
 

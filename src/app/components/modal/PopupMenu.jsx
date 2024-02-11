@@ -45,7 +45,7 @@ export default function PopupMenu({ toggleMenu }) {
         exit='hidden'
       >
         <header className={classes.header}>
-          <Link href='/'>
+          <Link href='/' onClick={toggleMenu}>
             <Image src={Logo} alt='VarausLista logo' width={123} />
           </Link>
           <Image
@@ -67,15 +67,19 @@ export default function PopupMenu({ toggleMenu }) {
                 Home
               </Link>
             </li>
-            <li>
-              <Link
-                href='/reservation'
-                className={sorce_sans_3.className + ' ' + classes.link}
-                onClick={toggleMenu}
-              >
-                Check Reservations
-              </Link>
-            </li>
+
+            {userData?.address_id && (
+              <li>
+                <Link
+                  href='/reservation'
+                  className={sorce_sans_3.className + ' ' + classes.link}
+                  onClick={toggleMenu}
+                >
+                  Check Reservations
+                </Link>
+              </li>
+            )}
+
             <li>
               <Link
                 href='/account'
@@ -85,17 +89,18 @@ export default function PopupMenu({ toggleMenu }) {
                 Account
               </Link>
             </li>
-            {userData?.address_id && (
+            {userData.user_id && (
               <li>
                 <Link
                   href='/address'
                   className={sorce_sans_3.className + ' ' + classes.link}
                   onClick={toggleMenu}
                 >
-                  {userData.address}
+                  {userData.address || 'Manage Address'}
                 </Link>
               </li>
             )}
+
             {/* <li>
                   <Link
                     href='/faq'
@@ -105,9 +110,19 @@ export default function PopupMenu({ toggleMenu }) {
                     How to use
                   </Link>
                 </li> */}
-            {userData?.email && (
+            {userData.user_id ? (
               <li>
                 <LogOut toggleMenu={toggleMenu} />
+              </li>
+            ) : (
+              <li>
+                <Link
+                  href='/login'
+                  className={sorce_sans_3.className + ' ' + classes.link}
+                  onClick={toggleMenu}
+                >
+                  Log In
+                </Link>
               </li>
             )}
           </ul>

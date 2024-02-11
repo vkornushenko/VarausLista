@@ -10,9 +10,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { toggleModal } from '@/redux/features/ui-slice';
 import Button from '@/app/components/ui/Button';
 import '@/app/globals.css';
-import { sorce_sans_3 } from '@/app/utils/fonts';
+
 import { useState } from 'react';
 import AddNeighbourForm from '@/app/components/modal/AddNeighbourForm';
+import NeighboursList from './NeighboursList';
 
 const infoQuoteData = {
   message: (
@@ -38,17 +39,17 @@ const howToFindUserIdQuoteData = {
 };
 
 export default function AddressCard({ propertyList, usersList }) {
-  const [addNeighbourIsVisible, setAddNeighbourIsVisible] = useState(false);
+  const [isAddNeighbourVisible, setIsAddNeighbourVisible] = useState(false);
 
   const toggleAddNeighbour = () => {
-    setAddNeighbourIsVisible((prevState) => !prevState);
+    setIsAddNeighbourVisible((prevState) => !prevState);
   };
   
-  console.log('usersList from AddressCard.jsx');
-  console.log(usersList);
+  // console.log('usersList from AddressCard.jsx');
+  // console.log(usersList);
   
   const userData = useSelector((state) => state.userReducer);
-  console.log(userData);
+  // console.log(userData);
   
   // redux
   const dispatch = useDispatch();
@@ -102,35 +103,25 @@ export default function AddressCard({ propertyList, usersList }) {
           </div>
         )}
 
+
         {usersList && (
-          <ul>
-            <h3 className={sorce_sans_3.className}>
-              Current Neighbours list for {userData.address}:
-            </h3>
-            {usersList.map((user) => (
-              <li key={user.id} title={user.user_id}>
-                {user.name}{' '}
-                {userData.user_id === user.user_id && '(you)'}
-              </li>
-            ))}
-            <li onClick={toggleAddNeighbour}>+ Add Neighbour</li>
-          </ul>
+          <NeighboursList usersList={usersList} userData={userData} toggleAddNeighbour={toggleAddNeighbour}/>
         )}
 
         {/* <InfoQuote data={infoQuoteData} /> */}
 
-        <Button name={'Manage Address'} action={toggleModalrHandler} />
+        <Button name={userData.address ? 'Manage Address' : 'Create New Address'} action={toggleModalrHandler} />
       </CardLayout>
 
       {showModal && (
         <ModalLayout toggleLayover={toggleModalrHandler}>
           <CardLayout>
-            <AddressForm propertyList={propertyList} />
+            <AddressForm propertyList={propertyList} formTitle={userData.address ? 'Manage Address' : 'Create New Address'} />
           </CardLayout>
         </ModalLayout>
       )}
 
-      {addNeighbourIsVisible && (
+      {isAddNeighbourVisible && (
         <ModalLayout toggleLayover={toggleAddNeighbour}>
           <CardLayout>
             <AddNeighbourForm address_id={userData.address_id} toggleLayover={toggleAddNeighbour}/>

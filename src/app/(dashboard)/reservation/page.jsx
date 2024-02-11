@@ -1,3 +1,4 @@
+import { redirect } from 'next/navigation';
 import ReservationCard from './ReservationCard';
 import {
   getAddressPropertyData,
@@ -7,6 +8,11 @@ import {
 
 export default async function ReservationPage() {
   const address_id = await getUsersAddressId();
+
+  // redirect to address if no address attached to user
+  if(address_id === null){
+    redirect('/address')
+  }
 
   const data = await getAddressPropertyData(address_id);
 
