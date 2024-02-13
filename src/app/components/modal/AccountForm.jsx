@@ -45,7 +45,7 @@ export default function AccountForm({
         // user_metadata
         data: {
           first_name: dataFromForm.first_name,
-          address: dataFromForm.address,
+          // address: dataFromForm.address,
           apartment: dataFromForm.apartment,
           password: dataFromForm.password,
         },
@@ -74,7 +74,7 @@ export default function AccountForm({
     const { data, error } = await supabase.auth.updateUser({
       data: {
         first_name: dataFromForm.first_name,
-        address: dataFromForm.address,
+        // address: dataFromForm.address,
         apartment: dataFromForm.apartment,
       },
     });
@@ -158,7 +158,7 @@ export default function AccountForm({
             />
           </div>
 
-          <div className='input_block'>
+          {/* <div className='input_block'>
             <label htmlFor='address' className={sorce_sans_3.className}>
               Address
             </label>
@@ -172,7 +172,7 @@ export default function AccountForm({
               className={sorce_sans_3.className}
               required
             />
-          </div>
+          </div> */}
 
           <div className='input_block'>
             <label htmlFor='apartment' className={sorce_sans_3.className}>

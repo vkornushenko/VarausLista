@@ -44,23 +44,23 @@ export default function AddressCard({ propertyList, usersList }) {
   const toggleAddNeighbour = () => {
     setIsAddNeighbourVisible((prevState) => !prevState);
   };
-  
+
   // console.log('usersList from AddressCard.jsx');
   // console.log(usersList);
-  
+
   const userData = useSelector((state) => state.userReducer);
   // console.log(userData);
-  
+
   // redux
   const dispatch = useDispatch();
-  
+
   // for layover
   const toggleModalrHandler = () => {
     dispatch(toggleModal());
     // if we want to pass a payload/action/data to a function:
     // dispatch(logIn(given-name));
   };
-  
+
   const showModal = useSelector(
     (state) => state.uiReducer.value.modalIsVisible
     // the same way we can get data from the store:
@@ -103,20 +103,31 @@ export default function AddressCard({ propertyList, usersList }) {
           </div>
         )}
 
-
         {usersList && (
-          <NeighboursList usersList={usersList} userData={userData} toggleAddNeighbour={toggleAddNeighbour}/>
+          <NeighboursList
+            usersList={usersList}
+            userData={userData}
+            toggleAddNeighbour={toggleAddNeighbour}
+          />
         )}
 
         {/* <InfoQuote data={infoQuoteData} /> */}
 
-        <Button name={userData.address ? 'Manage Address' : 'Create New Address'} action={toggleModalrHandler} />
+        <Button
+          name={userData.address ? 'Edit Address' : 'Create New Address'}
+          action={toggleModalrHandler}
+        />
       </CardLayout>
 
       {showModal && (
         <ModalLayout toggleLayover={toggleModalrHandler}>
           <CardLayout>
-            <AddressForm propertyList={propertyList} formTitle={userData.address ? 'Manage Address' : 'Create New Address'} />
+            <AddressForm
+              propertyList={propertyList}
+              formTitle={
+                userData.address ? 'Manage Address' : 'Create New Address'
+              }
+            />
           </CardLayout>
         </ModalLayout>
       )}
@@ -124,7 +135,10 @@ export default function AddressCard({ propertyList, usersList }) {
       {isAddNeighbourVisible && (
         <ModalLayout toggleLayover={toggleAddNeighbour}>
           <CardLayout>
-            <AddNeighbourForm address_id={userData.address_id} toggleLayover={toggleAddNeighbour}/>
+            <AddNeighbourForm
+              address_id={userData.address_id}
+              toggleLayover={toggleAddNeighbour}
+            />
           </CardLayout>
         </ModalLayout>
       )}

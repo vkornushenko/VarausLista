@@ -1,10 +1,30 @@
 import { motion } from 'framer-motion';
 
 import classes from './SharedPropertyNavigation.module.css';
-// import { useState } from 'react';
+import Link from 'next/link';
+import { getReservations } from '@/app/utils/apiRequests';
 
-export default function SharedPropertyNavigation({selectedPropertyId, setSelectedPropertyId, propertyData}) {
-  // const[selectedPropertyId, setSelectedPropertyId] = useState(propertyData[0].property_id);
+export default function SharedPropertyNavigation({
+  selectedPropertyId,
+  setSelectedPropertyId,
+  propertyData,
+  timeIntervalState,
+  setReservationDataState
+}) {
+
+  const handlePropertyChange = async (property_id) => {
+    setSelectedPropertyId(property_id);
+
+    const selectValues = {
+      timeInterval: timeIntervalState,
+      property_id: property_id
+    }
+    // api request
+    const data = await getReservations(selectValues);
+    // console.log(data)
+    setReservationDataState(data);
+  };
+
   return (
     <>
       <nav>
@@ -13,9 +33,12 @@ export default function SharedPropertyNavigation({selectedPropertyId, setSelecte
             <li
               key={index}
               property_id={item.property_id}
-              onClick={() => {setSelectedPropertyId(item.property_id)}}
+              onClick={() => {
+                handlePropertyChange(item.property_id);
+              }}
               className={`${classes.share_property_nav_item}${
-                item.property_id === selectedPropertyId && ' ' + classes.selected
+                item.property_id === selectedPropertyId &&
+                ' ' + classes.selected
               }`}
             >
               <p>{item.property.name}</p>
@@ -24,29 +47,11 @@ export default function SharedPropertyNavigation({selectedPropertyId, setSelecte
               )}
             </li>
           ))}
-          <li>+Add</li>
+          <li>
+            <Link href={'/address'}>+Add</Link>
+          </li>
         </ul>
       </nav>
-      {/* <nav>
-        <ul className={classes.shared_property_nav}>
-          {sharedPropertyList.map((propertyItem, index) => (
-            <li
-              key={index}
-              property_id={index}
-              onClick={changePropertyHandler}
-              className={`${classes.share_property_nav_item}${
-                propertyItem === selected && ' ' + classes.selected
-              }`}
-            >
-              <p>{propertyItem}</p>
-              {propertyItem === selected && (
-                <motion.div layoutId='underlined' className={classes.line} />
-              )}
-            </li>
-          ))}
-          <li>+Add</li>
-        </ul>
-      </nav> */}
     </>
   );
 }

@@ -1,6 +1,6 @@
 export default function TimeInterval({ start, end }) {
   const addZero = (value) => {
-    return (value < 10 ? '0' + value : value);
+    return value < 10 ? '0' + value : value;
   };
 
   const start_time = new Date(start);
@@ -10,6 +10,7 @@ export default function TimeInterval({ start, end }) {
   const start_mins = addZero(start_time.getMinutes());
   const end_hrs = addZero(end_time.getHours());
   const end_mins = addZero(end_time.getMinutes());
+
   return (
     <>
       {start_hrs}

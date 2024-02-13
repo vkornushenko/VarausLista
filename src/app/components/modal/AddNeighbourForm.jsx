@@ -13,7 +13,7 @@ export default function AddNeighbourForm({ address_id, toggleLayover }) {
   useEffect(() => {
     if (formActionState === 'success') {
       toggleLayover();
-      console.log('modal closed');
+      // console.log('modal closed');
     }
   }, [formActionState]);
 

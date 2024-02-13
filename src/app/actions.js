@@ -22,8 +22,8 @@ export async function getAddressIdFromUserAddressMapTable(users_id) {
     console.log(error);
     return null;
   } else {
-    console.log('user_address_map for users_id (data) | app/actions.js');
-    console.log(user_address_map);
+    // console.log('user_address_map for users_id (data) | app/actions.js');
+    // console.log(user_address_map);
     return user_address_map;
   }
 }
@@ -49,10 +49,10 @@ export async function getAddressDataFromAddressTable(address_id) {
     console.log(error);
     return null;
   } else {
-    console.log(
-      'address data from address table (for address_id) | app/action.js'
-    );
-    console.log(address);
+    // console.log(
+    //   'address data from address table (for address_id) | app/action.js'
+    // );
+    // console.log(address);
     return address;
   }
 }
@@ -78,8 +78,8 @@ export async function findUserInUsersTable(user_id) {
     return null;
   } else {
     if(users.length !== 0){
-      console.log('user was found -> user data from users (public) table | app/action.js');
-      console.log(users);
+      // console.log('user was found -> user data from users (public) table | app/action.js');
+      // console.log(users);
     }
     return users;
   }
@@ -108,10 +108,10 @@ export async function insertUserInUsersTable(
     console.log(error);
     return false;
   } else {
-    console.log(
-      'show result inserted new user to (public) table users | app/action.js'
-    );
-    console.log(data);
+    // console.log(
+    //   'show result inserted new user to (public) table users | app/action.js'
+    // );
+    // console.log(data);
     return data[0];
   }
 }

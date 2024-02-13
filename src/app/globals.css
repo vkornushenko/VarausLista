@@ -20,10 +20,10 @@ a img {
   display: block;
 }
 
-.link_icons{
+.link_icons {
   display: flex;
   align-items: center;
-  color: #333C40;
+  color: #333c40;
   vertical-align: bottom;
 }
 
@@ -63,6 +63,7 @@ main {
   display: flex;
   flex-direction: column;
   gap: 32px;
+  padding-bottom: 32px;
 }
 
 /* managing paragraph spacings */
@@ -143,7 +144,6 @@ form select::placeholder {
 
 .form input[type='datetime-local'] {
   font-size: 20px;
-  /* font-family: 'Times New Roman', Times, serif; */
 }
 
 .form input:disabled {
@@ -157,12 +157,6 @@ form select::placeholder {
   flex-direction: column;
   gap: 2px;
 }
-
-/* .form ul{
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-} */
 
 .submit_button {
   border: none;
@@ -189,4 +183,16 @@ form select::placeholder {
 
 .form button:focus {
   outline: none;
+}
+
+.text_button {
+  font-size: 16px;
+  color: #333c40;
+  background-color: #fff;
+  text-decoration: underline;
+  margin: 0;
+  width: fit-content;
+}
+.text_button:hover{
+  cursor: pointer;
 }

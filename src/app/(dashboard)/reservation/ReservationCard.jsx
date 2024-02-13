@@ -14,16 +14,23 @@ import { toggleModal } from '@/redux/features/ui-slice';
 import { useDispatch, useSelector } from 'react-redux';
 import ReservationCardHeader from './ReservationCardHeader';
 
-export default function ReservationCard({ propertyData, reservationData }) {
-  console.log('propertyData | ReservationCard.jsx')
-  console.log(propertyData)
+export default function ReservationCard({ propertyData, reservationData, initialPropertyId, timeInterval }) {
+  // console.log('propertyData | ReservationCard.jsx')
+  // console.log(propertyData)
 
   const [reservationDataState, setReservationDataState] = useState(reservationData);
+  // console.log('reservationDataState from ReservationCard.jsx')
+  // console.log(reservationDataState)
 
   const [selectedDateObject, setSelectedDateObject] = useState();
-  const [selectedPropertyId, setSelectedPropertyId] = useState(
-    propertyData[0].property_id
-  );
+  const [selectedPropertyId, setSelectedPropertyId] = useState(initialPropertyId);
+  const [timeIntervalState, setTimeIntervalState] = useState(timeInterval);
+
+  // console.log('timeIntervalState')
+  // console.log(timeIntervalState)
+  // console.log('selectedPropertyId')
+  // console.log(selectedPropertyId)
+
   const userData = useSelector((state) => state.userReducer);
   // console.log(userData);
 
@@ -79,8 +86,10 @@ export default function ReservationCard({ propertyData, reservationData }) {
           propertyData={propertyData}
           selectedPropertyId={selectedPropertyId}
           setSelectedPropertyId={setSelectedPropertyId}
+          timeIntervalState={timeIntervalState}
+          setReservationDataState={setReservationDataState}
         />
-        <DateNavigation setSelectedDateObject={setSelectedDateObject} setReservationDataState={setReservationDataState} address_id={userData.address_id} />
+        <DateNavigation setTimeIntervalState={setTimeIntervalState} setSelectedDateObject={setSelectedDateObject} setReservationDataState={setReservationDataState} address_id={userData.address_id} property_id={selectedPropertyId}/>
         <ReservationTable
           reservationData={reservationDataState}
           selectedPropertyId={selectedPropertyId}

@@ -36,8 +36,8 @@ export default async function RootLayout({ children }) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  console.log('user from supabase (auth) user table');
-  console.log(user);
+  // console.log('user from supabase (auth) user table');
+  // console.log(user);
 
   // destructure supabase data to userData
   const userData = {
@@ -51,8 +51,8 @@ export default async function RootLayout({ children }) {
     users_id: undefined,
   };
 
-  console.log('userData from (auth) user table:');
-  console.log(userData);
+  // console.log('userData from (auth) user table:');
+  // console.log(userData);
 
 if(user !== null){
 
@@ -71,21 +71,21 @@ if(user !== null){
       userData?.email
     );
 
-    console.log('app/layout.jsx | isUserInserted = ');
-    console.log(isUserInserted);
-    console.log(
-      'new user was added to users table + users_id was added to userData obj!!!'
-    );
+    // console.log('app/layout.jsx | isUserInserted = ');
+    // console.log(isUserInserted);
+    // console.log(
+    //   'new user was added to users table + users_id was added to userData obj!!!'
+    // );
 
     userData.users_id = isUserInserted?.id;
-    console.log(
-      'userData after new user was inserted to (public) table users:'
-    );
-    console.log(userData);
+    // console.log(
+    //   'userData after new user was inserted to (public) table users:'
+    // );
+    // console.log(userData);
   } else {
-    console.log(
-      'user already was in users table + users_id was added to userData obj!!!'
-    );
+    // console.log(
+    //   'user already was in users table + users_id was added to userData obj!!!'
+    // );
     userData.users_id = users[0].id;
   }
 
@@ -101,15 +101,15 @@ if(user !== null){
     user_address_map?.address_id
   );
   if (table_address) {
-    console.log(
-      'adding address_name = (' +
-        table_address?.address_name +
-        ') to userData'
-    );
+    // console.log(
+    //   'adding address_name = (' +
+    //     table_address?.address_name +
+    //     ') to userData'
+    // );
     userData.address = table_address?.address_name;
   }
-  console.log('final userData before adding to Redux Store | app/layout.jsx');
-  console.log(userData);
+  // console.log('final userData before adding to Redux Store | app/layout.jsx');
+  // console.log(userData);
 }
 
   return (

@@ -8,12 +8,6 @@ import { createClient } from '@/app/utils/supabase/server';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
-// connect to supabase
-// const cookieStore = cookies();
-// const supabase = createClient();
-
-// actions
-
 // get address and property data by address_id
 export async function getAddressPropertyData(address_id) {
   // connect to supabase
@@ -28,7 +22,8 @@ export async function getAddressPropertyData(address_id) {
       property(name)
       `
     )
-    .eq('address_id', address_id);
+    .eq('address_id', address_id)
+    .order('property_id', { ascending: true });
   if (error) {
     console.log(error);
   } else {
@@ -37,7 +32,8 @@ export async function getAddressPropertyData(address_id) {
 }
 
 // get reservations data start from Day for address_id
-export async function getReservationData(address_id, todayIsoString) {
+export async function getReservationData(property_id, timeInterval) {
+  // console.log(property_id + ' ' + todayIsoString)
   // connect to supabase
   const supabase = createClient();
 
@@ -46,18 +42,21 @@ export async function getReservationData(address_id, todayIsoString) {
     .select(
       `
         *,
-        property(id, name)
-        `
+        property(*),
+        users(*, user_address_map(*))
+      `
     )
-    .eq('address_id', address_id)
-    .gte('start_time', todayIsoString)
+    .eq('property_id', property_id)
+    .gte('start_time', timeInterval.from)
+    .lte('start_time', timeInterval.to)
     .order('start_time', { ascending: true });
   if (reservationData.error) {
+    console.log('error from reservations table - reservations/actions.js');
     console.log(reservationData.error);
     return reservationData.error;
   } else {
-    console.log('data from reservations table - reservations/page.jsx');
-    console.log(reservationData.data);
+    // console.log('data from reservations table - reservations/actions.js');
+    // console.log(reservationData.data);
     return reservationData.data;
   }
 }
@@ -71,6 +70,7 @@ export async function sendReservation(reservationFormData) {
   // cleaning data from form
   const cleanReservationFormData = Object.fromEntries(reservationFormData);
   // console.log(cleanReservationFormData);
+  // return;
 
   // will save time in 000Z (-2 hrs for finland)
   const start = new Date(cleanReservationFormData.start_time);
@@ -93,10 +93,7 @@ export async function sendReservation(reservationFormData) {
     .from('reservations')
     .insert([
       {
-        user_id: cleanReservationFormData.user_id,
-        name: cleanReservationFormData.first_name,
-        address_id: cleanReservationFormData.address_id,
-        apartment: cleanReservationFormData.apartment,
+        users_id: cleanReservationFormData.users_id,
         property_id: cleanReservationFormData.property_id,
         start_time: start,
         end_time: endTime,
@@ -106,8 +103,10 @@ export async function sendReservation(reservationFormData) {
   if (error) {
     console.log(error);
   } else {
-    console.log('this was inserted in reservations table');
-    console.log(data);
+    // console.log(
+    //   'this was inserted in reservations table | reservation/actions.js'
+    // );
+    // console.log(data);
   }
   revalidatePath('/');
   redirect('/reservation');
@@ -118,65 +117,72 @@ export async function sendReservation(reservationFormData) {
   // !!! data not revalidating !!!
 }
 
-export async function getPublicUsersIdByUserId(user_id){
+export async function getPublicUsersIdByUserId(user_id) {
   // connect to supabase
   const supabase = createClient();
 
-
   let { data: users, error } = await supabase
-  .from('users')
-  .select('id')
-  .eq('user_id', user_id)
-  .single()
-  if(error){
-    console.log(error)
-  }else{
-    console.log('getPublicUsersIdByUserId | reservation/actions.js')
-    console.log(users)
-    return users.id
+    .from('users')
+    .select('id')
+    .eq('user_id', user_id)
+    .single();
+  if (error) {
+    console.log(error);
+  } else {
+    // console.log('getPublicUsersIdByUserId | reservation/actions.js');
+    // console.log(users);
+    return users.id;
   }
 }
 
 // get users address_id from user_address_map table
 // returns null if no address attached
-export async function getUsersAddressId() {
+
+export async function getUserDataFromSession() {
   // connect to supabase
   const supabase = createClient();
 
-  // TODO replase with getSession().session.user
-  // get user
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  // getSession().session.user
+  const { data, error } = await supabase.auth.getSession();
+  if (error) {
+    console.log('error getUserDataFromSession');
+    console.log(error);
+  } else {
+    // console.log('data getUserDataFromSession');
+    // console.log(data.session.user);
+    return data.session.user;
+  }
+}
 
-  
-  console.log('try to get user | reservation/action.js');
-  console.log(user?.id);
-  console.log(user?.user_metadata);
-
-  const users_id = await getPublicUsersIdByUserId(user?.id);
-
-  // if no user found, redirect to login (maybe better to redirect to account)
-  if (user === null) {
-    // if user not loged in and trying to reach reservations page
-    // he will be redirected to login page
+export async function getUsersAddressId() {
+  const userFromSession = await getUserDataFromSession();
+  if (userFromSession === null) {
     redirect('/login');
   }
 
-  // get address_id from user_address_map for the user
-  let { data: user_address_map, error } = await supabase
-    .from('user_address_map')
-    .select('address_id')
-    .eq('users_id', users_id);
-  // if no address attached to user (or error)
-  // we will get empty array [] -> so return null
-  if (user_address_map.length !== 0) {
-    console.log('user_address_map');
-    console.log(user_address_map);
-    return user_address_map[0].address_id;
-  } else {
-    console.log('error | reservation/action.js');
-    console.log(error);
-    return null;
-  }
+  const user_id = userFromSession.id;
+  // connect to supabase
+  const supabase = createClient();
+
+  let { data: users, error } = await supabase
+    .from('users')
+    .select(
+      `
+        id,
+        user_address_map (
+          address_id
+        )
+      `
+    )
+    .eq('user_id', user_id)
+    .single();
+    if(error){
+      console.log('error from getUsersAddressId')
+      console.log(error)
+    }
+    else{
+      // console.log('data from getUsersAddressId')
+      // console.log(users.user_address_map[0].address_id)
+      return users.user_address_map[0].address_id
+    }
 }

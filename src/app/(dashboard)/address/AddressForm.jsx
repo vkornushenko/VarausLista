@@ -13,7 +13,7 @@ import CardHeader from '@/app/components/ui/CardHeader';
 
 export default function AddressForm({ propertyList, formTitle }) {
   const userData = useSelector((state) => state.userReducer);
-  console.log(userData);
+  // console.log(userData);
   
   const [sharedPlaceQty, setSharedPlaceQty] = useState(1);
 

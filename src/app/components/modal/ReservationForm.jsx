@@ -40,16 +40,16 @@ export default function ReservationForm({
         <form className='form' action={sendReservation}>
           <input
             type='hidden'
-            id='user_id'
-            name='user_id'
-            value={userData.user_id}
+            id='users_id'
+            name='users_id'
+            value={userData.users_id}
           />
-          <input
+          {/* <input
             type='hidden'
             id='address_id'
             name='address_id'
             value={userData.address_id}
-          />
+          /> */}
           <input
             type='hidden'
             id='property_id'
@@ -68,7 +68,7 @@ export default function ReservationForm({
               placeholder='Your name'
               defaultValue={userData?.name || ''}
               className={sorce_sans_3.className}
-              // disabled={userData.name}
+              disabled={userData.name}
               required
             />
           </div>
@@ -84,7 +84,7 @@ export default function ReservationForm({
               placeholder='Apartment number'
               defaultValue={userData?.apartment || ''}
               className={sorce_sans_3.className}
-              // disabled={userData.apartment}
+              disabled={userData.apartment}
               required
             />
           </div>

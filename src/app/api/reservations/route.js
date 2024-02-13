@@ -19,14 +19,22 @@ export async function POST(request) {
     .select(
       `
     *,
-    property(id, name)
+    property(*),
+    users(*, user_address_map(*))
     `
     )
-    .eq('address_id', selectValues.address_id)
+    .eq('property_id', selectValues.property_id)
     .gte('start_time', selectValues.selectedDayIsoStringFrom)
     .lte('start_time', selectValues.selectedDayIsoStringTo)
     .order('start_time', { ascending: true });
 
-// console.log(data);
+  if(error){
+    console.log('error from reservations/route.js')
+    console.log(error)
+  }
+  else{
+    // console.log('data from reservations/route.js')
+    // console.log(data)
+  }
   return NextResponse.json({ data, error });
 }

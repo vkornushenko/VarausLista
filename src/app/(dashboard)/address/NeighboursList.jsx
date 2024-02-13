@@ -1,12 +1,14 @@
 import { sorce_sans_3 } from '@/app/utils/fonts';
+import { source_serif_4 } from '@/app/utils/fonts';
+import '@/app/globals.css';
 
 export default function NeighboursList({
   usersList,
   userData,
   toggleAddNeighbour,
 }) {
-  console.log('usersList from NeighboursList.jsx');
-  console.log(usersList);
+  // console.log('usersList from NeighboursList.jsx');
+  // console.log(usersList);
 
   return (
     <ul>
@@ -18,7 +20,7 @@ export default function NeighboursList({
           {user.users.name} {userData.user_id === user.users.user_id && '(you)'}
         </li>
       ))}
-      <li onClick={toggleAddNeighbour}>+ Add Neighbour</li>
+      <button type='button' onClick={toggleAddNeighbour} className={'text_button ' + source_serif_4.className}>+ Add Neighbour</button>
     </ul>
   );
 }

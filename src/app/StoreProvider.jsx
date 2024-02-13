@@ -11,7 +11,7 @@ export default function StoreProvider({ children, userData }) {
   // console.log('hello from the StoreProvider component');
   // console.log('storeRef.current val is: ' + storeRef.current);
   if (!storeRef.current) {
-    console.log('makeStore function was triggered!!!');
+    // console.log('makeStore function was triggered!!!');
     // Create the store instance the first time this renders
     storeRef.current = makeStore();
   }

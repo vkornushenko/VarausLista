@@ -5,32 +5,58 @@ import {
   getReservationData,
   getUsersAddressId,
 } from './actions';
+import { getTimeInterval } from '@/app/utils/time';
 
 export default async function ReservationPage() {
+  // get address_id via session
   const address_id = await getUsersAddressId();
 
   // redirect to address if no address attached to user
-  if(address_id === null){
-    redirect('/address')
+  if (address_id === null) {
+    redirect('/address');
   }
 
-  const data = await getAddressPropertyData(address_id);
+  const propertyData = await getAddressPropertyData(address_id);
+  const initialPropertyId = propertyData[0].property_id;
+  // console.log('getAddressPropertyData');
+  // console.log(propertyData);
 
-  // calculate today
-  var now = new Date();
-  var startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  const todayIsoString = startOfDay.toISOString();
 
-  const reservationData = await getReservationData(address_id, todayIsoString);
-  console.log('reservationData from reservations/page.jsx line 18')
-  console.log(reservationData)
-  
+
+
+  // // calculate today
+  // var now = new Date();
+
+  // var startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  // console.log('startOfDay: ' + startOfDay)
+  // var startOfTomorrow = new Date(now.getFullYear(), now.getMonth(), (now.getDate() + 1));
+  // console.log('startOfTomorrow: ' + startOfTomorrow)
+
+  // const todayIsoString = startOfDay.toISOString();
+  // console.log('todayIsoString: ' + todayIsoString)
+
+  const timeInterval = getTimeInterval();
+
+
+
+
+
+
+
+  const reservationData = await getReservationData(
+    initialPropertyId,
+    timeInterval
+  );
+  // console.log('reservationData from reservations/page.jsx line 18')
+  // console.log(reservationData)
 
   return (
     <main>
       <ReservationCard
-        propertyData={data}
+      timeInterval={timeInterval}
+        propertyData={propertyData}
         reservationData={reservationData}
+        initialPropertyId={initialPropertyId}
       />
     </main>
   );

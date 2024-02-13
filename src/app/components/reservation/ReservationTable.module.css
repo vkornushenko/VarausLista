@@ -39,3 +39,19 @@
 .reservation_grid__content_time {
   white-space: nowrap;
 }
+
+
+
+/* new */
+
+.reservation_table__row{
+  display:flex;
+  justify-content: space-between;
+}
+.reservation_table__row p{
+  font-size: 14px;
+  /* color: #6c7a80; */
+}
+.reservation_table__row div{
+  white-space: nowrap;
+}

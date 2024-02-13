@@ -27,8 +27,8 @@ export async function addAddress(addressFormData) {
 
   // at the moment we are getting user_id from the hidden input
   // we can get it from the supabase also
-  console.log('formData address/actions.js');
-  console.log(formData);
+  // console.log('formData address/actions.js');
+  // console.log(formData);
 
   // insert for table 'address'
   const insertValForTable_address = [{ address_name: formData.address }];
@@ -122,8 +122,8 @@ export async function getUserIdList(address_id) {
     )
   `)
     .eq('address_id', address_id);
-  console.log('users | address/actions.js');
-  console.log(users);
+  // console.log('users | address/actions.js');
+  // console.log(users);
   return users;
 }
 
@@ -132,8 +132,8 @@ export async function addNeighbour(_, addNeighbourFormData) {
   // console.log(addNeighbourFormData);
   // cleaning data from form
   const formData = Object.fromEntries(addNeighbourFormData);
-  console.log('formData');
-  console.log(formData);
+  // console.log('formData');
+  // console.log(formData);
 
   const users_id = await getPublicUsersIdByUserId(formData.user_id);
 
@@ -143,8 +143,8 @@ export async function addNeighbour(_, addNeighbourFormData) {
     'users',
     'id'
   );
-  console.log('userIdExistsInUsersTable');
-  console.log(userIdExistsInUsersTable);
+  // console.log('userIdExistsInUsersTable');
+  // console.log(userIdExistsInUsersTable);
   if (!userIdExistsInUsersTable) {
     return 'User is not found. Check User Id and try again.';
   }
@@ -155,8 +155,8 @@ export async function addNeighbour(_, addNeighbourFormData) {
     'user_address_map',
     'users_id'
   );
-  console.log('usersIdExistsInUserAddressMapTable');
-  console.log(usersIdExistsInUserAddressMapTable);
+  // console.log('usersIdExistsInUserAddressMapTable');
+  // console.log(usersIdExistsInUserAddressMapTable);
 
   // cancel submitting data, user already has address
   if (usersIdExistsInUserAddressMapTable) {
@@ -200,8 +200,8 @@ export async function addNeighbour(_, addNeighbourFormData) {
       users_id,
       formData.address_id
     );
-  console.log('isUsersIdAndAddressIdInserted');
-  console.log(isUsersIdAndAddressIdInserted);
+  // console.log('isUsersIdAndAddressIdInserted');
+  // console.log(isUsersIdAndAddressIdInserted);
 
 if (isUsersIdAndAddressIdInserted) {
   var formSubmissionResult = 'success'
@@ -232,9 +232,9 @@ export async function isValueExistsInTablesColumn(
     console.log(error);
     return false;
   } else {
-    console.log(data);
+    // console.log(data);
     // console.log(typeof data);
-    console.log(data.length);
+    // console.log(data.length);
     return data.length === 0 ? false : true;
     // return true;
   }
@@ -254,8 +254,8 @@ export async function updateAddressIdInUsersTable(address_id, user_id) {
     console.log(error);
     return false;
   } else {
-    console.log('users table updated successfully | address/actions.js');
-    console.log(data);
+    // console.log('users table updated successfully | address/actions.js');
+    // console.log(data);
     return true;
   }
 }
@@ -276,10 +276,10 @@ export async function insertUserIdAndAddressIdInUserAddressMap(
     console.log(error);
     return false;
   } else {
-    console.log(
-      'users_id and address_id inserted successfully in user_address_map table | address/actions.js'
-    );
-    console.log(data);
+    // console.log(
+    //   'users_id and address_id inserted successfully in user_address_map table | address/actions.js'
+    // );
+    // console.log(data);
     return true;
   }
 }

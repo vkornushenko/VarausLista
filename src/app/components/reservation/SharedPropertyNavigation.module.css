@@ -5,7 +5,7 @@
   user-select: none;
 }
 
-.shared_property_nav:hover{
+.shared_property_nav li:hover{
   cursor: pointer;
 }
 

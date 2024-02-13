@@ -8,20 +8,30 @@ import { sorce_sans_3 } from '@/app/utils/fonts';
 import returnSevenDaysObject from '../../utils/sevenDays.js';
 import { useEffect, useState } from 'react';
 import { returnStartOfTheDayByOffset } from '@/app/utils/time';
+import { getReservations } from '@/app/utils/apiRequests';
 // import { useRouter } from 'next/navigation';
 
-export default function DateNavigation({ setSelectedDateObject, setReservationDataState, address_id }) {
+export default function DateNavigation({
+  setSelectedDateObject,
+  setReservationDataState,
+  address_id,
+  property_id,
+  setTimeIntervalState
+}) {
   // const router = useRouter();
   // offset -1 means that the list of the days starts from today - 1 = yesterday
   const [offset, setOffset] = useState(-1);
   // console.log('offset | DateNavigation.jsx');
   // console.log(offset);
 
+  // async because of the await api request
   const offsetHandler = async (event) => {
     // we need this '+' to convert string to number
     setOffset(+event.currentTarget.getAttribute('offset'));
 
-    const selectedDayOffset = +event.currentTarget.getAttribute('selected_day_offset');
+    const selectedDayOffset = +event.currentTarget.getAttribute(
+      'selected_day_offset'
+    );
     const selectedDayFrom = returnStartOfTheDayByOffset(selectedDayOffset);
     const selectedDayTo = returnStartOfTheDayByOffset(selectedDayOffset + 1);
     // console.log(selectedStartOfTheDay);
@@ -29,37 +39,25 @@ export default function DateNavigation({ setSelectedDateObject, setReservationDa
     // data for fetch request
     const selectedDayIsoStringFrom = selectedDayFrom.toISOString();
     const selectedDayIsoStringTo = selectedDayTo.toISOString();
+    const timeInterval = {from: selectedDayIsoStringFrom, to: selectedDayIsoStringTo}
+    setTimeIntervalState(timeInterval)
 
-    const selectValues = { selectedDayIsoStringFrom, selectedDayIsoStringTo, address_id };
+    const selectValues = {
+      timeInterval,
+      property_id
+    };
 
-    const res = await fetch(`${location.origin}/api/reservations`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(selectValues),
-    });
-
-    const json = await res.json();
-
-    if (json.error) {
-      console.log(json.error);
-      //console.log('error');
-    }
-    if (json.data) {
-      // console.log('data from reservations table | DateNavigation.jsx')
-      // console.log(json.data);
-      // console.log('ReservationData setted to useState() | DateNavigation.jsx')
-      setReservationDataState(json.data);
-      // router.refresh()
-      // router.push('/reservation')
-    }
+    // api request
+    const data = await getReservations(selectValues);
+    setReservationDataState(data);
   };
 
   const sevenDays = returnSevenDaysObject(offset);
-  const selectedDateObject = sevenDays[1]['date'];
+  const selectedDateObjectValue = sevenDays[1]['date'];
 
   useEffect(() => {
-    // console.log(selectedDateObject);
-    setSelectedDateObject(selectedDateObject);
+    // console.log(selectedDateObjectValue);
+    setSelectedDateObject(selectedDateObjectValue);
     // console.log('setSelectedDateObject triggered');
   }, [offset]);
 

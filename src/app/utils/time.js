@@ -27,3 +27,22 @@ export function returnStartOfTheDayByOffset(selectedDayOffset){
 
   return new Date(date.getFullYear(), date.getMonth(), date.getDate());
 }
+
+export function getTimeInterval(){
+  // calculate today
+  var now = new Date();
+
+  var startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  var startOfTomorrow = new Date(now.getFullYear(), now.getMonth(), (now.getDate() + 1));
+  
+  // console.log('startOfDay: ' + startOfDay)
+  // console.log('startOfTomorrow: ' + startOfTomorrow)
+
+  const todayIsoString = startOfDay.toISOString();
+  // console.log('todayIsoString: ' + todayIsoString);
+
+  const tomorrowIsoString = startOfTomorrow.toISOString();
+
+  const timeInterval = {from: todayIsoString, to: tomorrowIsoString}
+  return timeInterval
+}
