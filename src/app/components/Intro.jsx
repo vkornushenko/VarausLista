@@ -22,10 +22,9 @@ export default function Intro() {
 
   // button action
   const buttonAction = () => {
-    if(userData.email){
+    if (userData.email) {
       router.push(userData.address ? '/reservation' : '/address');
-    }
-    else{
+    } else {
       router.push('/account');
     }
   };
@@ -46,11 +45,11 @@ export default function Intro() {
           </li>
           <li>
             <Image src={BuildingIcon} alt='VarausLista logo' height={18} />
-            <p>Add address or join one created by your neighbours</p>
+            <p>Add new address or join one created by your neighbours</p>
           </li>
           <li>
             <Image src={ShareIcon} alt='VarausLista logo' height={18} />
-            <p>Make shared property reservations together</p>
+            <p>Reserve shared property and check reservations online</p>
           </li>
         </ul>
       )}
@@ -61,7 +60,9 @@ export default function Intro() {
             {userData.address && ` Your place is ${userData.address}.`}
           </p>
           <p className={classes.welcome__paragraph}>
-            {userData.address ? 'You can make a reservation for your shared property.' : 'As a next step you need to join your neighbours address or create new address and invite your neighbours.'}
+            {userData.address
+              ? 'You can make a reservation for your shared property.'
+              : 'As a next step you need to join your neighbours address or create new address and attach your neighbours to it by their User Ids.'}
           </p>
         </div>
       )}
@@ -71,12 +72,7 @@ export default function Intro() {
           name={userData.address ? 'Check Reservations' : 'Manage Address'}
         />
       )}
-      {!userData.email && (
-        <Button
-          action={buttonAction}
-          name='Get Started'
-        />
-      )}
+      {!userData.email && <Button action={buttonAction} name='Get Started' />}
     </>
   );
 }

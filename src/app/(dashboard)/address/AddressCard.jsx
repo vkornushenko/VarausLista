@@ -81,7 +81,7 @@ export default function AddressCard({ propertyList, usersList }) {
 
               <p>
                 Otherwise you need to create new address and attach your
-                neighbours by their Users Id.
+                neighbours to it by their User Ids.
               </p>
             </div>
             <InfoQuote data={howToFindUserIdQuoteData} />
@@ -91,14 +91,14 @@ export default function AddressCard({ propertyList, usersList }) {
         {userData.address && (
           <div className='text_block'>
             <p>Your address is {userData.address}.</p>
-            <p>
+            <p className='long_read'>
               To add neighbours to this address and use VarausLista App
               together, ask them to create an account and share 'User Id' with
               you.
             </p>
-            <p>
+            <p className='long_read'>
               After you add neighbours 'User Id' to address {userData.address},
-              you will be able to see and make reservations together.
+              they will be able to see and make reservations together with you.
             </p>
           </div>
         )}
@@ -116,6 +116,7 @@ export default function AddressCard({ propertyList, usersList }) {
         <Button
           name={userData.address ? 'Edit Address' : 'Create New Address'}
           action={toggleModalrHandler}
+          isDisabled={userData.address}
         />
       </CardLayout>
 

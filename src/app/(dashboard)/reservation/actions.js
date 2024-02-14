@@ -183,6 +183,7 @@ export async function getUsersAddressId() {
     else{
       // console.log('data from getUsersAddressId')
       // console.log(users.user_address_map[0].address_id)
-      return users.user_address_map[0].address_id
+      // console.log(users?.user_address_map[0]?.address_id)
+      return users?.user_address_map[0]?.address_id
     }
 }

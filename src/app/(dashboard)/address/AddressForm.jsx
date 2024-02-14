@@ -106,7 +106,7 @@ export default function AddressForm({ propertyList, formTitle }) {
             )}
           </div>
         ))}
-        <SubmitButton />
+        <SubmitButton pendingButtonName={'Saving New Address'} buttonName={'Save New Address'}/>
 
         {/* {errorIsFound && (
             <InfoQuote data={{ message: error.message, type: 'error' }} />

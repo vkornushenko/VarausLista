@@ -74,6 +74,10 @@ main {
   padding-bottom: 0;
 }
 
+.long_read {
+  text-align: justify;
+}
+
 /* light grey color for no content text placeholders */
 .no_content_placeholder p {
   color: #6c7a80;

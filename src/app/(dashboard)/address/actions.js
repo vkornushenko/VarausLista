@@ -107,9 +107,11 @@ export async function getPropertyList() {
   return data;
 }
 
+// returns a list of users (neighbours) with address_id value
 export async function getUserIdList(address_id) {
-  if (address_id === null) {
-    return null;
+  // will work if address_id is null or undefined
+  if (!address_id) {
+    return;
   }
   // connect to supabase
   const supabase = createClient();

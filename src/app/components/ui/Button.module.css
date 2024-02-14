@@ -12,3 +12,11 @@
     background-color: #3F788F;
     cursor: pointer;
 }
+
+.button:disabled{
+  background-color: #e6eff2;
+  color: #6c7a80;
+}
+.button:disabled:hover{
+  cursor: not-allowed
+}

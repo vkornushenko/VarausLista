@@ -14,7 +14,6 @@ import { getReservations } from '@/app/utils/apiRequests';
 export default function DateNavigation({
   setSelectedDateObject,
   setReservationDataState,
-  address_id,
   property_id,
   setTimeIntervalState
 }) {

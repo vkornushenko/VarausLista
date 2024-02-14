@@ -20,7 +20,7 @@ export default function ReservationCard({ propertyData, reservationData, initial
 
   const [reservationDataState, setReservationDataState] = useState(reservationData);
   // console.log('reservationDataState from ReservationCard.jsx')
-  // console.log(reservationDataState)
+  console.log(reservationDataState)
 
   const [selectedDateObject, setSelectedDateObject] = useState();
   const [selectedPropertyId, setSelectedPropertyId] = useState(initialPropertyId);

@@ -6,9 +6,11 @@ export default async function AddressPage() {
   const propertyList = await getPropertyList();
 
   // will return null if user is not mapped to any address_id
+  // if no address_id found, will return undefined
   const address_id = await getUsersAddressId();
 
-  // will return null if no address_id provided
+  // we need usersList to build NeighboursList component
+  // getUserIdList will return undefined if no address_id provided
   const usersList = await getUserIdList(address_id);
 
   return (

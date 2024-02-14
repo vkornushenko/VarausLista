@@ -18,8 +18,8 @@ export async function getAddressIdFromUserAddressMapTable(users_id) {
     .eq('users_id', users_id)
     .single();
   if (error) {
-    console.log('user_address_map for users_id (error) | app/actions.js');
-    console.log(error);
+    // console.log('user_address_map for users_id (error) | app/actions.js');
+    // console.log(error);
     return null;
   } else {
     // console.log('user_address_map for users_id (data) | app/actions.js');
