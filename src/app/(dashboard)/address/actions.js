@@ -6,7 +6,7 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { getPublicUsersIdByUserId } from '../reservation/actions';
 
-export async function addAddress(addressFormData) {
+export async function addAddress(_, addressFormData) {
   // connect to supabase
   const supabase = createClient();
   
@@ -88,11 +88,13 @@ export async function addAddress(addressFormData) {
       } else {
         // console.log('responceFrom_user_address_map!!!');
         // console.log(responceFrom_user_address_map.data);
+        return true;
       }
     }
   }
 
   // TODO close modal (the same way as 'addNeighbour')
+  
   revalidatePath('/address');
   redirect('/address');
 }

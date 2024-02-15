@@ -141,6 +141,7 @@ export async function getPublicUsersIdByUserId(user_id) {
 export async function getUserDataFromSession() {
   // connect to supabase
   const supabase = createClient();
+  console.log(supabase);
 
   // getSession().session.user
   const { data, error } = await supabase.auth.getSession();
@@ -150,7 +151,11 @@ export async function getUserDataFromSession() {
   } else {
     // console.log('data getUserDataFromSession');
     // console.log(data.session.user);
-    return data.session.user;
+    if (!data.session?.user) {
+      redirect('/login');
+    } else {
+      return data.session.user;
+    }
   }
 }
 
@@ -176,14 +181,13 @@ export async function getUsersAddressId() {
     )
     .eq('user_id', user_id)
     .single();
-    if(error){
-      console.log('error from getUsersAddressId')
-      console.log(error)
-    }
-    else{
-      // console.log('data from getUsersAddressId')
-      // console.log(users.user_address_map[0].address_id)
-      // console.log(users?.user_address_map[0]?.address_id)
-      return users?.user_address_map[0]?.address_id
-    }
+  if (error) {
+    console.log('error from getUsersAddressId');
+    console.log(error);
+  } else {
+    // console.log('data from getUsersAddressId')
+    // console.log(users.user_address_map[0].address_id)
+    // console.log(users?.user_address_map[0]?.address_id)
+    return users?.user_address_map[0]?.address_id;
+  }
 }

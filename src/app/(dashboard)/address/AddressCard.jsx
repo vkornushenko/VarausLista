@@ -124,6 +124,7 @@ export default function AddressCard({ propertyList, usersList }) {
         <ModalLayout toggleLayover={toggleModalrHandler}>
           <CardLayout>
             <AddressForm
+            toggleLayover={toggleModalrHandler}
               propertyList={propertyList}
               formTitle={
                 userData.address ? 'Manage Address' : 'Create New Address'
