@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 
 import CardLayout from '@/app/components/ui/CardLayout';
 import SharedPropertyNavigation from '@/app/components/reservation/SharedPropertyNavigation';
@@ -13,33 +13,67 @@ import ReservationForm from '@/app/components/modal/ReservationForm';
 import { toggleModal } from '@/redux/features/ui-slice';
 import { useDispatch, useSelector } from 'react-redux';
 import ReservationCardHeader from './ReservationCardHeader';
+import LoadingReservationTable from './LoadingReservationTable';
+import { getReservations } from '@/app/utils/apiRequests';
+import {
+  getTimeInterval,
+  monthNamesArray,
+  returnDatePlusMonth,
+} from '@/app/utils/time';
+import { returnPropertyName } from '@/app/components/reservation/utils';
 
-export default function ReservationCard({ propertyData, reservationData, initialPropertyId, timeInterval }) {
-  // console.log('propertyData | ReservationCard.jsx')
-  // console.log(propertyData)
+export default function ReservationCard({
+  initialPropertyId,
+  // initialTimeInterval,
+  propertyData,
+  initialReservationData,
+}) {
+  const [reservationData, setReservationData] = useState(
+    initialReservationData
+  );
+  // when we get initial reservation data from server - it is NOT outdated
+  // it should be set as outdated, when date or property changed
+  const [isReservationDataOutdated, setIsReserationDataOutdated] =
+    useState(false);
+  // we need to use propertyId in severalchild components (initially it comes from server)
+  const [selectedPropertyId, setSelectedPropertyId] =
+    useState(initialPropertyId);
 
-  const [reservationDataState, setReservationDataState] = useState(reservationData);
-  // console.log('reservationDataState from ReservationCard.jsx')
-  console.log(reservationDataState)
+  const [selectedDateObject, setSelectedDateObject] = useState(new Date());
 
-  const [selectedDateObject, setSelectedDateObject] = useState();
-  const [selectedPropertyId, setSelectedPropertyId] = useState(initialPropertyId);
-  const [timeIntervalState, setTimeIntervalState] = useState(timeInterval);
+  const refreshReservationData = async () => {
+    const timeInterval = getTimeInterval(selectedDateObject);
+    const selectValues = {
+      timeInterval,
+      property_id: selectedPropertyId,
+    };
 
-  // console.log('timeIntervalState')
-  // console.log(timeIntervalState)
-  // console.log('selectedPropertyId')
-  // console.log(selectedPropertyId)
+    // console.log('data for api request');
+    // console.log(selectValues);
+
+    const reservationData = await getReservations(selectValues);
+    // console.log('fetched res data')
+    // console.log(reservationData)
+    setReservationData(reservationData);
+  };
+
+  useEffect(() => {
+    if (isReservationDataOutdated) {
+      // console.log('reservation data need to be refreshed');
+      setReservationData([]);
+      refreshReservationData();
+    }
+    // return data to outdated = false after refreshing
+    setIsReserationDataOutdated(false);
+  }, [isReservationDataOutdated, reservationData, selectedDateObject]);
 
   const userData = useSelector((state) => state.userReducer);
-  // console.log(userData);
 
-  // return property array with key as id
-  let propertyArr = {};
-  propertyData.map(
-    (item) => (propertyArr[item.property_id] = item.property.name)
+  // current property name
+  const currentPropertyName = returnPropertyName(
+    propertyData,
+    selectedPropertyId
   );
-  const currentPropertyName = propertyArr[selectedPropertyId];
 
   // redux
   const dispatch = useDispatch();
@@ -49,34 +83,9 @@ export default function ReservationCard({ propertyData, reservationData, initial
     // if we want to pass a payload/action/data to a function:
     // dispatch(logIn(given-name));
   };
-  // NOTE!!!
-  // selector could be used in another component separatly
-  // all we need is to import selector and use useSelector
-  // like we using it below
   const showModal = useSelector(
     (state) => state.uiReducer.value.modalIsVisible
-    // the same way we can get data from the store:
-    // (state) => state.uiReducer.value.first_name
   );
-
-  const monthNames = [
-    'Jan',
-    'Feb',
-    'Mar',
-    'Apr',
-    'May',
-    'Jun',
-    'Jul',
-    'Aug',
-    'Sep',
-    'Oct',
-    'Nov',
-    'Dec',
-  ];
-
-  
-  // const sharedPropertyList = ['Sauna', 'Laundry', 'GYM', 'Grill'];
-  // const SharedPropName = sharedPropertyList[currentSharedPropertyIndex];
 
   return (
     <>
@@ -86,32 +95,42 @@ export default function ReservationCard({ propertyData, reservationData, initial
           propertyData={propertyData}
           selectedPropertyId={selectedPropertyId}
           setSelectedPropertyId={setSelectedPropertyId}
-          timeIntervalState={timeIntervalState}
-          setReservationDataState={setReservationDataState}
+          setIsReserationDataOutdated={setIsReserationDataOutdated}
+          // timeIntervalState={timeIntervalState}
+          // setReservationDataState={setReservationDataState}
         />
-        <DateNavigation setTimeIntervalState={setTimeIntervalState} setSelectedDateObject={setSelectedDateObject} setReservationDataState={setReservationDataState} address_id={userData.address_id} property_id={selectedPropertyId}/>
-        <ReservationTable
-          reservationData={reservationDataState}
-          selectedPropertyId={selectedPropertyId}
-          propertyName={currentPropertyName}
-          selectedDateObject={selectedDateObject}
+        <DateNavigation
+          setIsReserationDataOutdated={setIsReserationDataOutdated}
+          setSelectedDateObject={setSelectedDateObject}
+          // setTimeIntervalState={setTimeIntervalState}
+          // setReservationDataState={setReservationDataState}
+          // address_id={userData.address_id}
+          // property_id={selectedPropertyId}
         />
+        <Suspense fallback={LoadingReservationTable}>
+          <ReservationTable
+            reservationData={reservationData}
+            propertyName={currentPropertyName}
+            // reservationData={reservationDataState}
+            // selectedPropertyId={selectedPropertyId}
+            selectedDateObject={selectedDateObject}
+          />
+        </Suspense>
         <Button
           action={toggleModalrHandler}
           name={`Reserve ${currentPropertyName}
-          for ${selectedDateObject?.getDate()} ${
-            monthNames[selectedDateObject?.getMonth()]
-          }
+          for ${returnDatePlusMonth(selectedDateObject, monthNamesArray)}
           `}
         />
       </CardLayout>
       {showModal && (
         <ReservationForm
+          setIsReserationDataOutdated={setIsReserationDataOutdated}
+          selectedDateObject={selectedDateObject}
+          toggleLayover={toggleModalrHandler}
+          propertyName={currentPropertyName}
           userData={userData}
           property_id={selectedPropertyId}
-          propertyName={currentPropertyName}
-          toggleLayover={toggleModalrHandler}
-          selectedDateObject={selectedDateObject}
         />
       )}
     </>

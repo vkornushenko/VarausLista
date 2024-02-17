@@ -8,8 +8,10 @@ import { createClient } from '@/app/utils/supabase/server';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
+
+
 // get address and property data by address_id
-export async function getAddressPropertyData(address_id) {
+export async function getPropertyData(address_id) {
   // connect to supabase
   const supabase = createClient();
 
@@ -17,8 +19,7 @@ export async function getAddressPropertyData(address_id) {
     .from('address_property_map')
     .select(
       `
-      *,
-      address(address_name),
+      property_id,
       property(name)
       `
     )
@@ -61,7 +62,7 @@ export async function getReservationData(property_id, timeInterval) {
   }
 }
 
-export async function sendReservation(reservationFormData) {
+export async function sendReservation(_, reservationFormData) {
   // connect to supabase
   const supabase = createClient();
 
@@ -108,8 +109,9 @@ export async function sendReservation(reservationFormData) {
     // );
     // console.log(data);
   }
-  revalidatePath('/');
-  redirect('/reservation');
+  revalidatePath('/reservation');
+  return true;
+  // redirect('/reservation');
 
   // TODO
   // after form submission
@@ -141,7 +143,6 @@ export async function getPublicUsersIdByUserId(user_id) {
 export async function getUserDataFromSession() {
   // connect to supabase
   const supabase = createClient();
-  console.log(supabase);
 
   // getSession().session.user
   const { data, error } = await supabase.auth.getSession();

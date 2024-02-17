@@ -20,29 +20,59 @@ export function getEndTime(start, durationInSeconds) {
   return endTime;
 }
 
-export function returnStartOfTheDayByOffset(selectedDayOffset){
+export function returnStartOfTheDayByOffset(selectedDayOffset) {
   let date = new Date();
-  date.setDate(date.getDate() + selectedDayOffset)
+  date.setDate(date.getDate() + selectedDayOffset);
   // console.log(date);
 
   return new Date(date.getFullYear(), date.getMonth(), date.getDate());
 }
 
-export function getTimeInterval(){
+export function getTimeInterval(selectedDateObject) {
   // calculate today
-  var now = new Date();
+  let now = (selectedDateObject || new Date());
 
-  var startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  var startOfTomorrow = new Date(now.getFullYear(), now.getMonth(), (now.getDate() + 1));
-  
-  // console.log('startOfDay: ' + startOfDay)
-  // console.log('startOfTomorrow: ' + startOfTomorrow)
+  let startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  let startOfTomorrow = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate() + 1
+  );
 
   const todayIsoString = startOfDay.toISOString();
-  // console.log('todayIsoString: ' + todayIsoString);
-
   const tomorrowIsoString = startOfTomorrow.toISOString();
 
-  const timeInterval = {from: todayIsoString, to: tomorrowIsoString}
-  return timeInterval
+  const timeInterval = { from: todayIsoString, to: tomorrowIsoString };
+  return timeInterval;
+}
+
+export const monthNamesArray = [
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
+  'May',
+  'Jun',
+  'Jul',
+  'Aug',
+  'Sep',
+  'Oct',
+  'Nov',
+  'Dec',
+];
+
+export function returnDatePlusMonth(dateObject, monthNamesArray) {
+  // in case of undefined initial state
+  if (!dateObject) {
+    dateObject = new Date();
+  }
+
+  return dateObject.getDate() + ' ' + monthNamesArray[dateObject.getMonth()];
+}
+
+export function getCurrentTimeForInput(selectedDateObject) {
+  const now = new Date(selectedDateObject);
+  now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+  const currentTime = now.toISOString().slice(0, 16);
+  return currentTime;
 }

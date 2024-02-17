@@ -6,50 +6,46 @@ import ModalLayout from '../ui/ModalLayout';
 import { sorce_sans_3 } from '@/app/utils/fonts';
 import '@/app/globals.css';
 import { sendReservation } from '@/app/(dashboard)/reservation/actions';
+import { useFormState } from 'react-dom';
+import { useEffect } from 'react';
+import SubmitButton from '../ui/SubmitButton';
+import { getCurrentTimeForInput } from '@/app/utils/time';
 
 export default function ReservationForm({
-  userData,
-  property_id,
-  propertyName,
-  toggleLayover,
+  setIsReserationDataOutdated,
   selectedDateObject,
+  toggleLayover,
+  propertyName,
+  userData,
+  property_id
 }) {
-  // get current time, count timezone, prepare for input format
+  // form state
+  const [formActionState, formAction] = useFormState(sendReservation, null);
 
-  // const now = new Date();
-  const now = new Date(selectedDateObject);
-  now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
-  const currentTime = now.toISOString().slice(0, 16);
+  // useEffect for form state
+  useEffect(() => {
+    if (formActionState) {
+      // close popup
+      toggleLayover();
+      // data need to be refreshed
+      setIsReserationDataOutdated(true);
+    }
+  }, [formActionState]);
 
-  // // handle form submission
-  // const submitHandler = (event) => {
-  //   event.preventDefault();
-  //   // To do: get form data
-
-  //   // close popup
-  //   toggleLayover();
-  // }
+  // get current time, count timezone, prepared for input defaultValue
+  const currentTime = getCurrentTimeForInput(selectedDateObject);
 
   return (
     <ModalLayout toggleLayover={toggleLayover}>
       <CardLayout>
-        {/* <h1 className={sorce_sans_3.className + ' ' + classes.popup_header}>
-          Reserve Laundry
-        </h1> */}
         <CardHeader title={`Reserve ${propertyName}`} />
-        <form className='form' action={sendReservation}>
+        <form className='form' action={formAction}>
           <input
             type='hidden'
             id='users_id'
             name='users_id'
             value={userData.users_id}
           />
-          {/* <input
-            type='hidden'
-            id='address_id'
-            name='address_id'
-            value={userData.address_id}
-          /> */}
           <input
             type='hidden'
             id='property_id'
@@ -113,18 +109,6 @@ export default function ReservationForm({
               required
             />
           </div>
-          {/* <div className='input_block'>
-            <label htmlFor='end_time' className={sorce_sans_3.className}>
-              End time
-            </label>
-            <input
-              type='datetime-local'
-              id='end_time'
-              name='end_time'
-              defaultValue={currentTime}
-              className={sorce_sans_3.className}
-            />
-          </div> */}
           <div className='input_block'>
             <label htmlFor='duration' className={sorce_sans_3.className}>
               Duration (hh:mm)
@@ -135,16 +119,14 @@ export default function ReservationForm({
               name='duration'
               defaultValue='02:00'
               className={sorce_sans_3.className}
-              pattern="([01][0-9]|2[0-3]):([0-5][0-9])"
+              pattern='([01][0-9]|2[0-3]):([0-5][0-9])'
               required
             />
           </div>
-          <button
-            type='submit'
-            className={sorce_sans_3.className + ' ' + 'submit_button'}
-          >
-            {`Reserve ${propertyName}`}
-          </button>
+          <SubmitButton
+            pendingButtonName={`Reserving ${propertyName}...`}
+            buttonName={`Reserve ${propertyName}`}
+          />
         </form>
       </CardLayout>
     </ModalLayout>

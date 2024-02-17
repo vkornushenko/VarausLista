@@ -4,7 +4,6 @@ import TimeInterval from './TimeInterval';
 
 export default function ReservationTable({
   reservationData,
-  selectedPropertyId,
   propertyName,
   selectedDateObject,
 }) {

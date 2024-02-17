@@ -1,11 +1,14 @@
 import { redirect } from 'next/navigation';
 import ReservationCard from './ReservationCard';
 import {
-  getAddressPropertyData,
+  getPropertyData,
   getReservationData,
   getUsersAddressId,
 } from './actions';
 import { getTimeInterval } from '@/app/utils/time';
+
+// export const dynamic = 'force-dynamic'
+// export const revalidate = 0
 
 export default async function ReservationPage() {
   // get address_id via session
@@ -16,13 +19,8 @@ export default async function ReservationPage() {
     redirect('/address');
   }
 
-  const propertyData = await getAddressPropertyData(address_id);
+  const propertyData = await getPropertyData(address_id);
   const initialPropertyId = propertyData[0].property_id;
-  // console.log('getAddressPropertyData');
-  // console.log(propertyData);
-
-
-
 
   // // calculate today
   // var now = new Date();
@@ -35,28 +33,23 @@ export default async function ReservationPage() {
   // const todayIsoString = startOfDay.toISOString();
   // console.log('todayIsoString: ' + todayIsoString)
 
-  const timeInterval = getTimeInterval();
-
-
-
-
-
-
+  // will return initial from/to date ready to set as filter for supabase
+  const initialTimeInterval = getTimeInterval(null);
 
   const reservationData = await getReservationData(
     initialPropertyId,
-    timeInterval
+    initialTimeInterval
   );
-  // console.log('reservationData from reservations/page.jsx line 18')
-  // console.log(reservationData)
+  // console.log('reservationData from reservations/page.jsx');
+  // console.log(reservationData);
 
   return (
     <main>
       <ReservationCard
-      timeInterval={timeInterval}
-        propertyData={propertyData}
-        reservationData={reservationData}
         initialPropertyId={initialPropertyId}
+        // initialTimeInterval={initialTimeInterval}
+        propertyData={propertyData}
+        initialReservationData={reservationData}
       />
     </main>
   );
