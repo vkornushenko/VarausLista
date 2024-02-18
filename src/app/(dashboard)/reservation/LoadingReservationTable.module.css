@@ -1,0 +1,6 @@
+.loading_text {
+  display: flex;
+  justify-content: center;
+  padding: 30px 0 30px 0;
+  color: #6c7a80;
+}

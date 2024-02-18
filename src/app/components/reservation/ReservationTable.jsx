@@ -1,6 +1,8 @@
 import InfoQuote from '../ui/InfoQuote';
 import classes from './ReservationTable.module.css';
 import TimeInterval from './TimeInterval';
+import { motion } from 'framer-motion';
+import React from 'react';
 
 export default function ReservationTable({
   reservationData,
@@ -38,12 +40,24 @@ export default function ReservationTable({
     }. You can be the first to reserve it.`,
     type: 'info',
   };
+
   return (
-    <>
+    <motion.div
+      layout
+      transition={{ duration: 0.3 }}
+      variants={{
+        hidden: { opacity: 0 },
+        visible: { opacity: 100 },
+      }}
+      initial='hidden'
+      animate='visible'
+      exit='hidden'
+    >
       {/* <div className='text_block no_content_placeholder'>
         <p>Laundry is not reserved by your neighbours for 19 November.</p>
         <p>You can be the first to reserve it.</p>
       </div> */}
+
       {reservationData.length === 0 ? (
         <InfoQuote data={quoteData} />
       ) : (
@@ -63,54 +77,29 @@ export default function ReservationTable({
               <p className={classes.reservation_grid__header_text}>time</p>
             </div>
 
-            {/* {reservationData.map((item, index) => (
-            <>
-              {selectedPropertyId === item.property_id && (
-                <>
-                  <div className={classes.reservation_grid__first_column_items}>
-                    {item.name}
-                  </div>
-                  <div
+          {reservationData.map((reservationItem) => (
+            <React.Fragment key={reservationItem.id}>
+              <div className={classes.reservation_grid__first_column_items}>
+                <p>{reservationItem.users.name}</p>
+              </div>
+              <div
                     className={classes.reservation_grid__middle_column_items}
                   >
-                    {item.apartment}
-                  </div>
-                  <div className={classes.reservation_grid__middle_column_items}>3</div>
-                  <div className={classes.reservation_grid__last_column_items}>
-                    <TimeInterval start={item.start_time} end={item.end_time} />
-                  </div>
-
-                  <div className={classes.brake_line}></div>
-                </>
-              )}
-            </>
-          ))} */}
-          </div>
-          <div>
-            {reservationData.map((reservationItem) => (
-              <div
-                key={reservationItem.id}
-                className={classes.reservation_table__row}
-              >
-                <div>
-                  <p>{reservationItem.users.name}</p>
-                </div>
-                <div>
-                  <p>{reservationItem.users.apartment}</p>
-                </div>
-                <div>
-                  <p>
-                    <TimeInterval
-                      start={reservationItem.start_time}
-                      end={reservationItem.end_time}
-                    />
-                  </p>
-                </div>
+                <p>{reservationItem.users.apartment}</p>
               </div>
-            ))}
+              <div className={classes.reservation_grid__last_column_items}>
+                <p>
+                  <TimeInterval
+                    start={reservationItem.start_time}
+                    end={reservationItem.end_time}
+                  />
+                </p>
+              </div>
+            </React.Fragment>
+          ))}
           </div>
         </>
       )}
-    </>
+    </motion.div>
   );
 }

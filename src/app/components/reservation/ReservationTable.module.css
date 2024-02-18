@@ -1,6 +1,5 @@
 .reservations_grid {
   display: grid;
-  /* with machine 4, without 3 */
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: auto;
   align-items: center;
@@ -8,7 +7,7 @@
   row-gap: 8px;
   font-size: 14px;
 }
-/* for machine: start=1, end=5 | without 1,4 */
+
 .brake_line {
   grid-column-start: 1;
   grid-column-end: 4;
@@ -37,21 +36,5 @@
 }
 
 .reservation_grid__content_time {
-  white-space: nowrap;
-}
-
-
-
-/* new */
-
-.reservation_table__row{
-  display:flex;
-  justify-content: space-between;
-}
-.reservation_table__row p{
-  font-size: 14px;
-  /* color: #6c7a80; */
-}
-.reservation_table__row div{
   white-space: nowrap;
 }

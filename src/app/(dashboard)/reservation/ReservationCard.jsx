@@ -1,11 +1,17 @@
 'use client';
 
-import { Suspense, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import LoadingReservationTable from './LoadingReservationTable';
+
+import { AnimatePresence } from 'framer-motion';
 
 import CardLayout from '@/app/components/ui/CardLayout';
 import SharedPropertyNavigation from '@/app/components/reservation/SharedPropertyNavigation';
 import DateNavigation from '@/app/components/reservation/DateNavigation';
+
 import ReservationTable from '@/app/components/reservation/ReservationTable';
+// const ReservationTable = lazy(() => import('@/app/components/reservation/ReservationTable'));
+
 import Button from '@/app/components/ui/Button';
 import ReservationForm from '@/app/components/modal/ReservationForm';
 
@@ -13,7 +19,6 @@ import ReservationForm from '@/app/components/modal/ReservationForm';
 import { toggleModal } from '@/redux/features/ui-slice';
 import { useDispatch, useSelector } from 'react-redux';
 import ReservationCardHeader from './ReservationCardHeader';
-import LoadingReservationTable from './LoadingReservationTable';
 import { getReservations } from '@/app/utils/apiRequests';
 import {
   getTimeInterval,
@@ -28,6 +33,9 @@ export default function ReservationCard({
   propertyData,
   initialReservationData,
 }) {
+  // loading state
+  const [isLoading, setIsLoading] = useState(false);
+
   const [reservationData, setReservationData] = useState(
     initialReservationData
   );
@@ -41,20 +49,19 @@ export default function ReservationCard({
 
   const [selectedDateObject, setSelectedDateObject] = useState(new Date());
 
+  // refresh outdated reservations data
   const refreshReservationData = async () => {
+    setIsLoading(true);
+    // preparing request for data fetching
     const timeInterval = getTimeInterval(selectedDateObject);
     const selectValues = {
       timeInterval,
       property_id: selectedPropertyId,
     };
-
-    // console.log('data for api request');
-    // console.log(selectValues);
-
+    // fetching fresh data
     const reservationData = await getReservations(selectValues);
-    // console.log('fetched res data')
-    // console.log(reservationData)
     setReservationData(reservationData);
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -96,26 +103,23 @@ export default function ReservationCard({
           selectedPropertyId={selectedPropertyId}
           setSelectedPropertyId={setSelectedPropertyId}
           setIsReserationDataOutdated={setIsReserationDataOutdated}
-          // timeIntervalState={timeIntervalState}
-          // setReservationDataState={setReservationDataState}
         />
         <DateNavigation
           setIsReserationDataOutdated={setIsReserationDataOutdated}
           setSelectedDateObject={setSelectedDateObject}
-          // setTimeIntervalState={setTimeIntervalState}
-          // setReservationDataState={setReservationDataState}
-          // address_id={userData.address_id}
-          // property_id={selectedPropertyId}
         />
-        <Suspense fallback={LoadingReservationTable}>
-          <ReservationTable
-            reservationData={reservationData}
-            propertyName={currentPropertyName}
-            // reservationData={reservationDataState}
-            // selectedPropertyId={selectedPropertyId}
-            selectedDateObject={selectedDateObject}
-          />
-        </Suspense>
+        <AnimatePresence>
+          {isLoading ? (
+            <LoadingReservationTable />
+          ) : (
+            <ReservationTable
+              reservationData={reservationData}
+              propertyName={currentPropertyName}
+              selectedDateObject={selectedDateObject}
+            />
+          )}
+        </AnimatePresence>
+
         <Button
           action={toggleModalrHandler}
           name={`Reserve ${currentPropertyName}
