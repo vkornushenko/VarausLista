@@ -15,8 +15,8 @@ export function getEndTime(start, durationInSeconds) {
   const endTime = new Date(start.getTime() + durationInSeconds * 1000);
   // console.log('startTime');
   // console.log(start);
-  // console.log('endTime');
-  // console.log(endTime);
+  console.log('endTime | utils/time.js');
+  console.log(endTime);
   return endTime;
 }
 

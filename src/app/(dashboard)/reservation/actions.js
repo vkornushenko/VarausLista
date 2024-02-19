@@ -8,8 +8,6 @@ import { createClient } from '@/app/utils/supabase/server';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
-
-
 // get address and property data by address_id
 export async function getPropertyData(address_id) {
   // connect to supabase
@@ -70,13 +68,14 @@ export async function sendReservation(_, reservationFormData) {
   // console.log(reservationFormData);
   // cleaning data from form
   const cleanReservationFormData = Object.fromEntries(reservationFormData);
-  // console.log(cleanReservationFormData);
+  console.log(cleanReservationFormData);
   // return;
 
   // will save time in 000Z (-2 hrs for finland)
   const start = new Date(cleanReservationFormData.start_time);
-  // console.log('start');
-  // console.log(start);
+  console.log('start');
+  console.log(start);
+  // return;
 
   // will output hours in local time (+2 hrs for finland)
   // console.log(start.getHours());
@@ -85,9 +84,18 @@ export async function sendReservation(_, reservationFormData) {
     cleanReservationFormData.duration
   );
   // console.log('durationInSeconds');
-  // console.log(durationInSeconds);
+  console.log(durationInSeconds);
 
   const endTime = getEndTime(start, durationInSeconds);
+  console.log(endTime);
+  // return;
+
+  // let form_data = {
+  //   cleanReservationFormData,
+  //   start,
+  //   durationInSeconds,
+  //   endTime,
+  // };
 
   // insert data to supabase
   const { data, error } = await supabase
@@ -97,17 +105,18 @@ export async function sendReservation(_, reservationFormData) {
         users_id: cleanReservationFormData.users_id,
         property_id: cleanReservationFormData.property_id,
         start_time: start,
-        end_time: endTime,
+        end_time: endTime
       },
     ])
     .select();
   if (error) {
     console.log(error);
   } else {
-    // console.log(
-    //   'this was inserted in reservations table | reservation/actions.js'
-    // );
-    // console.log(data);
+    console.log(
+      'this was inserted in reservations table | reservation/actions.js'
+    );
+    console.log(data);
+    return;
   }
   revalidatePath('/reservation');
   return true;
@@ -162,7 +171,7 @@ export async function getUserDataFromSession() {
 
 export async function getUsersAddressId() {
   const userFromSession = await getUserDataFromSession();
-  if (userFromSession === null) {
+  if (!userFromSession) {
     redirect('/login');
   }
 
