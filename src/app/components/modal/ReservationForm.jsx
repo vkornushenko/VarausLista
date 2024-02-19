@@ -45,6 +45,12 @@ export default function ReservationForm({
       <CardLayout>
         <CardHeader title={`Reserve ${propertyName}`} />
         <form className='form' action={formAction}>
+        <input
+            type='hidden'
+            id='clientTimeZoneOffset'
+            name='clientTimeZoneOffset'
+            value={clientTimeZoneOffset}
+          />
           <input
             type='hidden'
             id='users_id'

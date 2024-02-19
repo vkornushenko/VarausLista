@@ -105,7 +105,8 @@ export async function sendReservation(_, reservationFormData) {
         users_id: cleanReservationFormData.users_id,
         property_id: cleanReservationFormData.property_id,
         start_time: start,
-        end_time: endTime
+        end_time: endTime,
+        extra: cleanReservationFormData.clientTimeZoneOffset
       },
     ])
     .select();
