@@ -86,7 +86,10 @@ export async function sendReservation(_, reservationFormData) {
 
   let start_time = new Date(cleanReservationFormData.start_time);
   // TimeZoneOffset correction
-  start_time = new Date(start_time.setHours(start_time.getHours() + clientTimeZoneOffset/60));
+  // in case server is not in UTC calc a summ of server and client offsets
+  const timeZoneOffset = serverTimeZoneOffset - clientTimeZoneOffset;
+  // calc start time in UTC
+  start_time = new Date(start_time.setHours(start_time.getHours() + timeZoneOffset/60));
 
   const durationInSeconds = getDurationInSeconds(
     cleanReservationFormData.duration
@@ -105,7 +108,7 @@ export async function sendReservation(_, reservationFormData) {
         property_id: cleanReservationFormData.property_id,
         start_time: start_time,
         end_time: end_time,
-        extra: `input_time = ${cleanReservationFormData.start_time} | ClientTimezoneOffset = ${cleanReservationFormData.clientTimeZoneOffset} | serverTimeZoneOffset = ${serverTimeZoneOffset} | start_time = ${start_time} | end_time = ${end_time}`,
+        extra: `input_time = ${cleanReservationFormData.start_time} | ClientTimezoneOffset = ${cleanReservationFormData.clientTimeZoneOffset} | serverTimeZoneOffset = ${serverTimeZoneOffset} | timeZoneOffset = ${timeZoneOffset} | start_time = ${start_time} | end_time = ${end_time}`,
       },
     ])
     .select();
