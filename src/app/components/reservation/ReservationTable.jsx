@@ -1,14 +1,17 @@
+
+
 import InfoQuote from '../ui/InfoQuote';
 import classes from './ReservationTable.module.css';
 import TimeInterval from './TimeInterval';
 import { motion } from 'framer-motion';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 export default function ReservationTable({
   reservationData,
   propertyName,
   selectedDateObject,
 }) {
+
   // console.log('reservationData from ReservationTable.jsx');
   // console.log(reservationData);
 

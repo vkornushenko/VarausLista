@@ -71,10 +71,26 @@ export async function sendReservation(_, reservationFormData) {
   console.log(cleanReservationFormData);
   // return;
 
+  // client time zone offset (in min)
+  const clientTimeZoneOffset = cleanReservationFormData.clientTimeZoneOffset;
+  console.log('clientTimeZoneOffset');
+  console.log(clientTimeZoneOffset);
+
   // will save time in 000Z (-2 hrs for finland)
-  const start = new Date(cleanReservationFormData.start_time);
-  console.log('start');
-  console.log(start);
+
+  let start_time = new Date(cleanReservationFormData.start_time);
+  // TimeZoneOffset correction
+  start_time = new Date(start_time.setHours(start_time.getHours() + clientTimeZoneOffset/60));
+  // new Date(startClientTZ.getHours())
+  // const startUTCTZ = new Date(cleanReservationFormData.start_time);
+  // const startUTCTZ = new Date(startClientTZ.getFullYear(), startClientTZ.getMonth(), startClientTZ.getDate(), (startClientTZ.getHours() + clientTimeZoneOffset/2), startClientTZ.getMinutes)
+  // const startUTC = Date.UTC(start.getUTCFullYear(), start.getUTCMonth(),
+  // start.getUTCDate(), start.getUTCHours());
+  // const startUTCTZISO = startUTCTZ.toISOString();
+  console.log('start_time');
+  console.log(start_time);
+  // console.log('startUTCTZISO');
+  // console.log(startUTCTZISO);
   // return;
 
   // will output hours in local time (+2 hrs for finland)
@@ -86,8 +102,8 @@ export async function sendReservation(_, reservationFormData) {
   // console.log('durationInSeconds');
   console.log(durationInSeconds);
 
-  const endTime = getEndTime(start, durationInSeconds);
-  console.log(endTime);
+  const end_time = getEndTime(start_time, durationInSeconds);
+  console.log(end_time);
   // return;
 
   // let form_data = {
@@ -104,9 +120,9 @@ export async function sendReservation(_, reservationFormData) {
       {
         users_id: cleanReservationFormData.users_id,
         property_id: cleanReservationFormData.property_id,
-        start_time: start,
-        end_time: endTime,
-        extra: cleanReservationFormData.clientTimeZoneOffset
+        start_time: start_time,
+        end_time: end_time,
+        extra: `input_time = ${cleanReservationFormData.start_time} | timezoneOffset = ${cleanReservationFormData.clientTimeZoneOffset} | start_time = ${start_time} | end_time = ${end_time}`,
       },
     ])
     .select();

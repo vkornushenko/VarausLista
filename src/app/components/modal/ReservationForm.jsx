@@ -22,7 +22,7 @@ export default function ReservationForm({
   // form state
   const [formActionState, formAction] = useFormState(sendReservation, null);
 
-  const now = new Date('2024-02-19T16:26')
+  const now = new Date()
   const clientTimeZoneOffset = now.getTimezoneOffset();
   console.log('clientTimeZoneOffset')
   console.log(clientTimeZoneOffset)

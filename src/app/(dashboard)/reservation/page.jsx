@@ -40,8 +40,8 @@ export default async function ReservationPage() {
     initialPropertyId,
     initialTimeInterval
   );
-  // console.log('reservationData from reservations/page.jsx');
-  // console.log(reservationData);
+  console.log('reservationData from reservations/page.jsx');
+  console.log(reservationData);
 
   return (
     <main>
