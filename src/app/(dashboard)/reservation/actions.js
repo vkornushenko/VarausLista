@@ -87,7 +87,7 @@ export async function sendReservation(_, reservationFormData) {
   let start_time = new Date(cleanReservationFormData.start_time);
   // TimeZoneOffset correction
   // in case server is not in UTC calc a summ of server and client offsets
-  const timeZoneOffset = serverTimeZoneOffset - clientTimeZoneOffset;
+  const timeZoneOffset = clientTimeZoneOffset - serverTimeZoneOffset;
   // calc start time in UTC
   start_time = new Date(start_time.setHours(start_time.getHours() + timeZoneOffset/60));
 
