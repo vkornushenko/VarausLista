@@ -71,6 +71,12 @@ export async function sendReservation(_, reservationFormData) {
   console.log(cleanReservationFormData);
   // return;
 
+  // check server TimeZoneOffset
+  const now = new Date()
+  const serverTimeZoneOffset = now.getTimezoneOffset();
+  console.log('serverTimeZoneOffset')
+  console.log(serverTimeZoneOffset)
+
   // client time zone offset (in min)
   const clientTimeZoneOffset = cleanReservationFormData.clientTimeZoneOffset;
   console.log('clientTimeZoneOffset');
@@ -81,37 +87,14 @@ export async function sendReservation(_, reservationFormData) {
   let start_time = new Date(cleanReservationFormData.start_time);
   // TimeZoneOffset correction
   start_time = new Date(start_time.setHours(start_time.getHours() + clientTimeZoneOffset/60));
-  // new Date(startClientTZ.getHours())
-  // const startUTCTZ = new Date(cleanReservationFormData.start_time);
-  // const startUTCTZ = new Date(startClientTZ.getFullYear(), startClientTZ.getMonth(), startClientTZ.getDate(), (startClientTZ.getHours() + clientTimeZoneOffset/2), startClientTZ.getMinutes)
-  // const startUTC = Date.UTC(start.getUTCFullYear(), start.getUTCMonth(),
-  // start.getUTCDate(), start.getUTCHours());
-  // const startUTCTZISO = startUTCTZ.toISOString();
-  console.log('start_time');
-  console.log(start_time);
-  // console.log('startUTCTZISO');
-  // console.log(startUTCTZISO);
-  // return;
-
-  // will output hours in local time (+2 hrs for finland)
-  // console.log(start.getHours());
 
   const durationInSeconds = getDurationInSeconds(
     cleanReservationFormData.duration
   );
-  // console.log('durationInSeconds');
   console.log(durationInSeconds);
 
   const end_time = getEndTime(start_time, durationInSeconds);
   console.log(end_time);
-  // return;
-
-  // let form_data = {
-  //   cleanReservationFormData,
-  //   start,
-  //   durationInSeconds,
-  //   endTime,
-  // };
 
   // insert data to supabase
   const { data, error } = await supabase
@@ -122,7 +105,7 @@ export async function sendReservation(_, reservationFormData) {
         property_id: cleanReservationFormData.property_id,
         start_time: start_time,
         end_time: end_time,
-        extra: `input_time = ${cleanReservationFormData.start_time} | timezoneOffset = ${cleanReservationFormData.clientTimeZoneOffset} | start_time = ${start_time} | end_time = ${end_time}`,
+        extra: `input_time = ${cleanReservationFormData.start_time} | ClientTimezoneOffset = ${cleanReservationFormData.clientTimeZoneOffset} | serverTimeZoneOffset = ${serverTimeZoneOffset} | start_time = ${start_time} | end_time = ${end_time}`,
       },
     ])
     .select();
@@ -132,8 +115,8 @@ export async function sendReservation(_, reservationFormData) {
     console.log(
       'this was inserted in reservations table | reservation/actions.js'
     );
-    console.log(data);
-    return;
+    // console.log(data);
+    // return;
   }
   revalidatePath('/reservation');
   return true;

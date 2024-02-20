@@ -91,7 +91,7 @@ export default function ReservationTable({
                 <p>{reservationItem.users.apartment}</p>
               </div>
               <div className={classes.reservation_grid__last_column_items}>
-                <p>
+                <p title={reservationItem.extra}>
                   <TimeInterval
                     start={reservationItem.start_time}
                     end={reservationItem.end_time}
