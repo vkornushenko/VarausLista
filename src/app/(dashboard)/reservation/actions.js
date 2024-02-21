@@ -31,8 +31,6 @@ export async function getPropertyData(address_id) {
   }
 }
 
-
-
 // get reservations data start from Day for address_id
 export async function getReservationData(property_id, timeInterval) {
   // console.log(property_id + ' ' + todayIsoString)
@@ -143,19 +141,23 @@ export async function sendReservation(_, reservationFormData) {
   // before insert data to reservations checking if this time already reserved
   const timeInterval = {
     from: start_time.toISOString(),
-    to: end_time.toISOString()
-  }
+    to: end_time.toISOString(),
+  };
   // console.log('timeInterval | reservation/actions.js')
   // console.log(timeInterval)
   const property_id = cleanReservationFormData.property_id;
   // const selectedDateObject = {timeInterval, property_id}
 
-  
-  const reservations = await isReservationTimeAvailable(property_id, timeInterval)
+  const reservations = await isReservationTimeAvailable(
+    property_id,
+    timeInterval
+  );
   console.log('reservations in input interval | reservation/actions.js');
   console.log(reservations);
-  if(reservations.length !== 0){
-    let response = {error: {message: 'The time is already reserved by someone else.'}}
+  if (reservations.length !== 0) {
+    let response = {
+      error: { message: 'The time is already reserved by someone else.' },
+    };
     return response;
   }
 
@@ -182,8 +184,13 @@ export async function sendReservation(_, reservationFormData) {
     // return;
   }
   revalidatePath('/reservation');
-  let response = {success: {message: 'The reservation was successfully added to reservation list.'}}
-  
+  let response = {
+    success: {
+      message: 'The reservation was successfully added to reservation list.',
+      data: data,
+    },
+  };
+
   return response;
   // redirect('/reservation');
 
@@ -216,11 +223,11 @@ export async function getPublicUsersIdByUserId(user_id) {
 export async function getUsersAddressId() {
   // connect to supabase
   const supabase = createClient();
-  
+
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  
+
   const user_id = user.id;
 
   let { data: users, error } = await supabase
@@ -243,5 +250,24 @@ export async function getUsersAddressId() {
     // console.log(users.user_address_map[0].address_id)
     // console.log(users?.user_address_map[0]?.address_id)
     return users?.user_address_map[0]?.address_id;
+  }
+}
+
+export async function deleteReservation(reservation_id) {
+  // connect to supabase
+  const supabase = createClient();
+
+  const { data, error } = await supabase
+    .from('reservations')
+    .delete()
+    .eq('id', reservation_id);
+
+  if (error) {
+    console.log(error);
+    return false;
+  } else {
+    console.log(data)
+    console.log(`reservation_id = ${reservation_id} was deleted`)
+    return true;
   }
 }

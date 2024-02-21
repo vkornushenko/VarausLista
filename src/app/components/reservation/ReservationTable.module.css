@@ -1,6 +1,6 @@
 .reservations_grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, 1fr) auto;
   grid-template-rows: auto;
   align-items: center;
   column-gap: 16px;
@@ -10,10 +10,10 @@
 
 .brake_line {
   grid-column-start: 1;
-  grid-column-end: 4;
+  grid-column-end: 5;
   border-bottom: 1px solid #e6eff2;
 }
-.brake_line:last-child{
+.brake_line:last-child {
   display: none;
 }
 
@@ -23,10 +23,21 @@
 .reservation_grid__middle_column_items {
   justify-self: center;
 }
-.reservation_grid__last_column_items {
+.reservation_grid__time_column_items {
   justify-self: end;
 }
-.reservation_grid__last_column_items_header {
+.reservation_grid__del_column_items {
+  justify-self: center;
+  align-self: end;
+}
+.delete_button{
+  color: #C73C52;
+}
+.delete_button:hover {
+  cursor: pointer;
+}
+
+.reservation_grid__time_column_items_header {
   justify-self: center;
 }
 

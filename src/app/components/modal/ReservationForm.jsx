@@ -32,6 +32,7 @@ export default function ReservationForm({
   useEffect(() => {
     if (formActionState?.success) {
       console.log(formActionState?.success.message)
+      console.log(formActionState?.success.data)
       // close popup
       toggleLayover();
       // data need to be refreshed

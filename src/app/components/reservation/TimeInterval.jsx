@@ -14,7 +14,7 @@ export default function TimeInterval({ start, end }) {
   return (
     <>
       {start_hrs}
-      <sup>{start_mins}</sup> - {end_hrs}
+      <sup>{start_mins}</sup> &ndash; {end_hrs}
       <sup>{end_mins}</sup>
     </>
   );

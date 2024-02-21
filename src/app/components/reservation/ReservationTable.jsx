@@ -1,25 +1,33 @@
-
-
+import { deleteReservation } from '@/app/(dashboard)/reservation/actions';
 import InfoQuote from '../ui/InfoQuote';
 import classes from './ReservationTable.module.css';
 import TimeInterval from './TimeInterval';
 import { motion } from 'framer-motion';
-import React, { useEffect } from 'react';
+import React from 'react';
+
+import { IoTrashOutline } from 'react-icons/io5';
 
 export default function ReservationTable({
   reservationData,
   propertyName,
   selectedDateObject,
+  setIsReserationDataOutdated,
+  users_id,
 }) {
-
-  // console.log('reservationData from ReservationTable.jsx');
-  // console.log(reservationData);
+  // console.log('reservationData[0] from ReservationTable.jsx');
+  // console.log(reservationData[0]);
 
   // checking for any reservations for selectedPropertyId
   // const reservationsFound = reservationData?.some(
   //   (item) => item.property_id === selectedPropertyId
   // );
   //console.log('found value = ' + reservationsFound);
+
+  const deleteReservationHandler = async (reservation_id) => {
+    const result = await deleteReservation(reservation_id);
+    console.log(result);
+    setIsReserationDataOutdated(true);
+  };
 
   const monthNames = [
     'January',
@@ -76,30 +84,47 @@ export default function ReservationTable({
             {/* <div className={classes.reservation_grid__middle_column_items}>
             <p className={classes.reservation_grid__header_text}>machine</p>
           </div> */}
-            <div className={classes.reservation_grid__last_column_items_header}>
+
+            <div className={classes.reservation_grid__time_column_items_header}>
               <p className={classes.reservation_grid__header_text}>time</p>
             </div>
+            <div className={classes.reservation_grid__del_column_items}>
+            </div>
 
-          {reservationData.map((reservationItem) => (
-            <React.Fragment key={reservationItem.id}>
-              <div className={classes.reservation_grid__first_column_items}>
-                <p>{reservationItem.users.name}</p>
-              </div>
-              <div
-                    className={classes.reservation_grid__middle_column_items}
+            {reservationData.map((reservationItem) => (
+              <React.Fragment key={reservationItem.id}>
+                <div className={classes.reservation_grid__first_column_items}>
+                  <p>{reservationItem.users.name}</p>
+                </div>
+                <div className={classes.reservation_grid__middle_column_items}>
+                  <p>{reservationItem.users.apartment}</p>
+                </div>
+
+                <div className={classes.reservation_grid__time_column_items}>
+                  <p
+                    title={reservationItem.extra}
+                    className={classes.reservation_grid__content_time}
                   >
-                <p>{reservationItem.users.apartment}</p>
-              </div>
-              <div className={classes.reservation_grid__last_column_items}>
-                <p title={reservationItem.extra}>
-                  <TimeInterval
-                    start={reservationItem.start_time}
-                    end={reservationItem.end_time}
-                  />
-                </p>
-              </div>
-            </React.Fragment>
-          ))}
+                    <TimeInterval
+                      start={reservationItem.start_time}
+                      end={reservationItem.end_time}
+                    />
+                  </p>
+                </div>
+                <div className={classes.reservation_grid__del_column_items}>
+                  {reservationItem.users_id === users_id && (
+                    <IoTrashOutline
+                      width={48}
+                      onClick={() =>
+                        deleteReservationHandler(reservationItem.id)
+                      }
+                      className={classes.delete_button}
+                    />
+                  )}
+                </div>
+                {/* <div className={classes.brake_line}></div> */}
+              </React.Fragment>
+            ))}
           </div>
         </>
       )}

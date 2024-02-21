@@ -75,6 +75,8 @@ export default function ReservationCard({
   }, [isReservationDataOutdated, reservationData, selectedDateObject]);
 
   const userData = useSelector((state) => state.userReducer);
+  // console.log('userData')
+  // console.log(userData)
 
   // current property name
   const currentPropertyName = returnPropertyName(
@@ -116,6 +118,8 @@ export default function ReservationCard({
               reservationData={reservationData}
               propertyName={currentPropertyName}
               selectedDateObject={selectedDateObject}
+              setIsReserationDataOutdated={setIsReserationDataOutdated}
+              users_id={userData.users_id}
             />
           )}
         </AnimatePresence>
