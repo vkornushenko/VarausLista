@@ -1,8 +1,12 @@
+
+
 export async function getReservations({
   timeInterval,
   // address_id,
   property_id,
 }) {
+  // console.log(timeInterval)
+  // console.log(property_id)
   const selectedDayIsoStringFrom = timeInterval.from;
   const selectedDayIsoStringTo = timeInterval.to;
   // api request

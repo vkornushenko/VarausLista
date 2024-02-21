@@ -10,6 +10,7 @@ import { useFormState } from 'react-dom';
 import { useEffect } from 'react';
 import SubmitButton from '../ui/SubmitButton';
 import { getCurrentTimeForInput } from '@/app/utils/time';
+import InfoQuote from '../ui/InfoQuote';
 
 export default function ReservationForm({
   setIsReserationDataOutdated,
@@ -24,12 +25,13 @@ export default function ReservationForm({
 
   const now = new Date()
   const clientTimeZoneOffset = now.getTimezoneOffset();
-  console.log('clientTimeZoneOffset')
-  console.log(clientTimeZoneOffset)
+  // console.log('clientTimeZoneOffset')
+  // console.log(clientTimeZoneOffset)
 
   // useEffect for form state
   useEffect(() => {
-    if (formActionState) {
+    if (formActionState?.success) {
+      console.log(formActionState?.success.message)
       // close popup
       toggleLayover();
       // data need to be refreshed
@@ -134,6 +136,11 @@ export default function ReservationForm({
               required
             />
           </div>
+          {formActionState?.error && (
+            <InfoQuote data={{message: formActionState.error.message, type: 'error'}}/>
+            // <p>{formActionState?.error.message}
+            // </p>
+          )}
           <SubmitButton
             pendingButtonName={`Reserving ${propertyName}...`}
             buttonName={`Reserve ${propertyName}`}

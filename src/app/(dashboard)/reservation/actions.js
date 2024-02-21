@@ -7,6 +7,7 @@ import { createClient } from '@/app/utils/supabase/server';
 
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
+import { getReservations } from '@/app/utils/apiRequests';
 
 // get address and property data by address_id
 export async function getPropertyData(address_id) {
@@ -30,6 +31,8 @@ export async function getPropertyData(address_id) {
   }
 }
 
+
+
 // get reservations data start from Day for address_id
 export async function getReservationData(property_id, timeInterval) {
   // console.log(property_id + ' ' + todayIsoString)
@@ -47,7 +50,38 @@ export async function getReservationData(property_id, timeInterval) {
     )
     .eq('property_id', property_id)
     .gte('start_time', timeInterval.from)
+    // .gte('end_time', timeInterval.from)
     .lte('start_time', timeInterval.to)
+    .order('start_time', { ascending: true });
+  if (reservationData.error) {
+    console.log('error from reservations table - reservations/actions.js');
+    console.log(reservationData.error);
+    return reservationData.error;
+  } else {
+    // console.log('data from reservations table - reservations/actions.js');
+    // console.log(reservationData.data);
+    return reservationData.data;
+  }
+}
+
+// check reservation availability
+export async function isReservationTimeAvailable(property_id, timeInterval) {
+  // console.log(property_id + ' ' + todayIsoString)
+  // connect to supabase
+  const supabase = createClient();
+
+  const reservationData = await supabase
+    .from('reservations')
+    .select(
+      `
+        *,
+        property(*),
+        users(*, user_address_map(*))
+      `
+    )
+    .eq('property_id', property_id)
+    .gt('end_time', timeInterval.from)
+    .lt('start_time', timeInterval.to)
     .order('start_time', { ascending: true });
   if (reservationData.error) {
     console.log('error from reservations table - reservations/actions.js');
@@ -68,36 +102,62 @@ export async function sendReservation(_, reservationFormData) {
   // console.log(reservationFormData);
   // cleaning data from form
   const cleanReservationFormData = Object.fromEntries(reservationFormData);
-  console.log(cleanReservationFormData);
+  // console.log(cleanReservationFormData);
   // return;
 
   // check server TimeZoneOffset
-  const now = new Date()
+  const now = new Date();
   const serverTimeZoneOffset = now.getTimezoneOffset();
-  console.log('serverTimeZoneOffset')
-  console.log(serverTimeZoneOffset)
+  // console.log('serverTimeZoneOffset');
+  // console.log(serverTimeZoneOffset);
 
-  // client time zone offset (in min)
+  // client time zone offset from input (in min)
   const clientTimeZoneOffset = cleanReservationFormData.clientTimeZoneOffset;
-  console.log('clientTimeZoneOffset');
-  console.log(clientTimeZoneOffset);
+  // console.log('clientTimeZoneOffset');
+  // console.log(clientTimeZoneOffset);
 
   // will save time in 000Z (-2 hrs for finland)
-
+  // creating new data object and correcting with timezone offset
   let start_time = new Date(cleanReservationFormData.start_time);
+
   // TimeZoneOffset correction
-  // in case server is not in UTC calc a summ of server and client offsets
+  /*
+  if server offset is 0 (regularry it is UTC = 0) than we need to -120 - 0 = -120
+  if server offset is different (localhost can be -120) than -120 - (-120) = 0
+  */
+  // in case server is not in UTC calc client - server offsets
   const timeZoneOffset = clientTimeZoneOffset - serverTimeZoneOffset;
-  // calc start time in UTC
-  start_time = new Date(start_time.setHours(start_time.getHours() + timeZoneOffset/60));
+  // calc correct start time in UTC
+  start_time = new Date(
+    start_time.setHours(start_time.getHours() + timeZoneOffset / 60)
+  );
 
   const durationInSeconds = getDurationInSeconds(
     cleanReservationFormData.duration
   );
-  console.log(durationInSeconds);
+  // console.log(durationInSeconds);
 
   const end_time = getEndTime(start_time, durationInSeconds);
-  console.log(end_time);
+  // console.log(end_time);
+
+  // before insert data to reservations checking if this time already reserved
+  const timeInterval = {
+    from: start_time.toISOString(),
+    to: end_time.toISOString()
+  }
+  // console.log('timeInterval | reservation/actions.js')
+  // console.log(timeInterval)
+  const property_id = cleanReservationFormData.property_id;
+  // const selectedDateObject = {timeInterval, property_id}
+
+  
+  const reservations = await isReservationTimeAvailable(property_id, timeInterval)
+  console.log('reservations in input interval | reservation/actions.js');
+  console.log(reservations);
+  if(reservations.length !== 0){
+    let response = {error: {message: 'The time is already reserved by someone else.'}}
+    return response;
+  }
 
   // insert data to supabase
   const { data, error } = await supabase
@@ -115,14 +175,16 @@ export async function sendReservation(_, reservationFormData) {
   if (error) {
     console.log(error);
   } else {
-    console.log(
-      'this was inserted in reservations table | reservation/actions.js'
-    );
+    // console.log(
+    //   'this was inserted in reservations table | reservation/actions.js'
+    // );
     // console.log(data);
     // return;
   }
   revalidatePath('/reservation');
-  return true;
+  let response = {success: {message: 'The reservation was successfully added to reservation list.'}}
+  
+  return response;
   // redirect('/reservation');
 
   // TODO
@@ -151,36 +213,15 @@ export async function getPublicUsersIdByUserId(user_id) {
 
 // get users address_id from user_address_map table
 // returns null if no address attached
-
-export async function getUserDataFromSession() {
-  // connect to supabase
-  const supabase = createClient();
-
-  // getSession().session.user
-  const { data, error } = await supabase.auth.getSession();
-  if (error) {
-    console.log('error getUserDataFromSession');
-    console.log(error);
-  } else {
-    // console.log('data getUserDataFromSession');
-    // console.log(data.session.user);
-    if (!data.session?.user) {
-      redirect('/login');
-    } else {
-      return data.session.user;
-    }
-  }
-}
-
 export async function getUsersAddressId() {
-  const userFromSession = await getUserDataFromSession();
-  if (!userFromSession) {
-    redirect('/login');
-  }
-
-  const user_id = userFromSession.id;
   // connect to supabase
   const supabase = createClient();
+  
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  
+  const user_id = user.id;
 
   let { data: users, error } = await supabase
     .from('users')
