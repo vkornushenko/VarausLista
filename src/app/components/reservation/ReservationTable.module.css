@@ -28,14 +28,10 @@
 }
 .reservation_grid__del_column_items {
   justify-self: center;
-  align-self: end;
+  align-self:center;
+  display: grid;
 }
-.delete_button{
-  color: #C73C52;
-}
-.delete_button:hover {
-  cursor: pointer;
-}
+
 
 .reservation_grid__time_column_items_header {
   justify-self: center;

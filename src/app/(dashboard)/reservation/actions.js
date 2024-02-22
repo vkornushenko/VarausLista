@@ -228,7 +228,10 @@ export async function getUsersAddressId() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const user_id = user.id;
+  const user_id = user?.id;
+  if(!user_id) {
+    redirect('/login')
+  }
 
   let { data: users, error } = await supabase
     .from('users')

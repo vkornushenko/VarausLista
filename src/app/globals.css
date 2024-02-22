@@ -200,3 +200,10 @@ form select::placeholder {
 .text_button:hover{
   cursor: pointer;
 }
+
+.delete_button{
+  color: #C73C52;
+}
+.delete_button:hover {
+  cursor: pointer;
+}

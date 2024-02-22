@@ -9,28 +9,28 @@ import { motion } from 'framer-motion';
 import { AnimatePresence } from 'framer-motion';
 
 // icons
-import BinIcon from '../../../../public/icons/bin.svg';
 import EyeIcon from '../../../../public/icons/eye.svg';
 import EyeSlashedIcon from '../../../../public/icons/eye_slashed.svg';
 import CopyIcon from '../../../../public/icons/copy.svg';
 import { IoSettingsOutline } from 'react-icons/io5';
 import Link from 'next/link';
 
-export default function UserDataList({ userData, toggleConfirmationHandler }) {
+export default function UserDataList({ userData }) {
   // state for password state
   const [passwordDisplayState, setPasswordDisplayState] = useState(false);
-  const togglePasswordDisplayState = () => {
-    setPasswordDisplayState(!passwordDisplayState);
-  };
+  // const togglePasswordDisplayState = () => {
+  //   setPasswordDisplayState(!passwordDisplayState);
+  // };
 
   // copy to clipboard state
-  const [copyState, setCopyState] = useState(false);
+  const [copyUserIdState, setCopyUserIdState] = useState(false);
+  const [copyEmailState, setCopyEmailState] = useState(false)
   // copy to clipboard function
-  const copyToClipboard = (content) => {
-    setCopyState(true);
+  const copyToClipboard = (content, action) => {
+    action(true);
     navigator.clipboard.writeText(content);
     setTimeout(() => {
-      setCopyState(false);
+      action(false);
     }, 3000);
   };
 
@@ -72,9 +72,25 @@ export default function UserDataList({ userData, toggleConfirmationHandler }) {
             alt='copy icon'
             height={18}
             onClick={() => {
-              copyToClipboard(userData.email);
+              copyToClipboard(userData.email, setCopyEmailState);
             }}
           />
+          <AnimatePresence>
+            {copyEmailState && (
+              <motion.div
+                className={classes.ux_feedback}
+                variants={{
+                  hidden: { opacity: 0 },
+                  visible: { opacity: 100 },
+                }}
+                initial='hidden'
+                animate='visible'
+                exit='hidden'
+              >
+                Email is copied
+              </motion.div>
+            )}
+          </AnimatePresence>
         </li>
       )}
 
@@ -89,7 +105,7 @@ export default function UserDataList({ userData, toggleConfirmationHandler }) {
             src={passwordDisplayState ? EyeSlashedIcon : EyeIcon}
             alt='eye icon'
             height={18}
-            onClick={togglePasswordDisplayState}
+            onClick={() => {setPasswordDisplayState((prevState) => !prevState)}}
           />
         </li>
       )}
@@ -110,7 +126,7 @@ export default function UserDataList({ userData, toggleConfirmationHandler }) {
             }}
           />
           <AnimatePresence>
-            {copyState && (
+            {copyUserIdState && (
               <motion.div
                 className={classes.ux_feedback}
                 variants={{
@@ -138,11 +154,11 @@ export default function UserDataList({ userData, toggleConfirmationHandler }) {
             alt='copy icon'
             height={18}
             onClick={() => {
-              copyToClipboard(userData.user_id);
+              copyToClipboard(userData.user_id, setCopyUserIdState);
             }}
           />
           <AnimatePresence>
-            {copyState && (
+            {copyUserIdState && (
               <motion.div
                 className={classes.ux_feedback}
                 variants={{

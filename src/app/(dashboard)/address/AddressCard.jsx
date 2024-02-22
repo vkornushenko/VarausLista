@@ -70,7 +70,7 @@ export default function AddressCard({ propertyList, usersList }) {
   return (
     <>
       <CardLayout>
-        <CardHeader title='Manage Address' />
+        <CardHeader title={userData.address || 'Manage Address'} />
         {!userData.address && (
           <>
             <div className='text_block'>
@@ -90,7 +90,7 @@ export default function AddressCard({ propertyList, usersList }) {
 
         {userData.address && (
           <div className='text_block'>
-            <p>Your address is {userData.address}.</p>
+            {/* <p>Your address is {userData.address}.</p> */}
             <p className='long_read'>
               To add neighbours to this address and use VarausLista App
               together, ask them to create an account and share 'User Id' with

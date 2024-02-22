@@ -1,6 +1,7 @@
 import { deleteReservation } from '@/app/(dashboard)/reservation/actions';
 import InfoQuote from '../ui/InfoQuote';
 import classes from './ReservationTable.module.css';
+import '@/app/globals.css';
 import TimeInterval from './TimeInterval';
 import { motion } from 'framer-motion';
 import React from 'react';
@@ -118,7 +119,7 @@ export default function ReservationTable({
                       onClick={() =>
                         deleteReservationHandler(reservationItem.id)
                       }
-                      className={classes.delete_button}
+                      className='delete_button'
                     />
                   )}
                 </div>

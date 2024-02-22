@@ -25,11 +25,6 @@ import { useRouter } from 'next/navigation';
 export default function AccountCard() {
   const router = useRouter();
   const userData = useSelector((state) => state.userReducer);
-  // console.log('This is userData from the Redux Store (AccountCard.jsx file:)');
-  // console.log(userData);
-  // console.log('userData object length = ' + Object.keys(userData).length);
-  // console.log('Are all the values in userData are undefined? Answer: ' + Object.values(userData).every(el => el === undefined));
-
   // redux
   const dispatch = useDispatch();
 
@@ -42,12 +37,6 @@ export default function AccountCard() {
     }
   }, [userData]);
 
-  // // redux for user slice
-  // if (userData.email) {
-  //   dispatch(setUser(userData));
-  //   userData = useSelector((state) => state.userReducer);
-  // }
-
   // for layover
   const toggleModalrHandler = () => {
     // redux dispatch
@@ -58,14 +47,14 @@ export default function AccountCard() {
     (state) => state.uiReducer.value.modalIsVisible
   );
 
-  // redux, state value
-  const showConfirmation = useSelector(
-    (state) => state.uiReducer.value.confirmationIsVisible
-  );
-  // for deleting address confirmation
-  const toggleConfirmationHandler = () => {
-    dispatch(toggleConfirmation());
-  };
+  // // redux, state value
+  // const showConfirmation = useSelector(
+  //   (state) => state.uiReducer.value.confirmationIsVisible
+  // );
+  // // for deleting address confirmation
+  // const toggleConfirmationHandler = () => {
+  //   dispatch(toggleConfirmation());
+  // };
 
   // content for info quote
   const infoQuoteContent = {
@@ -91,21 +80,20 @@ export default function AccountCard() {
 
         {!userDataIsEmpty && (
           <UserDataList
-            toggleConfirmationHandler={toggleConfirmationHandler}
+            // toggleConfirmationHandler={toggleConfirmationHandler}
             userData={userData}
           />
         )}
 
         {userDataIsEmpty && <InfoQuote data={infoQuoteContent} />}
 
-        {(!userData.address && !userDataIsEmpty) && (
+        {!userData.address && !userDataIsEmpty && (
           <InfoQuote data={howToJoinNeighboursAddressQuoteData} />
         )}
 
-        {userDataIsEmpty && (
+        {userDataIsEmpty ? (
           <Button name={'Create Account'} action={toggleModalrHandler} />
-        )}
-        {!userDataIsEmpty && (
+        ) : (
           <Button
             name={userData.address ? 'Edit Account' : 'Manage Address'}
             action={
@@ -116,7 +104,15 @@ export default function AccountCard() {
           />
         )}
 
-        {!userDataIsEmpty ? <AccountCardLogOut /> : <AccountCardLogin questionText={'Already a user?'} actionText={'LogIn'} actionLink={'/login'} />}
+        {!userDataIsEmpty ? (
+          <AccountCardLogOut />
+        ) : (
+          <AccountCardLogin
+            questionText={'Already a user?'}
+            actionText={'LogIn'}
+            actionLink={'/login'}
+          />
+        )}
       </CardLayout>
 
       {showModal && (
@@ -127,13 +123,13 @@ export default function AccountCard() {
         />
       )}
 
-      {showConfirmation && (
+      {/* {showConfirmation && (
         <ModalLayout toggleLayover={toggleConfirmationHandler}>
           <CardLayout>
             <ConfirmationCard />
           </CardLayout>
         </ModalLayout>
-      )}
+      )} */}
     </>
   );
 }

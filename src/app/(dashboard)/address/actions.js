@@ -9,7 +9,7 @@ import { getPublicUsersIdByUserId } from '../reservation/actions';
 export async function addAddress(_, addressFormData) {
   // connect to supabase
   const supabase = createClient();
-  
+
   // console.log('this we get RAW from the form addressFormData');
   // console.log(addressFormData);
 
@@ -94,7 +94,7 @@ export async function addAddress(_, addressFormData) {
   }
 
   // TODO close modal (the same way as 'addNeighbour')
-  
+
   revalidatePath('/address');
   redirect('/address');
 }
@@ -120,11 +120,13 @@ export async function getUserIdList(address_id) {
 
   let { data: users, error } = await supabase
     .from('user_address_map')
-    .select(`
+    .select(
+      `
     users (
       id, name, user_id
     )
-  `)
+  `
+    )
     .eq('address_id', address_id);
   // console.log('users | address/actions.js');
   // console.log(users);
@@ -167,10 +169,6 @@ export async function addNeighbour(_, addNeighbourFormData) {
     return 'User is already have been attached to address. Check User Id and try again.';
   }
 
-
-
-
-
   // // WE PROPBABLY DON'T NEED IT ANYMORE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
   // // update address_id for users table (for this user_id)
@@ -192,12 +190,6 @@ export async function addNeighbour(_, addNeighbourFormData) {
 
   // // WE PROPBABLY DON'T NEED IT ANYMORE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-
-
-
-
-
-
   // insert user_id and address_id in user_address_map table
   const isUsersIdAndAddressIdInserted =
     await insertUserIdAndAddressIdInUserAddressMap(
@@ -207,16 +199,33 @@ export async function addNeighbour(_, addNeighbourFormData) {
   // console.log('isUsersIdAndAddressIdInserted');
   // console.log(isUsersIdAndAddressIdInserted);
 
-if (isUsersIdAndAddressIdInserted) {
-  var formSubmissionResult = 'success'
-}
-else{
-  return 'Error. Attaching user to address was failed. Problem was detected in user_address_map table.';
-}
+  if (isUsersIdAndAddressIdInserted) {
+    var formSubmissionResult = 'success';
+  } else {
+    return 'Error. Attaching user to address was failed. Problem was detected in user_address_map table.';
+  }
 
   // redirect('/address');
   revalidatePath('/address');
   return formSubmissionResult;
+}
+
+export async function unsubscribeUser(users_id) {
+  // connect to supabase
+  const supabase = createClient();
+
+  const { error } = await supabase
+    .from('user_address_map')
+    .delete()
+    .eq('users_id', users_id);
+  if (error) {
+    console.log(error);
+    return false;
+  } else {
+    // return true;
+    revalidatePath('/')
+    redirect('/account')
+  }
 }
 
 // check if value exists in table
