@@ -26,8 +26,10 @@ import {
   returnDatePlusMonth,
 } from '@/app/utils/time';
 import { returnPropertyName } from '@/app/components/reservation/utils';
+import { getReservationData } from './actions';
 
 export default function ReservationCard({
+  address_id,
   initialPropertyId,
   // initialTimeInterval,
   propertyData,
@@ -59,7 +61,8 @@ export default function ReservationCard({
       property_id: selectedPropertyId,
     };
     // fetching fresh data
-    const reservationData = await getReservations(selectValues);
+    // const reservationData = await getReservations(selectValues);
+const reservationData = await getReservationData(address_id, selectedPropertyId, timeInterval)
     setReservationData(reservationData);
     setIsLoading(false);
   };

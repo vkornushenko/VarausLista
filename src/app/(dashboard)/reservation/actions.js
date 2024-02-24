@@ -32,7 +32,8 @@ export async function getPropertyData(address_id) {
 }
 
 // get reservations data start from Day for address_id
-export async function getReservationData(property_id, timeInterval) {
+export async function getReservationData(address_id, property_id, timeInterval) {
+  // const address_id = 63;
   // console.log(property_id + ' ' + todayIsoString)
   // connect to supabase
   const supabase = createClient();
@@ -41,12 +42,18 @@ export async function getReservationData(property_id, timeInterval) {
     .from('reservations')
     .select(
       `
-        *,
-        property(*),
-        users(*, user_address_map(*))
+        id,
+        users_id,
+        property_id,
+        start_time,
+        end_time,
+        extra,
+        property!inner(id, name),
+        users!inner(id, name, apartment, email, user_id, user_address_map!inner(id, address_id, users_id))
       `
     )
-    .eq('property_id', property_id)
+    .eq('users.user_address_map.address_id', address_id)
+    .eq('property.id', property_id)
     .gte('start_time', timeInterval.from)
     // .gte('end_time', timeInterval.from)
     .lte('start_time', timeInterval.to)

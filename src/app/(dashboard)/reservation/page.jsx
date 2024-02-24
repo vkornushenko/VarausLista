@@ -37,16 +37,18 @@ export default async function ReservationPage() {
   const initialTimeInterval = getTimeInterval(null);
 
   const reservationData = await getReservationData(
+    address_id,
     initialPropertyId,
     initialTimeInterval
   );
 
-  // console.log('reservationData from reservations/page.jsx');
-  // console.log(reservationData);
+  console.log('reservationData from reservations/page.jsx');
+  console.log(reservationData);
 
   return (
     <main>
       <ReservationCard
+        address_id={address_id}
         initialPropertyId={initialPropertyId}
         // initialTimeInterval={initialTimeInterval}
         propertyData={propertyData}
