@@ -8,9 +8,7 @@ export default function SharedPropertyNavigation({
   selectedPropertyId,
   setSelectedPropertyId,
   propertyData,
-  setIsReserationDataOutdated,
-  // timeIntervalState,
-  // setReservationDataState
+  setIsReserationDataOutdated
 }) {
   // when property changed
   const handlePropertyChange = (property_id) => {
@@ -19,23 +17,11 @@ export default function SharedPropertyNavigation({
     // set data need to be refreshed
     setIsReserationDataOutdated(true);
   };
-  // const handlePropertyChange = async (property_id) => {
-  //   setSelectedPropertyId(property_id);
-
-  //   const selectValues = {
-  //     timeInterval: timeIntervalState,
-  //     property_id: property_id
-  //   }
-  //   // api request
-  //   const data = await getReservations(selectValues);
-  //   // console.log(data)
-  //   setReservationDataState(data);
-  // };
 
   return (
     <nav>
       <ul className={classes.shared_property_nav}>
-        {propertyData.map((item, index) => (
+        {propertyData.map((item) => (
           <li
             key={item.property_id}
             property_id={item.property_id}

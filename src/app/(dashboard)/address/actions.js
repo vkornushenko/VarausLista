@@ -1,4 +1,5 @@
 'use server';
+import { cookies } from "next/headers";
 
 // supabase
 import { createClient } from '@/app/utils/supabase/server';
@@ -8,7 +9,8 @@ import { getPublicUsersIdByUserId } from '../reservation/actions';
 
 export async function addAddress(_, addressFormData) {
   // connect to supabase
-  const supabase = createClient();
+  const cookieStore = cookies();
+  const supabase = createClient(cookieStore);
 
   // console.log('this we get RAW from the form addressFormData');
   // console.log(addressFormData);
@@ -95,13 +97,14 @@ export async function addAddress(_, addressFormData) {
 
   // TODO close modal (the same way as 'addNeighbour')
 
-  revalidatePath('/address');
+  revalidatePath('/');
   redirect('/address');
 }
 
 export async function getPropertyList() {
   // connect to supabase
-  const supabase = createClient();
+  const cookieStore = cookies();
+  const supabase = createClient(cookieStore);
   const { data, error } = await supabase.from('property').select();
   if (error) {
     console.log(error.message);
@@ -116,7 +119,8 @@ export async function getUserIdList(address_id) {
     return;
   }
   // connect to supabase
-  const supabase = createClient();
+  const cookieStore = cookies();
+  const supabase = createClient(cookieStore);
 
   let { data: users, error } = await supabase
     .from('user_address_map')
@@ -212,7 +216,8 @@ export async function addNeighbour(_, addNeighbourFormData) {
 
 export async function unsubscribeUser(users_id) {
   // connect to supabase
-  const supabase = createClient();
+  const cookieStore = cookies();
+  const supabase = createClient(cookieStore);
 
   const { error } = await supabase
     .from('user_address_map')
@@ -235,7 +240,8 @@ export async function isValueExistsInTablesColumn(
   columnName
 ) {
   // connect to supabase
-  const supabase = createClient();
+  const cookieStore = cookies();
+  const supabase = createClient(cookieStore);
 
   let { data, error } = await supabase
     .from(tableName)
@@ -256,7 +262,8 @@ export async function isValueExistsInTablesColumn(
 // update address_id for users table (for this user_id)
 export async function updateAddressIdInUsersTable(address_id, user_id) {
   // connect to supabase
-  const supabase = createClient();
+  const cookieStore = cookies();
+  const supabase = createClient(cookieStore);
 
   const { data, error } = await supabase
     .from('users')
@@ -279,7 +286,8 @@ export async function insertUserIdAndAddressIdInUserAddressMap(
   address_id
 ) {
   // connect to supabase
-  const supabase = createClient();
+  const cookieStore = cookies();
+  const supabase = createClient(cookieStore);
 
   const { data, error } = await supabase
     .from('user_address_map')

@@ -1,3 +1,4 @@
+import { cookies } from "next/headers";
 // fonts
 import { source_serif_4 } from '@/app/utils/fonts';
 // style
@@ -30,7 +31,8 @@ export const dynamic = 'force-dynamic';
 
 export default async function RootLayout({ children }) {
   // connect to supabase
-  const supabase = createClient();
+  const cookieStore = cookies();
+  const supabase = createClient(cookieStore);
 
   const {
     data: { user },

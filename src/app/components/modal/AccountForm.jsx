@@ -1,95 +1,54 @@
+// hooks
 import { useRouter } from 'next/navigation';
+import { useFormState } from 'react-dom';
+import { useEffect } from 'react';
 
-import '@/app/globals.css';
-
-//supabase
-import { createClient } from '@/app/utils/supabase/client';
-
-import CardLayout from '../ui/CardLayout';
-import ModalLayout from '../ui/ModalLayout';
 // fonts
 import { sorce_sans_3 } from '@/app/utils/fonts';
-import CardHeader from '../ui/CardHeader';
+import '@/app/globals.css';
 
-// import InfoQuote from '../ui/InfoQuote';
-// import { useState } from 'react';
+// components
+import ModalLayout from '../ui/ModalLayout';
+import CardLayout from '../ui/CardLayout';
+import CardHeader from '../ui/CardHeader';
+import { createAccount, editAccount } from '@/app/(dashboard)/account/actions';
+import SubmitButton from '../ui/SubmitButton';
 
 export default function AccountForm({
   toggleLayover,
   userData,
   userDataIsEmpty,
 }) {
-  // state for error
-  // const [errorIsFound, setErrorIsFound] = useState(false);
+  const [formActionEditState, formActionEdit] = useFormState(editAccount, null);
+  const [formActionCreateState, formActionCreate] = useFormState(
+    createAccount,
+    null
+  );
 
   const router = useRouter();
-  
-  // connect to supabase
-  const supabase = createClient();
 
-  // handle form Create Account submission
-  const submitCreateAccountHandler = async (event) => {
-    event.preventDefault();
-    // set error to undefined when start (for resubmit cases)
-    // error = undefined;
+  // const dispatch = useDispatch();
 
-    // get form data
-    const formData = new FormData(event.target);
-    const dataFromForm = Object.fromEntries(formData.entries());
+  if (formActionCreateState) {
+    console.log('user was created | AccountForm.jsx');
+    router.push('/verify');
+  }
 
-    const { data, error } = await supabase.auth.signUp({
-      email: dataFromForm.email,
-      password: dataFromForm.password,
-      options: {
-        emailRedirectTo: `${location.origin}/api/auth/callback`,
-        // user_metadata
-        data: {
-          first_name: dataFromForm.first_name,
-          // address: dataFromForm.address,
-          apartment: dataFromForm.apartment,
-          password: dataFromForm.password,
-        },
-      },
-    });
+  useEffect(() => {
+    if (formActionEditState?.status === 200) {
+      // let updatedUserData = {
+      //   ...userData,
+      //   apartment: formActionEditState.data[0].apartment,
+      //   name: formActionEditState.data[0].name,
+      // };
+      // console.log(updatedUserData)
+      // // update user store
+      // dispatch(setUser(updatedUserData));
 
-    if (error) {
-      console.log(error);
-    } else {
-      router.push('/verify');
       // close popup
       toggleLayover();
     }
-  };
-
-  // handle Edit Account submission
-  const submitEditAccountHandler = async (event) => {
-    event.preventDefault();
-
-    // get form data
-    const formData = new FormData(event.target);
-    const dataFromForm = Object.fromEntries(formData.entries());
-
-    
-
-    const { data, error } = await supabase.auth.updateUser({
-      data: {
-        first_name: dataFromForm.first_name,
-        // address: dataFromForm.address,
-        apartment: dataFromForm.apartment,
-      },
-    });
-
-    if (error) {
-      console.log(error);
-      // setErrorIsFound(true);
-    }
-    if (!error) {
-      router.push('/account');
-      router.refresh();
-      // close popup
-      toggleLayover();
-    }
-  };
+  }, [formActionEditState, userData]);
 
   return (
     <ModalLayout toggleLayover={toggleLayover}>
@@ -99,13 +58,15 @@ export default function AccountForm({
         <form
           autoComplete='on'
           className='form'
-          onSubmit={
-            !userDataIsEmpty
-              ? submitEditAccountHandler
-              : submitCreateAccountHandler
-          }
+          action={!userDataIsEmpty ? formActionEdit : formActionCreate}
         >
           <div className='input_block'>
+            <input
+              type='hidden'
+              id='users_id'
+              name='users_id'
+              value={userData.users_id}
+            />
             <label htmlFor='email' className={sorce_sans_3.className}>
               Email address
             </label>
@@ -158,22 +119,6 @@ export default function AccountForm({
             />
           </div>
 
-          {/* <div className='input_block'>
-            <label htmlFor='address' className={sorce_sans_3.className}>
-              Address
-            </label>
-            <input
-              autoComplete='off'
-              type='text'
-              id='address'
-              name='address'
-              placeholder='Your address'
-              defaultValue={userData?.address || ''}
-              className={sorce_sans_3.className}
-              required
-            />
-          </div> */}
-
           <div className='input_block'>
             <label htmlFor='apartment' className={sorce_sans_3.className}>
               Apartment No
@@ -190,12 +135,12 @@ export default function AccountForm({
             />
           </div>
 
-          <button
-            type='submit'
-            className={sorce_sans_3.className + ' ' + 'submit_button'}
-          >
-            {!userDataIsEmpty ? 'Edit Account' : 'Create Account'}
-          </button>
+          <SubmitButton
+            pendingButtonName={
+              !userDataIsEmpty ? 'Editing Account...' : 'Creating Account...'
+            }
+            buttonName={!userDataIsEmpty ? 'Edit Account' : 'Create Account'}
+          />
         </form>
       </CardLayout>
     </ModalLayout>
