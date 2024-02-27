@@ -76,8 +76,6 @@ export async function createAccount(_, accountFormData) {
   // get form data
   const { email, password, first_name, apartment } = Object.fromEntries(accountFormData);
 
-  https://nxxtojbsozpnghsxhmrr.supabase.co/auth/v1/verify?token=pkce_1192c6978c1b8a82208b58934b5ffdfdcda9326e99175c8a85962c23&type=signup&redirect_to=varauslista.vercel.app/api/auth/callback
-
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
