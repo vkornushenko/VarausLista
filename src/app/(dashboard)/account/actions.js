@@ -81,7 +81,7 @@ export async function createAccount(_, accountFormData) {
     password,
     options: {
       // emailRedirectTo: `${location.origin}/api/auth/callback`,
-      emailRedirectTo: `${process.env.URL_LOCATION}/api/auth/callback`,
+      emailRedirectTo: 'varauslista.vercel.app/api/auth/callback',
       // user_metadata
       data: {
         first_name,

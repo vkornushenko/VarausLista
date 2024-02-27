@@ -31,6 +31,8 @@ export default function AccountForm({
 
   if (formActionCreateState) {
     console.log('user was created | AccountForm.jsx');
+    // close popup
+    toggleLayover();
     router.push('/verify');
   }
 
