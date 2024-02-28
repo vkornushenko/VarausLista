@@ -1,5 +1,4 @@
 'use server';
-import { cookies } from "next/headers";
 
 import { getDurationInSeconds } from '@/app/utils/time';
 import { getEndTime } from '@/app/utils/time';
@@ -13,8 +12,7 @@ import { getReservations } from '@/app/utils/apiRequests';
 // get address and property data by address_id
 export async function getPropertyData(address_id) {
   // connect to supabase
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = createClient();
 
   let { data, error } = await supabase
     .from('address_property_map')
@@ -38,8 +36,7 @@ export async function getReservationData(address_id, property_id, timeInterval) 
   // const address_id = 63;
   // console.log(property_id + ' ' + todayIsoString)
   // connect to supabase
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = createClient();
 
   const reservationData = await supabase
     .from('reservations')
@@ -76,8 +73,7 @@ export async function getReservationData(address_id, property_id, timeInterval) 
 export async function isReservationTimeAvailable(property_id, timeInterval) {
   // console.log(property_id + ' ' + todayIsoString)
   // connect to supabase
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = createClient();
 
   const reservationData = await supabase
     .from('reservations')
@@ -105,8 +101,7 @@ export async function isReservationTimeAvailable(property_id, timeInterval) {
 
 export async function sendReservation(_, reservationFormData) {
   // connect to supabase
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = createClient();
 
   // console.log('reservationFormData');
   // console.log(reservationFormData);
@@ -214,8 +209,7 @@ export async function sendReservation(_, reservationFormData) {
 
 export async function getPublicUsersIdByUserId(user_id) {
   // connect to supabase
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = createClient();
 
   let { data: users, error } = await supabase
     .from('users')
@@ -235,8 +229,7 @@ export async function getPublicUsersIdByUserId(user_id) {
 // returns null if no address attached
 export async function getUsersAddressId() {
   // connect to supabase
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = createClient();
 
   const {
     data: { user },
@@ -272,8 +265,7 @@ export async function getUsersAddressId() {
 
 export async function deleteReservation(reservation_id) {
   // connect to supabase
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = createClient();
 
   const { data, error } = await supabase
     .from('reservations')

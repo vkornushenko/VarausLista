@@ -13,6 +13,7 @@ import CardLayout from '../ui/CardLayout';
 import CardHeader from '../ui/CardHeader';
 import { createAccount, editAccount } from '@/app/(dashboard)/account/actions';
 import SubmitButton from '../ui/SubmitButton';
+import InfoQuote from '../ui/InfoQuote';
 
 export default function AccountForm({
   toggleLayover,
@@ -30,15 +31,16 @@ export default function AccountForm({
   // const dispatch = useDispatch();
 
   if (formActionCreateState) {
-    console.log(formActionCreateState.status);
-    console.log(formActionCreateState?.data);
-    console.log(formActionCreateState?.error);
-    
-    if (formActionCreateState?.status === 200) {
+    // console.log(formActionCreateState);
+
+    if (formActionCreateState?.data) {
       console.log('user was created | AccountForm.jsx');
       // close popup
       toggleLayover();
       router.push('/verify');
+    }
+    else{
+      console.log(formActionCreateState?.error);
     }
   }
 
@@ -142,13 +144,16 @@ export default function AccountForm({
               required
             />
           </div>
-
+          {formActionCreateState?.error && (
+            <InfoQuote data={{message: formActionCreateState?.error.message, type: 'error'}}/>
+          )}
           <SubmitButton
             pendingButtonName={
               !userDataIsEmpty ? 'Editing Account...' : 'Creating Account...'
             }
             buttonName={!userDataIsEmpty ? 'Edit Account' : 'Create Account'}
           />
+          
         </form>
       </CardLayout>
     </ModalLayout>

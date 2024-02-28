@@ -2,7 +2,6 @@
 
 // supabase
 import { createClient } from '@/app/utils/supabase/server';
-import { cookies } from "next/headers";
 
 // get address_id from user_address_map table by user_id
 export async function getAddressIdFromUserAddressMapTable(users_id) {
@@ -11,8 +10,7 @@ export async function getAddressIdFromUserAddressMapTable(users_id) {
     return null;
   }
   // connect to supabase
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = createClient();
 
   let { data: user_address_map, error } = await supabase
     .from('user_address_map')
@@ -38,8 +36,7 @@ export async function getAddressDataFromAddressTable(address_id) {
   }
 
   // connect to supabase
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = createClient();
 
   // fetching data
   let { data: address, error } = await supabase
@@ -67,8 +64,7 @@ export async function findUserInUsersTable(user_id) {
     return null;
   }
   // connect to supabase
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = createClient();
   // fetching data
   let { data: users, error } = await supabase
     .from('users')
@@ -97,8 +93,7 @@ export async function insertUserInUsersTable(
   email
 ) {
   // connect to supabase
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = createClient();
 
   // inserting user
   const { data, error } = await supabase

@@ -1,5 +1,4 @@
 'use server';
-import { cookies } from "next/headers";
 
 // supabase
 import { createClient } from '@/app/utils/supabase/server';
@@ -7,10 +6,26 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { getPublicUsersIdByUserId } from '../reservation/actions';
 
+export async function insertAddressName(address_name) {
+  // connect to supabase
+  const supabase = createClient();
+
+  const { data, error } = await supabase
+    .from('address')
+    .insert([{ address_name }])
+    .select();
+  if (error) {
+    console.log(error);
+    return false;
+  } else {
+    console.log(data);
+    return data[0].id;
+  }
+}
+
 export async function addAddress(_, addressFormData) {
   // connect to supabase
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = createClient();
 
   // console.log('this we get RAW from the form addressFormData');
   // console.log(addressFormData);
@@ -32,79 +47,67 @@ export async function addAddress(_, addressFormData) {
   // console.log('formData address/actions.js');
   // console.log(formData);
 
-  // insert for table 'address'
-  const insertValForTable_address = [{ address_name: formData.address }];
+  const address_id = await insertAddressName(formData.address);
+
+  // check address_id
+  if (!address_id) {
+    // TO DO make an error message for better UX
+    return;
+  }
+
+  // prepare insert with new address_id
+  let insertValForTable_address_property_map = [];
+  formData.property_types.map((property_id, index) => {
+    insertValForTable_address_property_map[index] = {
+      address_id: address_id,
+      property_id: property_id,
+    };
+  });
+
+  const responce = await supabase
+    .from('address_property_map')
+    .insert(insertValForTable_address_property_map)
+    .select();
+  if (responce.error) {
+    console.log(responce.error);
+  } else {
+
+    const resInsertToUserAddressMap = await insertToUserAddressMap(
+      address_id,
+      formData.users_id
+    );
+    // check error from insert to user_address_map table
+    if (!resInsertToUserAddressMap) {
+      // TO DO make an error message for better UX
+      return;
+    }
+  }
+
+  revalidatePath('/');
+  // redirect('/address');
+  return true;
+}
+
+export async function insertToUserAddressMap(address_id, users_id) {
+  // connect to supabase
+  const supabase = createClient();
 
   const { data, error } = await supabase
-    .from('address')
-    .insert(insertValForTable_address)
+    .from('user_address_map')
+    .insert([{ address_id, users_id }])
     .select();
 
   if (error) {
     console.log(error);
+    return false;
   } else {
-    // console.log(data);
-
-    // here should be new adress_id from DB
-    const address_id = data[0].id;
-
-    // if everything fine -> lets create 2nd table
-    // prepare insert with new address_id
-    let insertValForTable_address_property_map = [];
-    formData.property_types.map((property_id, index) => {
-      insertValForTable_address_property_map[index] = {
-        address_id: address_id,
-        property_id: property_id,
-      };
-    });
-
-    const responce = await supabase
-      .from('address_property_map')
-      .insert(insertValForTable_address_property_map)
-      .select();
-    if (responce.error) {
-      console.log(responce.error);
-    } else {
-      // console.log('data inserted in table (address_property_map):')
-      // console.log(insertValForTable_address_property_map);
-      // console.log('data returned from table (address_property_map) after insert:')
-      // console.log(responce.data);
-
-      // now insert to the table 'user_address_map'
-      // user_id + address_id
-
-      // prepare insert object:
-      const insertValForTable_user_address_map = [
-        {
-          address_id: address_id,
-          users_id: formData.users_id,
-        },
-      ];
-
-      const responceFrom_user_address_map = await supabase
-        .from('user_address_map')
-        .insert(insertValForTable_user_address_map)
-        .select();
-      if (responce.error) {
-        console.log(responceFrom_user_address_map.error);
-      } else {
-        // console.log('responceFrom_user_address_map!!!');
-        // console.log(responceFrom_user_address_map.data);
-        return true;
-      }
-    }
+    return data;
   }
-
-  // TODO close modal (the same way as 'addNeighbour')
-
-  revalidatePath('/');
-  redirect('/address');
 }
 
 export async function getPropertyList() {
   // connect to supabase
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = createClient();
   const { data, error } = await supabase.from('property').select();
   if (error) {
     console.log(error.message);
@@ -119,8 +122,7 @@ export async function getUserIdList(address_id) {
     return;
   }
   // connect to supabase
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = createClient();
 
   let { data: users, error } = await supabase
     .from('user_address_map')
@@ -216,8 +218,7 @@ export async function addNeighbour(_, addNeighbourFormData) {
 
 export async function unsubscribeUser(users_id) {
   // connect to supabase
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = createClient();
 
   const { error } = await supabase
     .from('user_address_map')
@@ -228,8 +229,8 @@ export async function unsubscribeUser(users_id) {
     return false;
   } else {
     // return true;
-    revalidatePath('/')
-    redirect('/account')
+    revalidatePath('/');
+    // redirect('/account');
   }
 }
 
@@ -240,8 +241,7 @@ export async function isValueExistsInTablesColumn(
   columnName
 ) {
   // connect to supabase
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = createClient();
 
   let { data, error } = await supabase
     .from(tableName)
@@ -262,8 +262,7 @@ export async function isValueExistsInTablesColumn(
 // update address_id for users table (for this user_id)
 export async function updateAddressIdInUsersTable(address_id, user_id) {
   // connect to supabase
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = createClient();
 
   const { data, error } = await supabase
     .from('users')
@@ -286,8 +285,7 @@ export async function insertUserIdAndAddressIdInUserAddressMap(
   address_id
 ) {
   // connect to supabase
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = createClient();
 
   const { data, error } = await supabase
     .from('user_address_map')

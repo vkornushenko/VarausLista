@@ -4,27 +4,29 @@ import '@/app/globals.css';
 import classes from './AddressForm.module.css';
 import { sorce_sans_3 } from '@/app/utils/fonts';
 import { source_serif_4 } from '@/app/utils/fonts';
+
 import { useEffect, useState } from 'react';
 import { useFormState } from 'react-dom';
-
 import { addAddress } from './actions';
-import SubmitButton from '@/app/components/ui/SubmitButton';
 import { useSelector } from 'react-redux';
+
+import SubmitButton from '@/app/components/ui/SubmitButton';
 import CardHeader from '@/app/components/ui/CardHeader';
 
-export default function AddressForm({ propertyList, formTitle, toggleLayover }) {
+export default function AddressForm({
+  propertyList,
+  formTitle,
+  toggleLayover,
+}) {
   const [formActionState, formAction] = useFormState(addAddress, null);
+  const [sharedPlaceQty, setSharedPlaceQty] = useState(1);
+  const userData = useSelector((state) => state.userReducer);
 
   useEffect(() => {
     if (formActionState) {
       toggleLayover();
     }
   }, [formActionState]);
-
-  const userData = useSelector((state) => state.userReducer);
-  // console.log(userData);
-  
-  const [sharedPlaceQty, setSharedPlaceQty] = useState(1);
 
   const addSharedPlaceHandler = () => {
     setSharedPlaceQty((prevState) => prevState + 1);
@@ -115,7 +117,10 @@ export default function AddressForm({ propertyList, formTitle, toggleLayover }) 
             )}
           </div>
         ))}
-        <SubmitButton pendingButtonName={'Saving New Address'} buttonName={'Save New Address'}/>
+        <SubmitButton
+          pendingButtonName={'Saving New Address'}
+          buttonName={'Save New Address'}
+        />
 
         {/* {errorIsFound && (
             <InfoQuote data={{ message: error.message, type: 'error' }} />

@@ -3,8 +3,7 @@ import { createClient } from '@/app/utils/supabase/server';
 import { cookies } from 'next/headers';
 
 export async function POST(request) {
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = createClient();
 
   const selectValues = await request.json();
   // console.log('selectValues');

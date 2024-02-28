@@ -1,13 +1,11 @@
 'use server';
-import { cookies } from "next/headers";
 
 // supabase
 import { createClient } from '@/app/utils/supabase/server';
 
 export async function updateUsersTable(id, name, apartment) {
   // connect to supabase
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = createClient();
 
   const { data, error, status } = await supabase
     .from('users')
@@ -26,8 +24,7 @@ export async function updateUsersTable(id, name, apartment) {
 
 export async function updateUserAuthSchema(updateData) {
   // connect to supabase
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = createClient();
 
   const { data, error } = await supabase.auth.updateUser(updateData);
   if (error) {
@@ -68,20 +65,20 @@ export async function editAccount(_, accountFormData) {
 
 export async function createAccount(_, accountFormData) {
   // connect to supabase
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = createClient();
 
   console.log('createAccount action triggered');
 
   // get form data
   const { email, password, first_name, apartment } = Object.fromEntries(accountFormData);
 
-  const { data, error, status } = await supabase.auth.signUp({
+  const { data, error } = await supabase.auth.signUp({
     email,
     password,
     options: {
       // emailRedirectTo: `${location.origin}/api/auth/callback`,
-      emailRedirectTo: 'https://varauslista.vercel.app/api/auth/callback',
+      // emailRedirectTo: 'https://varauslista.vercel.app/api/auth/callback',
+      emailRedirectTo: 'http://localhost:3000/api/auth/callback',
       // user_metadata
       data: {
         first_name,
@@ -93,12 +90,12 @@ export async function createAccount(_, accountFormData) {
 
   if (error) {
     console.log(error);
-    return {error, status};
+    return {error};
   } else {
-    console.log('data after user sign up')
-    console.log(data);
+    // console.log('data after user sign up')
+    // console.log(data);
     
-    return {data, status};
+    return {data};
     // // close popup
     // toggleLayover();
   }
