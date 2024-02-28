@@ -76,7 +76,7 @@ export async function createAccount(_, accountFormData) {
   // get form data
   const { email, password, first_name, apartment } = Object.fromEntries(accountFormData);
 
-  const { data, error } = await supabase.auth.signUp({
+  const { data, error, status } = await supabase.auth.signUp({
     email,
     password,
     options: {
@@ -93,12 +93,12 @@ export async function createAccount(_, accountFormData) {
 
   if (error) {
     console.log(error);
-    return false;
+    return {error, status};
   } else {
     console.log('data after user sign up')
     console.log(data);
     
-    return true;
+    return {data, status};
     // // close popup
     // toggleLayover();
   }

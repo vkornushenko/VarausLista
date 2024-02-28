@@ -30,10 +30,16 @@ export default function AccountForm({
   // const dispatch = useDispatch();
 
   if (formActionCreateState) {
-    console.log('user was created | AccountForm.jsx');
-    // close popup
-    toggleLayover();
-    router.push('/verify');
+    console.log(formActionCreateState.status);
+    console.log(formActionCreateState?.data);
+    console.log(formActionCreateState?.error);
+    
+    if (formActionCreateState?.status === 200) {
+      console.log('user was created | AccountForm.jsx');
+      // close popup
+      toggleLayover();
+      router.push('/verify');
+    }
   }
 
   useEffect(() => {
