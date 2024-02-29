@@ -42,8 +42,8 @@ export default async function ReservationPage() {
     initialTimeInterval
   );
 
-  console.log('reservationData from reservations/page.jsx');
-  console.log(reservationData);
+  // console.log('reservationData from reservations/page.jsx');
+  // console.log(reservationData);
 
   return (
     <main>

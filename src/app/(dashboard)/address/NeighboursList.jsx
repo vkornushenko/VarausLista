@@ -4,20 +4,31 @@ import '@/app/globals.css';
 import classes from './NeighboursList.module.css';
 import { IoTrashOutline } from 'react-icons/io5';
 import { useState } from 'react';
-import { unsubscribeUser } from './actions';
+import { deleteAddress, deleteUsersReservations, unsubscribeUser } from './actions';
+// import { useRouter } from 'next/navigation';
 
 export default function NeighboursList({
   usersList,
   userData,
   toggleAddNeighbour,
 }) {
-  // console.log('usersList from NeighboursList.jsx');
-  // console.log(usersList);
+  console.log(userData);
+  console.log(usersList);
 
   const handleUnsubscribeUser = async (users_id) => {
+    const neighboursQty = usersList.length;
+    console.log('usersList.length');
+    console.log(usersList.length);
     console.log(`you are about to unsubscribe user with id = ${users_id}`);
     await unsubscribeUser(users_id);
-    // console.log(`isUserUnsubscribed = ${isUserUnsubscribed}`)
+
+    // in case it was the last user from address
+    if (neighboursQty === 1) {
+      // delete address (address_property_map will be deleted CASCADE)
+      await deleteAddress(userData.address_id);
+      // delete users reservations
+      await deleteUsersReservations(userData.users_id);
+    }
   };
 
   return (

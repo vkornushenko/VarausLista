@@ -71,7 +71,6 @@ export async function addAddress(_, addressFormData) {
   if (responce.error) {
     console.log(responce.error);
   } else {
-
     const resInsertToUserAddressMap = await insertToUserAddressMap(
       address_id,
       formData.users_id
@@ -216,7 +215,7 @@ export async function addNeighbour(_, addNeighbourFormData) {
   return formSubmissionResult;
 }
 
-export async function unsubscribeUser(users_id) {
+export async function unsubscribeUser(users_id, neighboursQty) {
   // connect to supabase
   const supabase = createClient();
 
@@ -233,6 +232,27 @@ export async function unsubscribeUser(users_id) {
     // redirect('/account');
   }
 }
+
+export async function deleteAddress(id) {
+// connect to supabase
+const supabase = createClient();
+
+  const { error } = await supabase
+    .from('address')
+    .delete()
+    .eq('id', id);
+}
+
+export async function deleteUsersReservations(users_id){
+// connect to supabase
+const supabase = createClient();
+
+  const { error } = await supabase
+  .from('reservations')
+  .delete()
+  .eq('users_id', users_id);
+}
+
 
 // check if value exists in table
 export async function isValueExistsInTablesColumn(
