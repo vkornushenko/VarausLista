@@ -22,11 +22,11 @@ export default function ReservationTable({
   // const reservationsFound = reservationData?.some(
   //   (item) => item.property_id === selectedPropertyId
   // );
-  //console.log('found value = ' + reservationsFound);
+  // console.log('found value = ' + reservationsFound);
 
   const deleteReservationHandler = async (reservation_id) => {
     const result = await deleteReservation(reservation_id);
-    console.log(result);
+    // console.log(result);
     setIsReserationDataOutdated(true);
   };
 

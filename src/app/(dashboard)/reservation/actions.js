@@ -32,7 +32,11 @@ export async function getPropertyData(address_id) {
 }
 
 // get reservations data start from Day for address_id
-export async function getReservationData(address_id, property_id, timeInterval) {
+export async function getReservationData(
+  address_id,
+  property_id,
+  timeInterval
+) {
   // const address_id = 63;
   // console.log(property_id + ' ' + todayIsoString)
   // connect to supabase
@@ -70,7 +74,11 @@ export async function getReservationData(address_id, property_id, timeInterval) 
 }
 
 // check reservation availability
-export async function isReservationTimeAvailable(property_id, timeInterval) {
+export async function isReservationTimeAvailable(
+  property_id,
+  timeInterval,
+  address_id
+) {
   // console.log(property_id + ' ' + todayIsoString)
   // connect to supabase
   const supabase = createClient();
@@ -79,12 +87,12 @@ export async function isReservationTimeAvailable(property_id, timeInterval) {
     .from('reservations')
     .select(
       `
-        *,
-        property(*),
-        users(*, user_address_map(*))
+        property!inner(id),
+        users!inner(user_address_map!inner(address_id))
       `
     )
-    .eq('property_id', property_id)
+    .eq('users.user_address_map.address_id', address_id)
+    .eq('property.id', property_id)
     .gt('end_time', timeInterval.from)
     .lt('start_time', timeInterval.to)
     .order('start_time', { ascending: true });
@@ -93,8 +101,8 @@ export async function isReservationTimeAvailable(property_id, timeInterval) {
     console.log(reservationData.error);
     return reservationData.error;
   } else {
-    // console.log('data from reservations table - reservations/actions.js');
-    // console.log(reservationData.data);
+    console.log('data from reservations table - reservations/actions.js');
+    console.log(reservationData.data);
     return reservationData.data;
   }
 }
@@ -155,9 +163,14 @@ export async function sendReservation(_, reservationFormData) {
   const property_id = cleanReservationFormData.property_id;
   // const selectedDateObject = {timeInterval, property_id}
 
+  const address_id = await getUsersAddressId(cleanReservationFormData.users_id);
+  if (!address_id) {
+    return { error: { message: 'no address found for user' } };
+  }
   const reservations = await isReservationTimeAvailable(
     property_id,
-    timeInterval
+    timeInterval,
+    address_id
   );
   console.log('reservations in input interval | reservation/actions.js');
   console.log(reservations);
@@ -236,8 +249,8 @@ export async function getUsersAddressId() {
   } = await supabase.auth.getUser();
 
   const user_id = user?.id;
-  if(!user_id) {
-    redirect('/login')
+  if (!user_id) {
+    redirect('/login');
   }
 
   let { data: users, error } = await supabase
@@ -276,8 +289,8 @@ export async function deleteReservation(reservation_id) {
     console.log(error);
     return false;
   } else {
-    console.log(data)
-    console.log(`reservation_id = ${reservation_id} was deleted`)
+    console.log(data);
+    console.log(`reservation_id = ${reservation_id} was deleted`);
     return true;
   }
 }

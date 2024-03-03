@@ -12,10 +12,11 @@ export default function NeighboursList({
   userData,
   toggleAddNeighbour,
 }) {
-  console.log(userData);
-  console.log(usersList);
+  const [unsubscribingUser, setUnsubscribingUser] = useState(false);
+
 
   const handleUnsubscribeUser = async (users_id) => {
+    setUnsubscribingUser(true);
     const neighboursQty = usersList.length;
     console.log('usersList.length');
     console.log(usersList.length);
@@ -29,6 +30,7 @@ export default function NeighboursList({
       // delete users reservations
       await deleteUsersReservations(userData.users_id);
     }
+    setUnsubscribingUser(false);
   };
 
   return (
@@ -48,6 +50,7 @@ export default function NeighboursList({
                   className={classes.delete_button}
                 />
               )}
+              {(unsubscribingUser && userData.user_id === user.users.user_id) && (<p>processing...</p>)}
             </li>
           ))}
           <button

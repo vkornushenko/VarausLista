@@ -27,6 +27,7 @@ import {
 } from '@/app/utils/time';
 import { returnPropertyName } from '@/app/components/reservation/utils';
 import { getReservationData } from './actions';
+import { useRouter } from 'next/navigation';
 
 export default function ReservationCard({
   address_id,
@@ -35,6 +36,8 @@ export default function ReservationCard({
   propertyData,
   initialReservationData,
 }) {
+const router = useRouter();
+
   // loading state
   const [isLoading, setIsLoading] = useState(false);
 
@@ -65,6 +68,7 @@ export default function ReservationCard({
 const reservationData = await getReservationData(address_id, selectedPropertyId, timeInterval)
     setReservationData(reservationData);
     setIsLoading(false);
+    // console.log('Res Data refreshed')
   };
 
   useEffect(() => {
@@ -72,6 +76,8 @@ const reservationData = await getReservationData(address_id, selectedPropertyId,
       // console.log('reservation data need to be refreshed');
       setReservationData([]);
       refreshReservationData();
+      // without refreshing router, initial data will be outdated (from cache)
+      router.refresh('/reservation');
     }
     // return data to outdated = false after refreshing
     setIsReserationDataOutdated(false);
